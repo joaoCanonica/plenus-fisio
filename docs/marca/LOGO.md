@@ -7,7 +7,7 @@ Originais intactos em `assets-originais/` (sha256 no `media.manifest.json`). Nad
 |---|---|---|
 | Oval | potrace fiel, mas com borda irregular | **reconstruída** como elipse SVG (proporção ~0,72, aberturas laterais como no original) |
 | Palavra PLENUS | potrace a 20x (Lanczos + limiar) legível e com proporções fiéis; bordas levemente onduladas | **usada** (`plenus-palavra-trace.svg`); refazer com o arquivo original |
-| "FISIOTERAPIA & PILATES" | ilegível para vetorizar (~5 px de altura) | recomposto em **Lato** (fonte do site), caixa alta com espaçamento |
+| "FISIOTERAPIA & PILATES" | ilegível para vetorizar (~5 px de altura) | recomposto em **Figtree** (fonte do site), caixa alta com espaçamento |
 | Duas figuras (traço fino) | vetorização vira manchas e **inventa contornos** | **fora dos lockups**; não redesenhar sem o original |
 
 Lockups (`assets-originais/marca/derivados/`), gerados por `node scripts/gerar-lockups.mjs`:
@@ -21,7 +21,7 @@ Todos usam `currentColor`. São **provisórios**: sem as figuras, não equivalem
 | Verde dominante (moda) | `#407040` | 5,82:1 com branco |
 | Claro | branco `#ffffff` | — |
 
-Sugestão: trocar `verdeProfundo` (hoje `#2f5d50`, provisório) por `#457147` e derivar hover/noite dele, rodando `pnpm check`. Não aplicado nesta etapa.
+Aplicado: `verdeMarca = #457147` em `theme.config.ts` (botão primário), com hover `#38603b`.
 
 ## Fotos (150x150)
 `pessoa-foto-a` e `pessoa-foto-b`: derivados 2x (300x300) com Lanczos3 + nitidez leve (`scripts/derivar-avatares.mjs`), em WebP/AVIF/JPEG, sem EXIF.

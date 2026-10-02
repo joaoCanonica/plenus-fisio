@@ -1,0 +1,25 @@
+---
+// Moldura oval (herdada da oval do logo) para fotografia real: 4:5 ou 9:16.
+// A imagem/vídeo vai no slot padrão; legenda opcional no slot "legenda".
+interface Props { formato?: '4:5' | '9:16'; class?: string | undefined; contorno?: boolean }
+const { formato = '4:5', class: cls, contorno = false } = Astro.props;
+---
+<figure class:list={['oval', { 'oval--contorno': contorno }, cls]} style={`--ar:${formato.replace(':', '/')}`}>
+  <div class="oval__midia"><slot /></div>
+  <slot name="legenda" />
+</figure>
+<style>
+  .oval { margin: 0; }
+  .oval__midia {
+    position: relative;
+    aspect-ratio: var(--ar);
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--acento);
+  }
+  /* Contorno fino afastado, como a oval aberta do logo. */
+  .oval--contorno { padding: 0.6rem; border: 1.5px solid var(--destaque); border-radius: 50%; }
+  .oval__midia :global(img),
+  .oval__midia :global(video) { width: 100%; height: 100%; object-fit: cover; }
+  .oval :global(figcaption) { margin-top: 0.9rem; font-size: 0.85rem; color: var(--texto-suave); text-align: center; }
+</style>

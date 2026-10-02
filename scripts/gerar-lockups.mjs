@@ -1,7 +1,7 @@
 // Lockups vetoriais PROVISÓRIOS do logo da Plenus, a partir do original de 150x150.
 // - Palavra PLENUS: vetorizada com potrace (assets-originais/marca/derivados/plenus-palavra-trace.svg).
 // - Oval: reconstruída geometricamente (proporção medida no original, ~0,72).
-// - "Fisioterapia & Pilates": texto em Lato (fonte do site); no original é ilegível para vetorizar.
+// - "Fisioterapia & Pilates": texto em Figtree (fonte do site); no original é ilegível para vetorizar.
 // - Figuras: NÃO incluídas (a vetorização não ficou fiel; ver docs/marca/LOGO.md).
 // Uso: node scripts/gerar-lockups.mjs
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -12,7 +12,7 @@ const g = trace.slice(trace.indexOf('<g '), trace.lastIndexOf('</g>') + 4).repla
 // Palavra no sistema do trace: 2160 x 560 → escala para largura w.
 const palavra = (x, y, w) => `<g transform="translate(${x} ${y}) scale(${w / 2160})">${g}</g>`;
 const sub = (x, y, size, anchor = 'middle') =>
-  `<text x="${x}" y="${y}" font-family="Lato, 'Segoe UI', sans-serif" font-size="${size}" letter-spacing="${size * 0.08}" text-anchor="${anchor}" fill="currentColor">FISIOTERAPIA &amp; PILATES</text>`;
+  `<text x="${x}" y="${y}" font-family="Figtree, 'Segoe UI', sans-serif" font-size="${size}" letter-spacing="${size * 0.08}" text-anchor="${anchor}" fill="currentColor">FISIOTERAPIA &amp; PILATES</text>`;
 
 /** Oval com aberturas laterais (como no original), de y1 a y2. */
 function oval(cx, cy, rx, ry, y1, y2, sw) {

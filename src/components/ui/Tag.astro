@@ -1,5 +1,6 @@
 ---
-interface Props { variante?: 'neutra' | 'acento' }
+// Etiqueta. "quente" (terracota) só para destaques pontuais.
+interface Props { variante?: 'neutra' | 'acento' | 'quente' }
 const { variante = 'neutra' } = Astro.props;
 ---
 <span class:list={['tag', `tag--${variante}`]}><slot /></span>
@@ -9,9 +10,10 @@ const { variante = 'neutra' } = Astro.props;
     align-items: center;
     padding: 0.35rem 0.85rem;
     border-radius: 999px;
-    font: 700 0.82rem/1.2 var(--fonte-texto);
-    letter-spacing: 0.02em;
+    font: 600 0.82rem/1.2 var(--fonte-texto);
+    letter-spacing: 0.01em;
   }
   .tag--neutra { background: var(--superficie); color: var(--texto); border: 1px solid var(--linha); }
   .tag--acento { background: var(--acento); color: var(--acento-texto); border: 1px solid var(--acento); }
+  .tag--quente { background: var(--quente-fundo); color: var(--quente-texto); border: 1px solid var(--quente-fundo); }
 </style>

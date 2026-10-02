@@ -19,16 +19,16 @@ export function cssDoTema(): string {
   const aviso = Object.entries(theme.aviso)
     .map(([k, v]) => `--aviso-${k}:${hex(v)};`)
     .join('');
-  // Token de composição: fundo da seção de destaque (tom "marca").
-  const comp = `--secao-marca:${hex('verdeProfundo')};`;
+  // Token de composição: fundo da seção verde.
+  const comp = `--secao-verde:${hex('verdeMarca')};`;
   return [
-    `:root{color-scheme:light dark;${comp}${aviso}--marca:${hex('verdeProfundo')};}`,
+    `:root{color-scheme:light dark;${comp}${aviso}--marca:${hex('verdeMarca')};}`,
     `:root,.tom-claro{color-scheme:light;${bloco(claro)}}`,
     `@media (prefers-color-scheme: dark){:root,.tom-claro{color-scheme:dark;${bloco(escuro)}--marca:${hex('verdeClaro')};}}`,
-    `[data-tema="claro"],[data-tema="claro"] .tom-claro{color-scheme:light;${bloco(claro)}--marca:${hex('verdeProfundo')};}`,
+    `[data-tema="claro"],[data-tema="claro"] .tom-claro{color-scheme:light;${bloco(claro)}--marca:${hex('verdeMarca')};}`,
     `[data-tema="escuro"],[data-tema="escuro"] .tom-claro{color-scheme:dark;${bloco(escuro)}--marca:${hex('verdeClaro')};}`,
     `.tom-escuro{color-scheme:dark;${bloco(theme.tons.escuro)}--marca:${hex('verdeClaro')};}`,
-    `.tom-marca{color-scheme:dark;${bloco(theme.tons.marca)}--marca:${hex('areia')};}`,
+    `.tom-verde{color-scheme:dark;${bloco(theme.tons.verde)}--marca:${hex('offWhiteClaro')};}`,
     `:root{--fonte-display:${theme.fontes.display};--fonte-texto:${theme.fontes.texto};}`,
   ].join('\n');
 }
@@ -62,7 +62,7 @@ export function verificarContraste(): ResultadoPar[] {
     ['esquema claro', theme.esquemas.claro],
     ['esquema escuro', theme.esquemas.escuro],
     ['tom escuro', theme.tons.escuro],
-    ['tom marca', theme.tons.marca],
+    ['tom verde', theme.tons.verde],
   ];
   const out: ResultadoPar[] = [];
   for (const [contexto, t] of contextos)

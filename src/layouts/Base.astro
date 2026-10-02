@@ -1,11 +1,13 @@
 ---
-import '@fontsource/lato/latin-400.css';
-import '@fontsource/lato/latin-400-italic.css';
-import '@fontsource/lato/latin-700.css';
+import '@fontsource/instrument-serif/latin-400.css';
+import '@fontsource/instrument-serif/latin-400-italic.css';
+import '@fontsource/figtree/latin-400.css';
+import '@fontsource/figtree/latin-600.css';
+import '@fontsource/figtree/latin-700.css';
 import '../styles/global.css';
 // Fontes críticas pré-carregadas para evitar troca tardia (CLS).
-import lato400 from '@fontsource/lato/files/lato-latin-400-normal.woff2?url';
-import lato700 from '@fontsource/lato/files/lato-latin-700-normal.woff2?url';
+import serif400 from '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2?url';
+import figtree400 from '@fontsource/figtree/files/figtree-latin-400-normal.woff2?url';
 import Cabecalho from '../components/Cabecalho.astro';
 import Rodape from '../components/Rodape.astro';
 import Consentimento from '../components/Consentimento.astro';
@@ -37,8 +39,8 @@ const canonico = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={titulo} />
     <meta property="og:description" content={descricao} />
     {preload && <link rel="preload" as="image" imagesrcset={preload.srcset} imagesizes={preload.sizes} type={preload.type} fetchpriority="high" />}
-    <link rel="preload" as="font" type="font/woff2" href={lato400} crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href={lato700} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={serif400} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={figtree400} crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline>
       // .js para revelações.

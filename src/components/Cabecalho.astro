@@ -11,10 +11,7 @@ const links = secoes().filter((s) => s.noMenu).map((s) => [s.rotulo, s.id] as co
 <header class="cab" data-cab>
   <div class="wrap cab__in">
     <a class="cab__marca" href="/" aria-label={`${clinica.nomeFantasia.valor}, página inicial`}>
-      <Marca class="cab__logo" />
-      <span class="cab__nome">
-        <strong>{clinica.nomeFantasia.valor}</strong>
-      </span>
+      <Marca class="cab__logo" decorativa />
     </a>
     <nav aria-label="Seções">
       <ul class="cab__nav">
@@ -58,7 +55,7 @@ const links = secoes().filter((s) => s.noMenu).map((s) => [s.rotulo, s.id] as co
     color: var(--texto);
     margin-right: auto;
   }
-  .cab :global(.cab__logo) { width: 2.6rem; height: 2.4rem; flex: none; color: var(--destaque); }
+  .cab :global(.cab__logo) { width: auto; height: 2.6rem; flex: none; color: var(--destaque); }
   .cab__nome { display: grid; line-height: 1.15; white-space: nowrap; }
   .cab__nome strong { font: 500 1.05rem/1.2 var(--fonte-display); }
   .cab__nome small { font-size: 0.72rem; color: var(--texto-suave); letter-spacing: 0.04em; }

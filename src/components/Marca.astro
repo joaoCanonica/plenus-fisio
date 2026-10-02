@@ -1,8 +1,19 @@
 ---
-// Logo da marca. PROVISÓRIO: sem logo vetorizado da Plenus, não desenha nada.
-// Trocar pelo SVG do logo (usar currentColor) quando o arquivo chegar.
-interface Props { class?: string; titulo?: string }
-const { class: cls, titulo } = Astro.props;
-void cls;
-void titulo;
+// Logo da Plenus a partir dos lockups vetoriais (assets-originais/marca/derivados,
+// gerados por scripts/gerar-lockups.mjs). Usa currentColor: a cor vem do contexto.
+// PROVISÓRIO até o arquivo original do logo (sem as figuras; ver docs/marca/LOGO.md).
+import horizontal from '../../assets-originais/marca/derivados/lockup-horizontal.svg?raw';
+import oval from '../../assets-originais/marca/derivados/lockup-oval.svg?raw';
+import simbolo from '../../assets-originais/marca/derivados/simbolo-oval.svg?raw';
+/** decorativa: quando o contexto já nomeia a marca (ex.: link com aria-label). */
+interface Props { class?: string; variante?: 'horizontal' | 'oval' | 'simbolo'; titulo?: string; decorativa?: boolean }
+const { class: cls, variante = 'horizontal', titulo = 'Plenus Fisioterapia & Pilates', decorativa = false } = Astro.props;
+const fonte = { horizontal, oval, simbolo }[variante];
+// Remove a cor fixa e o título do arquivo (a cor vem do CSS; o rótulo, da prop).
+const svg = fonte
+  .replace(/\sstyle="color:[^"]*"/, '')
+  .replace(/<title[^>]*>[\s\S]*?<\/title>/, '')
+  .replace(/\srole="img"\saria-labelledby="t"/, '')
+  .replace('<svg ', `<svg class="marca ${cls ?? ''}" ${decorativa ? 'aria-hidden="true" focusable="false"' : `role="img" aria-label="${titulo}"`} `);
 ---
+<Fragment set:html={svg} />
