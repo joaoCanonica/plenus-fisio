@@ -1,19 +1,36 @@
 ---
-// Badge de identificação COFFITO: "Nome · Fisioterapeuta · CREFITO número".
-import { profile } from '../../config/profile.config.ts';
+// Selo de identificação. Sem `profissional`: linha da pessoa jurídica (COFFITO).
+// Com `profissional` (id da equipe): nome completo + CREFITO, só se visível;
+// senão cai na identificação da clínica (nunca mostra nome sem CREFITO).
 import Provisorio from '../Provisorio.astro';
+import { clinica } from '../../config/profile.config.ts';
 import { provisorio } from '../../lib/modo.ts';
-interface Props { compacto?: boolean }
-const { compacto = false } = Astro.props;
-const p = profile;
+import { profissionalVisivel, registroEmpresa, responsavelTecnico } from '../../lib/clinica.ts';
+interface Props { compacto?: boolean; profissional?: string | null | undefined }
+const { compacto = false, profissional } = Astro.props;
+const p = profissionalVisivel(profissional);
+const rt = responsavelTecnico();
+const prov = provisorio(clinica.registroEmpresaCrefito) || provisorio(clinica.responsavelTecnico.nome) || provisorio(clinica.responsavelTecnico.crefito);
 ---
 <p class:list={['badge-id', { 'badge-id--compacto': compacto }]}>
-  <span class="badge-id__nome">{p.nomeCompleto.valor}</span>
-  <span aria-hidden="true">·</span>
-  <span>{p.profissao.valor}</span>
-  <span aria-hidden="true">·</span>
-  <span>CREFITO {p.crefito.numero.valor}</span>
-  <Provisorio ativo={provisorio(p.nomeCompleto) || provisorio(p.crefito.regiao)} titulo="Nome completo e região do CREFITO a confirmar" />
+  {p ? (
+    <>
+      <span class="badge-id__nome">{p.nomeCompleto}</span>
+      <span aria-hidden="true">·</span>
+      <span>Fisioterapeuta</span>
+      <span aria-hidden="true">·</span>
+      <span>{p.registro}</span>
+    </>
+  ) : (
+    <>
+      <span class="badge-id__nome">{clinica.nomeFantasia.valor}</span>
+      <span aria-hidden="true">·</span>
+      <span>Registro {registroEmpresa()}</span>
+      <span aria-hidden="true">·</span>
+      <span>RT: {rt.nome}, {rt.registro}</span>
+      <Provisorio ativo={prov} titulo="Registro da empresa e responsável técnico a informar" />
+    </>
+  )}
 </p>
 <style>
   .badge-id {

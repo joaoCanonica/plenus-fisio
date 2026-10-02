@@ -2,16 +2,16 @@
 import Base from '../layouts/Base.astro';
 import Identificacao from '../components/Identificacao.astro';
 import Provisorio from '../components/Provisorio.astro';
-import { profile, sede } from '../config/profile.config.ts';
+import { clinica } from '../config/profile.config.ts';
+import { enderecoTexto } from '../lib/clinica.ts';
 import { contato } from '../config/contato.config.ts';
 import { exibir, provisorio } from '../lib/modo.ts';
 import { revogacaoUrl, whatsappUrl } from '../lib/contato.ts';
-const p = profile;
 const email = exibir(contato.emailPrivacidade);
 const temMedicao = contato.analytics.tipo !== 'nenhum';
 const atualizada = '01/10/2026';
 ---
-<Base titulo={`Privacidade e cookies · ${p.nomeMarca.valor}`} descricao="Como este site trata dados pessoais, cookies e imagens de pacientes, e como pedir a retirada de uma imagem ou vídeo.">
+<Base titulo={`Privacidade e cookies · ${clinica.nomeFantasia.valor}`} descricao="Como este site trata dados pessoais, cookies e imagens de pacientes, e como pedir a retirada de uma imagem ou vídeo.">
   <article class="sec wrap texto">
     <p class="eyebrow">Privacidade</p>
     <h1 class="titulo">Política de privacidade e cookies</h1>
@@ -30,9 +30,9 @@ const atualizada = '01/10/2026';
     </nav>
 
     <h2 id="controlador">1. Quem é o responsável</h2>
-    <p>O controlador dos dados é o fisioterapeuta abaixo, que também responde pelos pedidos de privacidade (canal de atendimento ao titular, LGPD, art. 41).</p>
+    <p>O controlador dos dados é a clínica abaixo, que também responde pelos pedidos de privacidade (canal de atendimento ao titular, LGPD, art. 41).</p>
     <div class="cartao"><Identificacao /></div>
-    <p>Endereço profissional: {sede().nome}, {sede().endereco.valor}.</p>
+    <p>Endereço: {enderecoTexto()}.</p>
 
     <h2 id="dados">2. Dados tratados e finalidades</h2>
     <div class="tab-rolagem" tabindex="0" role="region" aria-label="Tabela: dados, finalidades e bases legais">

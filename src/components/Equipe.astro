@@ -1,0 +1,53 @@
+---
+// Equipe: SÓ profissionais com nome completo + CREFITO (lib/clinica.ts →
+// equipeVisivel). Sem ninguém elegível, a seção não existe. Foto opcional,
+// em círculo de no máximo 112 px (avatares de baixa resolução).
+import Provisorio from './Provisorio.astro';
+import { areas } from '../config/profile.config.ts';
+import { copy } from '../config/copy.config.ts';
+import { equipeVisivel, variante } from '../lib/clinica.ts';
+import { imagemLiberada, srcsetImagem } from '../lib/manifesto.ts';
+import { EM_PRODUCAO } from '../lib/modo.ts';
+const pessoas = equipeVisivel().map((p) => {
+  const img = p.foto ? imagemLiberada(p.foto, EM_PRODUCAO) : null;
+  return { ...p, img, webp: img ? srcsetImagem(img, 'webp') : null, avif: img ? srcsetImagem(img, 'avif') : null };
+});
+const nomeArea = (id: string) => areas.find((a) => a.id === id && a.ativa)?.titulo;
+---
+{pessoas.length > 0 && (
+  <section id="equipe" class="sec equipe tom-claro" aria-labelledby="equipe-titulo">
+    <div class="wrap">
+      <h2 id="equipe-titulo" class="titulo" data-revelar>{variante(copy.equipe.titulo)}</h2>
+      <ul class="equipe__grade">
+        {pessoas.map((p) => (
+          <li class="equipe__card" data-revelar>
+            {p.img && p.webp && p.avif && (
+              <div class="equipe__foto">
+                <picture>
+                  <source type="image/avif" srcset={p.avif.srcset} sizes="112px" />
+                  <img src={p.webp.srcset.split(' ')[0]} srcset={p.webp.srcset} sizes="112px" alt={`Foto de ${p.nomeCompleto}`} width="112" height="112" loading="lazy" decoding="async" />
+                </picture>
+                <Provisorio ativo={!p.img.publicavel} titulo="Foto sem autorização confirmada: só em preview" />
+              </div>
+            )}
+            <div>
+              <h3>{p.nomeCompleto}</h3>
+              <p class="equipe__reg">Fisioterapeuta · {p.registro}{p.responsavelTecnico && ' · Responsável técnico'}</p>
+              {p.titulos.length > 0 && <p class="equipe__tit">{p.titulos.join(' · ')}</p>}
+              {p.areas.map(nomeArea).filter(Boolean).length > 0 && <p class="equipe__areas">{p.areas.map(nomeArea).filter(Boolean).join(' · ')}</p>}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+<style>
+  .equipe { background: var(--superficie-alt); }
+  .equipe__grade { list-style: none; margin: 2.5rem 0 0; padding: 0; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+  .equipe__card { display: flex; gap: 1.25rem; align-items: center; padding: 1.25rem; border-radius: var(--raio-g); background: var(--superficie); border: 1px solid var(--linha); }
+  .equipe__foto { position: relative; flex: none; width: 7rem; height: 7rem; }
+  .equipe__foto img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+  .equipe__card h3 { font-size: 1.05rem; }
+  .equipe__reg, .equipe__tit, .equipe__areas { font-size: 0.88rem; color: var(--texto-suave); margin-top: 0.25rem; }
+</style>

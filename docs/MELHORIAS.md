@@ -1,15 +1,54 @@
-# Melhorias e avisos (não bloqueantes)
+# Melhorias (o site já funciona sem)
 
-Itens que não impedem a publicação. Bloqueantes ficam só os três listados em `CLAUDE.md`.
+O site publica sem pendência: campo vazio some sozinho. Bloqueiam a produção só os três itens do
+`CLAUDE.md` (registro da empresa, RT, WhatsApp), além de termo vetado ou mídia referenciada sem
+consentimento. O bloco abaixo é gerado por `pnpm pendencias`; as seções seguintes são manuais.
+
+<!-- auto:inicio -->
+## O que a clínica pode acrescentar (gerado por `pnpm pendencias`)
+
+**Para publicar faltam 4 item(ns):**
+- [ ] Número do registro da empresa (Plenus) no CREFITO.
+- [ ] Nome completo do responsável técnico (RT).
+- [ ] CREFITO do responsável técnico (RT).
+- [ ] WhatsApp real em pelo menos um canal (clínica ou profissional).
+
+### Identificação da clínica
+- [ ] Razão social (aparece na identificação do rodapé).
+- [ ] CNPJ (aparece na identificação do rodapé).
+
+### Equipe
+- [ ] Com nome completo + CREFITO, Adrian (sócio) passa a aparecer no site (cards, textos e vídeos).
+- [ ] Com nome completo + CREFITO, Natalia passa a aparecer no site (cards, textos e vídeos).
+
+### Endereço e contato
+- [ ] Número do endereço.
+- [ ] Complemento do endereço (sala, andar).
+- [ ] WhatsApp da clínica (recepção).
+- [ ] Telefone fixo.
+- [ ] Horários de atendimento (ex.: "Segunda a sexta, 7h às 20h").
+- [ ] Domínio de produção (melhora SEO, canonical e sitemap).
+- [ ] Link do perfil no Google (abre o mapa e as avaliações fora do site).
+
+### Vídeos
+- [ ] Slot de vídeo vago (a seção não aparece). Preencher com vídeo liberado.
+- [ ] Slot de vídeo vago (a seção não aparece). Preencher com vídeo liberado.
+
+### Conteúdo e vocabulário
+- [ ] Confirmar se o Pilates é conduzido por fisioterapeuta (permite descrevê-lo como recurso do plano terapêutico).
+- [ ] Confirmar os recursos usados na clínica para listá-los: Bandagem elástica (taping), Compressão pneumática (bota), Drenagem linfática, Laserterapia.
+- [ ] Área "Fisioterapia geriátrica" inativa: confirmar se a clínica atende para exibi-la.
+
+### Outros
+- [ ] E-mail para pedidos de privacidade (hoje o canal é o WhatsApp).
+
+<!-- auto:fim -->
 
 ## Avisos herdados da preparação do repositório
 - [ ] Amostrar o verde do logo da Plenus e trocar as primitivas provisórias em `theme.config.ts` (`pnpm check`).
 - [ ] Logo vetorizado (SVG, `currentColor`) para `Marca.astro` e `public/favicon.svg` (hoje placeholders).
 - [ ] Definir a tipografia da marca (hoje Lato em tudo), self-hosted via `@fontsource`.
-- [ ] Endereço por extenso, link do Google Maps e domínio de produção.
-- [ ] Instagram da clínica (opcional).
 - [ ] Copy do hero e das seções: pesquisar (`docs/pesquisa/`), escrever o copy deck e aprovar com a clínica.
-- [ ] Implementar `opcional()` e a config de clínica (`docs/ARQUITETURA.md`).
 
 ## Lote 01: logo e fotos (ver docs/marca/LOGO.md)
 - [ ] Pedir o **arquivo original do logo** (AI/SVG/PDF ou PNG ≥ 2000 px): permite vetorizar as figuras e refazer PLENUS sem ondulação.

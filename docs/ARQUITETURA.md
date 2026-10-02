@@ -30,66 +30,22 @@ docs/       AUDITORIA · ARQUITETURA · COMPLIANCE · MELHORIAS · pesquisa/<tem
 `validate-config (--production)` → `validate-theme` → `prepare-media` → `astro build` (portão de pendências em `astro.config.ts`) → `gerar-csp` → `audit-compliance`.
 Preview nunca falha por pendência; produção falha só com BLOQUEANTE.
 
-## Proposta: config de CLÍNICA
+## Núcleo de CLÍNICA (implementado)
 
-Hoje `profile` descreve **um** profissional. A Plenus é pessoa jurídica com RT e equipe.
-Proposta: substituir `profile.config.ts` por `clinica.config.ts` com três blocos e um novo construtor `opcional()`.
-
-### 1. `campo.ts`: `opcional()`
-```ts
-// Campo que pode ficar vazio para sempre: vazio = o trecho/seção some, sem gerar pendência.
-export type Campo<T> =
-  | { status: 'confirmado'; valor: T }
-  | { status: 'pendente'; valor: T; nivel: Nivel; nota: string }
-  | { status: 'opcional'; valor: T | null };          // novo
-
-export const opcional = <T>(valor: T | null = null): Campo<T | null> => ({ status: 'opcional', valor });
-```
-- `exibir()` devolve `valor` (ou `null`) em qualquer modo; nenhum selo, nenhuma pendência.
-- Uso: Instagram, link do Maps, formação, pós, Lattes, e-mail de privacidade, subtítulos.
-- Regra: só os 3 bloqueantes do projeto usam `bloqueante()`. Conteúdo a aprovar usa `aviso()`; tudo o que pode não existir usa `opcional()`.
-
-### 2. `clinica.config.ts`
-```ts
-export const clinica = {
-  pj: {
-    nomeFantasia: confirmado('Plenus Fisioterapia & Pilates'),   // só a PJ usa nome fantasia
-    razaoSocial: opcional<string>(),
-    registroCrefito: bloqueante('', 'Nº do registro da empresa no CREFITO-10.'),   // BLOQUEANTE (1)
-    crefitoRegiao: confirmado('CREFITO-10'),
-  },
-  rt: {                                                            // BLOQUEANTE (2)
-    nomeCompleto: bloqueante('', 'Nome completo do responsável técnico.'),
-    crefito: bloqueante('', 'CREFITO do responsável técnico.'),
-  },
-  equipe: [
-    // Sem CREFITO o profissional NÃO aparece (filtro em lib, não pendência bloqueante).
-    { id: 'adrian', nomeCompleto: aviso('', '...'), crefito: aviso('', '...'), papel: 'socio',
-      formacao: opcional(), posGraduacao: opcional(), especialista: { registrado: false, rqe: null, especialidade: null } },
-    { id: 'natalia', /* idem */ },
-  ],
-  canais: {
-    whatsapp: [                                                    // BLOQUEANTE (3): ≥ 1 com número real
-      { id: 'recepcao', rotulo: 'Agendamento', numero: bloqueante('', 'WhatsApp real.') },
-    ],
-    instagram: opcional<string>(),
-  },
-  unidades: [{ id: 'lages', nome: 'Plenus', endereco: aviso('Lages (SC)', '...'), mapsUrl: opcional(), vinculoId: null }],
-  vinculos: [],                                                    // terceiros: só com autorização formal
-  dominio: aviso('https://example.com', '...'),
-} as const;
-```
-
-Regras derivadas (em `lib/validacao.ts` e `lib/identificacao.ts`):
-| Regra | Implementação proposta |
+| Peça | Onde |
 |---|---|
-| Identificação PJ em toda página | rodapé + `audit-compliance` passam a exigir nome fantasia + registro da empresa + RT (nome e CREFITO) |
-| Profissional só aparece com nome completo + CREFITO | `equipeVisivel()` filtra; profissional sem número some (aviso, não bloqueio) |
-| ≥ 1 WhatsApp real | validador: `canais.whatsapp.some(confirmado)`, senão bloqueante |
-| "especialista" | vetado por profissional, liberado só com `registrado + rqe` daquele profissional |
-| Pilates | **aguardando a regra do Prompt 2** (vocabulário e enquadramento como recurso fisioterapêutico). Entrará como termos/regras em `compliance.config.ts` |
+| `confirmado()` / `opcional()` / `bloqueante()` / `aviso()` | `src/config/campo.ts`. `opcional` vazio some e nunca gera pendência (vira melhoria) |
+| Dados: `clinica`, `equipe[]`, `areas[]`, `pilates`, `recursos[]`, `atendimentoRapido`, `vinculos` | `src/config/profile.config.ts` |
+| Regras de exibição: `equipeVisivel()`, `modoEquipe()`, `variante()`, `areasAtivas()`, `resumoPilates()`, roteamento do WhatsApp, identificação PJ | `src/lib/clinica.ts` |
+| Perfil `coffito-clinica`: identificação PJ, termos vetados, vocabulário por modalidade, regra de vídeo | `src/config/compliance.config.ts` |
+| Bloqueio de produção e relatório/`MELHORIAS.md` | `src/lib/validacao.ts`, `scripts/validate-config.ts` (`pnpm pendencias`) |
 
-Migração: `profile` → `clinica` em `Identificacao`, `BadgeId`, `Rodape`, `Cabecalho`, `index`, `contato.ts`, `validacao.ts`, `audit-compliance.ts`. O shape antigo sai na mesma mudança.
+Regras:
+- **Pessoa só aparece com nome completo + CREFITO** (`equipeVisivel()` é a única porta de nomes). Vale para cards, textos, schema e selo de vídeo. O RT aparece pela identificação PJ.
+- **modoEquipe**: `clinica` (ninguém elegível: terceira pessoa, sem nomes), `solo`, `equipe`. Textos com pessoas usam `variante({clinica, solo, equipe})` com `{clinica}`, `{nome}`, `{nomes}`.
+- **WhatsApp**: canal preferido da área → clínica → qualquer número real (sem nome). Canal de profissional só conta se ele for visível.
+- **Pilates**: sem `conduzidoPorFisioterapeuta` confirmado, só "Pilates em solo e em aparelhos" (vocabulário clínico vetado nesse texto).
+- **Bloqueia produção**: registro da empresa, RT (nome + CREFITO), WhatsApp real, termo vetado em texto publicado, mídia referenciada sem consentimento. Qualquer outro problema de mídia referenciada só a tira da produção (aviso).
 
 ## Orçamento de JS (cliente, home)
 Medido no build atual: **1,49 kB gzip** em 4 scripts inline, sem bundle em `/_astro`.

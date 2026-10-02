@@ -2,21 +2,18 @@
 // Página de pendências: só é gerada em dev/preview, nunca em produção.
 import Base from '../layouts/Base.astro';
 import { EM_PRODUCAO } from '../lib/modo.ts';
-import { GRUPOS, listarPendencias } from '../lib/validacao.ts';
+import { GRUPOS, NIVEIS, listarPendencias } from '../lib/validacao.ts';
 export function getStaticPaths() {
   return EM_PRODUCAO ? [] : [{ params: { interna: 'pendencias' } }];
 }
 const ps = listarPendencias();
-const grupos = [
-  ['bloqueante', 'Bloqueantes para produção'],
-  ['aviso', 'Avisos'],
-] as const;
+const grupos = NIVEIS;
 ---
 <Base titulo="Pendências · preview" descricao="Lista de pendências do site (somente preview).">
   <section class="sec wrap">
     <p class="eyebrow">Somente preview</p>
     <h1 class="titulo">Pendências</h1>
-    <p class="lead">Edite <code>src/config/*.ts</code> e <code>media.manifest.json</code>. O build de produção (<code>npm run build</code>) falha enquanto houver item bloqueante.</p>
+    <p class="lead">Edite <code>src/config/*.ts</code> e <code>media.manifest.json</code>. O build de produção (<code>pnpm build</code>) falha só por item bloqueante; o resto some sozinho.</p>
     {grupos.map(([nivel, rotulo]) => {
       const lista = ps.filter((p) => p.nivel === nivel);
       return (

@@ -32,6 +32,10 @@ export interface ItemManifesto {
   readonly crop?: { readonly largura: number; readonly altura: number } | null;
   readonly derivados?: readonly string[];
   readonly problemas: readonly string[];
+  /** Id da equipe (profile.config.ts) de quem atende; exibido só se for visível. */
+  readonly profissionalResponsavelRef?: string;
+  /** Arquivo guardado fora do git (repositório público). */
+  readonly foraDoRepo?: boolean;
 }
 
 export const manifesto = manifestoJson as unknown as {

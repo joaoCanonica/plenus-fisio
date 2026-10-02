@@ -1,4 +1,4 @@
-import { aviso } from './campo.ts';
+import { opcional } from './campo.ts';
 
 /**
  * Contato, privacidade e medição.
@@ -21,5 +21,5 @@ export const contato = {
   },
 
   /** E-mail para pedidos formais de privacidade (opcional). */
-  emailPrivacidade: aviso<string | null>(null, 'Informar um e-mail para pedidos de privacidade (opcional; hoje o canal é o WhatsApp).'),
+  emailPrivacidade: opcional<string>(null, 'E-mail para pedidos de privacidade (hoje o canal é o WhatsApp).'),
 } as const;

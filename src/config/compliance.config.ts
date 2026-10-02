@@ -4,7 +4,7 @@
  *
  * `termosVetados` é aplicado em dois momentos:
  *  - na validação (scripts/validate-config.ts), sobre configs, manifesto e slots;
- *  - depois do build (scripts/conformidade.ts), sobre o texto renderizado.
+ *  - depois do build (scripts/audit-compliance.ts), sobre o texto renderizado.
  * Negações explícitas ("não cura", "sem garantia", "nunca promete") são aceitas.
  */
 export interface TermoVetado {
@@ -13,7 +13,7 @@ export interface TermoVetado {
 }
 
 export const compliance = {
-  perfil: 'coffito',
+  perfil: 'coffito-clinica',
 
   termosVetados: [
     { padrao: '\\bpre[çc]os?\\b', motivo: 'preço' },
@@ -37,16 +37,44 @@ export const compliance = {
     { padrao: '\\btreinos?\\b', motivo: 'use "plano terapêutico"' },
   ] satisfies readonly TermoVetado[],
 
-  /** Vetado enquanto profile.especialista.registrado for false. */
+  /** Vetado salvo se algum profissional visível tiver título registrado + RQE. */
   termoEspecialista: { padrao: '\\bespecialista\\b', motivo: '"especialista" sem título registrado e RQE' },
 
   /** Negações que tornam um termo aceitável ("não cura"). */
   negacao: '\\b(n[ãa]o|nem|sem|nunca)\\s+(\\S+\\s+){0,2}$',
 
-  /** Toda página e todo vídeo exibem nome completo, profissão e CREFITO. */
-  identificacao: { emTodaPagina: true, emTodoVideo: true, campos: ['nomeCompleto', 'profissao', 'crefito'] },
+  /**
+   * Identificação da pessoa jurídica em toda página: nome fantasia, registro da
+   * empresa no CREFITO e responsável técnico (nome + CREFITO). Profissional citado:
+   * nome completo + CREFITO, senão não aparece (lib/clinica.ts → equipeVisivel).
+   */
+  identificacao: {
+    emTodaPagina: true,
+    pj: ['nomeFantasia', 'registroEmpresaCrefito', 'responsavelTecnico.nome', 'responsavelTecnico.crefito'],
+    profissional: ['nomeCompleto', 'crefito'],
+  },
+
+  /** Vídeo/imagem de paciente: TCLE + data do registro + nome e CREFITO do profissional responsável. */
+  video: { exigeDataRegistro: true, exigeProfissionalVisivel: true, exigeTcle: true },
+
+  /**
+   * Vocabulário por modalidade (aplicado aos textos de cada área):
+   *  - fisioterapia e Pilates clínico: os termos vetados gerais já impõem
+   *    "consulta fisioterapêutica", "atendimento", "paciente", "plano terapêutico";
+   *  - Pilates sem fisioterapeuta confirmado: nada de vocabulário clínico nem título.
+   */
+  vocabulario: {
+    pilatesSemFisioterapeuta: [
+      { padrao: '\\bfisioterap', motivo: 'Pilates sem fisioterapeuta confirmado' },
+      { padrao: '\\bpaciente', motivo: 'Pilates sem fisioterapeuta confirmado' },
+      { padrao: '\\bplano terap', motivo: 'Pilates sem fisioterapeuta confirmado' },
+      { padrao: '\\bcl[íi]nico\\b', motivo: 'Pilates sem fisioterapeuta confirmado' },
+    ] satisfies readonly TermoVetado[],
+  },
 
   antesDepois: false,
+  /** Frase obrigatória se antesDepois for ligado. */
+  fraseAntesDepois: 'O resultado não é garantido nem igual.',
 
   /** Menor de idade: TCLE do responsável legal; evitar rosto frontal. */
   menores: { tcleResponsavel: true, rostoFrontal: 'evitar' },

@@ -1,0 +1,50 @@
+---
+// Áreas ativas. Cada uma com o WhatsApp roteado (atendimentoRapido) e, se houver,
+// os profissionais VISÍVEIS (nome completo + CREFITO). Área inativa não aparece.
+import Button from './ui/Button.astro';
+import { copy } from '../config/copy.config.ts';
+import { areasAtivas, recursosConfirmados, variante } from '../lib/clinica.ts';
+const c = copy.areas;
+const lista = areasAtivas();
+const recursos = recursosConfirmados();
+---
+{lista.length > 0 && (
+  <section id="areas" class="sec areas tom-claro" aria-labelledby="areas-titulo">
+    <div class="wrap">
+      <div data-revelar>
+        <h2 id="areas-titulo" class="titulo">{c.titulo}</h2>
+        <p class="lead">{variante(c.intro)}</p>
+      </div>
+      <ul class="areas__grade">
+        {lista.map((a, i) => (
+          <li class="areas__card" data-revelar style={`--i:${i}`}>
+            <h3>{a.titulo}</h3>
+            <p>{a.resumo}</p>
+            {a.equipe.length > 0 && (
+              <p class="areas__quem">Com {a.equipe.map((p) => `${p.nomeCompleto} (${p.registro})`).join(' e ')}</p>
+            )}
+            <Button href={a.whatsapp} variante="secundario" icone="whatsapp" externo>
+              {a.id === 'pilates' ? 'Saber como funciona' : 'Agendar pelo WhatsApp'}
+            </Button>
+          </li>
+        ))}
+      </ul>
+      {recursos.length > 0 && (
+        <div class="areas__recursos" data-revelar>
+          <h3>{c.recursosTitulo}</h3>
+          <ul>{recursos.map((r) => <li>{r.nome}</li>)}</ul>
+        </div>
+      )}
+    </div>
+  </section>
+)}
+<style>
+  .areas__grade { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+  .areas__card { display: grid; gap: 0.75rem; align-content: start; justify-items: start; padding: 1.5rem; border-radius: var(--raio-g); background: var(--superficie); border: 1px solid var(--linha); }
+  .areas__card h3 { font-size: 1.1rem; }
+  .areas__card p { color: var(--texto-suave); }
+  .areas__quem { font-size: 0.88rem; }
+  .areas__recursos { margin-top: 2.5rem; }
+  .areas__recursos h3 { font-size: 1rem; }
+  .areas__recursos ul { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; padding-left: 1.2rem; margin-top: 0.75rem; color: var(--texto-suave); }
+</style>

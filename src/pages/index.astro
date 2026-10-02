@@ -7,31 +7,37 @@ import BadgeId from '../components/ui/BadgeId.astro';
 import Provisorio from '../components/Provisorio.astro';
 import SlotConvite from '../components/SlotConvite.astro';
 import SlotAtendimentos from '../components/SlotAtendimentos.astro';
+import Areas from '../components/Areas.astro';
+import Equipe from '../components/Equipe.astro';
 import Onde from '../components/Onde.astro';
 import Faq from '../components/Faq.astro';
 import Contato from '../components/Contato.astro';
 import { copy } from '../config/copy.config.ts';
-import { profile, registroCrefito, sede } from '../config/profile.config.ts';
-import { whatsappUrl } from '../lib/contato.ts';
+import { clinica } from '../config/profile.config.ts';
+import { areasAtivas, enderecoTexto, equipeVisivel, registroEmpresa, responsavelTecnico, variante, whatsappUrl } from '../lib/clinica.ts';
 import { EM_PRODUCAO, exibir, provisorio } from '../lib/modo.ts';
-const p = profile;
-const subtitulo = exibir(copy.hero.subtitulo);
-const titulo = `${p.nomeMarca.valor} · Fisioterapia e Pilates em Lages (SC)`;
-const descricao = `${p.nomeMarca.valor}, clínica de fisioterapia em Lages (SC). Agende uma consulta fisioterapêutica pelo WhatsApp.`;
+const c = clinica;
+const sub = exibir(copy.hero.subtitulo);
+const subtitulo = sub ? variante(sub) : null;
+const titulo = `${c.nomeFantasia.valor} · Fisioterapia e Pilates em Lages (SC)`;
+const descricao = `${c.nomeFantasia.valor}, clínica de fisioterapia em Lages (SC). Agende uma consulta fisioterapêutica pelo WhatsApp.`;
+const dominio = exibir(c.dominio);
 // Dados estruturados só em produção (com dados confirmados).
+// Dados estruturados só em produção. Pessoas só entram se visíveis (nome + CREFITO).
 const ld = EM_PRODUCAO
   ? JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Physiotherapy',
-      name: p.nomeMarca.valor,
-      url: p.dominio.valor,
-      address: sede().endereco.valor,
-      employee: {
-        '@type': 'Person',
-        name: p.nomeCompleto.valor,
-        jobTitle: p.profissao.valor,
-        identifier: registroCrefito(),
-      },
+      name: c.nomeFantasia.valor,
+      ...(dominio ? { url: dominio } : {}),
+      address: enderecoTexto(),
+      identifier: `Registro ${registroEmpresa()}`,
+      medicalSpecialty: 'PhysicalTherapy',
+      availableService: areasAtivas().map((a) => ({ '@type': 'MedicalTherapy', name: a.titulo })),
+      employee: [
+        { '@type': 'Person', name: responsavelTecnico().nome, jobTitle: 'Fisioterapeuta, responsável técnico', identifier: responsavelTecnico().registro },
+        ...equipeVisivel().map((p) => ({ '@type': 'Person', name: p.nomeCompleto, jobTitle: 'Fisioterapeuta', identifier: p.registro })),
+      ],
     })
   : null;
 ---
@@ -42,11 +48,13 @@ const ld = EM_PRODUCAO
       <h1 id="hero-titulo" class="titulo">
         {copy.hero.titulo.valor}<Provisorio ativo={provisorio(copy.hero.titulo)} titulo="Título a aprovar" />
       </h1>
-      {subtitulo && <p class="lead">{subtitulo}<Provisorio ativo={provisorio(copy.hero.subtitulo)} /></p>}
+      {subtitulo && <p class="lead">{subtitulo}</p>}
       <div class="inicio__acoes"><Button href={whatsappUrl()} externo>Chamar no WhatsApp</Button></div>
       <div class="inicio__id"><BadgeId compacto /></div>
     </div>
   </section>
+  <Areas />
+  <Equipe />
   <SlotConvite />
   <SlotAtendimentos />
   <Onde />

@@ -54,7 +54,7 @@ const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, 
   <figcaption id={`${id}-leg`} class="vp__leg">
     <strong>{titulo}</strong>
     <span>Registro de {dataBR(item.dataRegistro)}{semAudio ? ' · vídeo sem áudio' : ''}</span>
-    <BadgeId compacto />
+    <BadgeId compacto profissional={item.profissionalResponsavelRef} />
   </figcaption>
 </figure>
 

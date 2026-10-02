@@ -1,7 +1,7 @@
 ---
 import Marca from './Marca.astro';
 import Icone from './ui/Icon.astro';
-import { profile } from '../config/profile.config.ts';
+import { clinica } from '../config/profile.config.ts';
 import { telefoneExibicao, whatsappUrl } from '../lib/contato.ts';
 import { secoes } from '../lib/secoes.ts';
 const base = Astro.url.pathname === '/' ? '' : '/';
@@ -10,10 +10,10 @@ const links = secoes().filter((s) => s.noMenu).map((s) => [s.rotulo, s.id] as co
 ---
 <header class="cab" data-cab>
   <div class="wrap cab__in">
-    <a class="cab__marca" href="/" aria-label={`${profile.nomeMarca.valor}, página inicial`}>
+    <a class="cab__marca" href="/" aria-label={`${clinica.nomeFantasia.valor}, página inicial`}>
       <Marca class="cab__logo" />
       <span class="cab__nome">
-        <strong>{profile.nomeMarca.valor}</strong>
+        <strong>{clinica.nomeFantasia.valor}</strong>
       </span>
     </a>
     <nav aria-label="Seções">

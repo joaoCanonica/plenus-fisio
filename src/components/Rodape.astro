@@ -1,34 +1,37 @@
 ---
 import Marca from './Marca.astro';
 import Identificacao from './Identificacao.astro';
-import Provisorio from './Provisorio.astro';
-import { profile, sede } from '../config/profile.config.ts';
-import { exibir, provisorio } from '../lib/modo.ts';
+import { clinica } from '../config/profile.config.ts';
+import { exibir } from '../lib/modo.ts';
+import { enderecoTexto, telefoneExibicao } from '../lib/clinica.ts';
 import { instagramUrl, revogacaoUrl, whatsappUrl } from '../lib/contato.ts';
+const c = clinica;
 const ig = instagramUrl();
-const p = profile;
-const lattes = exibir(p.lattes);
-const endereco = sede().endereco;
+const horarios = exibir(c.horarios);
+const telefone = exibir(c.telefone);
+const gmn = exibir(c.googleMeuNegocio);
 const ano = new Date().getFullYear();
 ---
 <footer class="rod tom-claro">
   <div class="wrap rod__grade">
     <div class="rod__marca">
       <Marca class="rod__logo" />
-      <p class="rod__frase">{p.nomeMarca.valor}</p>
+      <p class="rod__frase">{c.nomeFantasia.valor}</p>
     </div>
     <div>
-      <h2 class="rod__h">Identificação profissional</h2>
+      <h2 class="rod__h">Identificação</h2>
       <Identificacao />
     </div>
     <div>
       <h2 class="rod__h">Endereço</h2>
-      <address>{sede().nome} · {endereco.valor}<Provisorio ativo={provisorio(endereco)} /></address>
+      <address>{enderecoTexto()}</address>
+      {horarios && <p class="rod__info">{horarios}</p>}
+      {telefone && <p class="rod__info">Telefone: {telefoneExibicao(telefone)}</p>}
       <h2 class="rod__h">Links</h2>
       <ul class="rod__links">
         <li><a href={whatsappUrl()} target="_blank" rel="noopener">WhatsApp</a></li>
         {ig && <li><a href={ig} target="_blank" rel="noopener">Instagram</a></li>}
-        {lattes && <li><a href={lattes} target="_blank" rel="noopener">Currículo Lattes</a></li>}
+        {gmn && <li><a href={gmn} target="_blank" rel="noopener">Perfil no Google</a></li>}
         <li><a href="/privacidade">Política de privacidade e cookies</a></li>
         <li><button type="button" class="rod__btn" data-reabrir-consentimento>Preferências de cookies</button></li>
       </ul>
@@ -41,7 +44,7 @@ const ano = new Date().getFullYear();
   </div>
   <div class="wrap rod__base">
     <p>
-      © {ano} {p.nomeMarca.valor}. As informações deste site têm caráter educativo e
+      © {ano} {c.nomeFantasia.valor}. As informações deste site têm caráter educativo e
       não substituem a consulta com profissional de saúde. Este site não agenda
       atendimentos nem coleta dados de saúde.
     </p>
@@ -77,6 +80,7 @@ const ano = new Date().getFullYear();
   }
   .rod__h:not(:first-child) { margin-top: 2rem; }
   address { font-style: normal; }
+  .rod__info { margin-top: 0.4rem; color: var(--texto-suave); }
   .rod__links { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
   .rod__btn {
     font: inherit;
