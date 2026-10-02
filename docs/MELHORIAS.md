@@ -62,3 +62,4 @@ consentimento. O bloco abaixo é gerado por `pnpm pendencias`; as seções segui
 - [ ] Confirmar que o espaço dos vídeos 2 e 3 é a Plenus.
 - [ ] Curso: autorização da instrutora, título/registro, termo de imagem dos participantes e dados do curso (módulo futuro "Cursos").
 - [ ] Guardar os vídeos (originais e derivados) em armazenamento privado fora do git; o repositório é público. Conferir com o sha256 do manifesto.
+- [ ] Confirmar o título do hero: "Fisioterapia e Pilates em Lages".

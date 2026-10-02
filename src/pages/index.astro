@@ -2,23 +2,18 @@
 // Esqueleto da landing: só a estrutura herdada do template, sem conteúdo de saúde.
 // As seções da Plenus entram depois do copy deck aprovado (ver docs/ARQUITETURA.md).
 import Base from '../layouts/Base.astro';
-import Button from '../components/ui/Button.astro';
-import BadgeId from '../components/ui/BadgeId.astro';
-import Provisorio from '../components/Provisorio.astro';
 import SlotConvite from '../components/SlotConvite.astro';
 import SlotAtendimentos from '../components/SlotAtendimentos.astro';
-import Areas from '../components/Areas.astro';
+import Hero from '../components/Hero.astro';
+import PorOndeComecar from '../components/PorOndeComecar.astro';
 import Equipe from '../components/Equipe.astro';
 import Onde from '../components/Onde.astro';
 import Faq from '../components/Faq.astro';
 import Contato from '../components/Contato.astro';
-import { copy } from '../config/copy.config.ts';
 import { clinica } from '../config/profile.config.ts';
-import { areasAtivas, enderecoTexto, equipeVisivel, registroEmpresa, responsavelTecnico, variante, whatsappUrl } from '../lib/clinica.ts';
-import { EM_PRODUCAO, exibir, provisorio } from '../lib/modo.ts';
+import { areasAtivas, enderecoTexto, equipeVisivel, registroEmpresa, responsavelTecnico } from '../lib/clinica.ts';
+import { EM_PRODUCAO, exibir } from '../lib/modo.ts';
 const c = clinica;
-const sub = exibir(copy.hero.subtitulo);
-const subtitulo = sub ? variante(sub) : null;
 const titulo = `${c.nomeFantasia.valor} · Fisioterapia e Pilates em Lages (SC)`;
 const descricao = `${c.nomeFantasia.valor}, clínica de fisioterapia em Lages (SC). Agende uma consulta fisioterapêutica pelo WhatsApp.`;
 const dominio = exibir(c.dominio);
@@ -43,17 +38,8 @@ const ld = EM_PRODUCAO
 ---
 <Base titulo={titulo} descricao={descricao} landing>
   {ld && <script type="application/ld+json" set:html={ld} />}
-  <section id="inicio" class="sec tom-claro" aria-labelledby="hero-titulo">
-    <div class="wrap">
-      <h1 id="hero-titulo" class="titulo">
-        {copy.hero.titulo.valor}<Provisorio ativo={provisorio(copy.hero.titulo)} titulo="Título a aprovar" />
-      </h1>
-      {subtitulo && <p class="lead">{subtitulo}</p>}
-      <div class="inicio__acoes"><Button href={whatsappUrl()} externo>Chamar no WhatsApp</Button></div>
-      <div class="inicio__id"><BadgeId compacto /></div>
-    </div>
-  </section>
-  <Areas />
+  <Hero />
+  <PorOndeComecar />
   <Equipe />
   <SlotConvite />
   <SlotAtendimentos />
@@ -61,8 +47,3 @@ const ld = EM_PRODUCAO
   <Faq />
   <Contato />
 </Base>
-
-<style>
-  .inicio__acoes { margin-top: 2rem; }
-  .inicio__id { margin-top: 1.5rem; }
-</style>

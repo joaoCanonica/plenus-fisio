@@ -23,12 +23,9 @@ type Variantes = Readonly<Record<ModoEquipe, string>>;
 
 export const copy = {
   hero: {
-    titulo: confirmado('Fisioterapia e Pilates em Lages (SC)'),
-    subtitulo: confirmado<Variantes>({
-      clinica: 'A {clinica} oferece consulta fisioterapêutica e atendimento individual, além de Pilates. O agendamento é pelo WhatsApp.',
-      solo: 'Na {clinica}, {nome} oferece consulta fisioterapêutica e atendimento individual, além de Pilates. O agendamento é pelo WhatsApp.',
-      equipe: 'Na {clinica}, {nomes} oferecem consulta fisioterapêutica e atendimento individual, além de Pilates. O agendamento é pelo WhatsApp.',
-    }),
+    /** CONFIRMAR com a clínica (ver docs/MELHORIAS.md). */
+    titulo: confirmado('Fisioterapia e Pilates em Lages'),
+    // Subtítulo gerado em Hero.astro a partir das áreas ativas.
   },
 
   areas: {

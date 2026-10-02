@@ -44,6 +44,8 @@ export interface Area {
   readonly titulo: string;
   /** Descrição do serviço, sem afirmação clínica (afirmações exigem docs/pesquisa). */
   readonly resumo: string;
+  /** Cartão "Por onde começar" (null = a área não tem cartão). */
+  readonly cartao: { readonly rotulo: string; readonly texto: string; readonly ordem: number } | null;
 }
 
 export interface Recurso {
@@ -127,6 +129,7 @@ export const areas: readonly Area[] = [
     responsaveis: ['adrian'],
     titulo: 'Fisioterapia traumato-ortopédica',
     resumo: 'Consulta fisioterapêutica e atendimento para dores e lesões de músculos, ossos e articulações, e no pós-operatório ortopédico.',
+    cartao: { rotulo: 'Dor e reabilitação ortopédica', texto: 'Dores, lesões e recuperação depois de cirurgia ortopédica.', ordem: 3 },
   },
   {
     id: 'esportiva',
@@ -134,6 +137,7 @@ export const areas: readonly Area[] = [
     responsaveis: ['adrian'],
     titulo: 'Fisioterapia esportiva',
     resumo: 'Atendimento para quem pratica esporte, da lesão ao retorno à atividade, com plano terapêutico individual.',
+    cartao: { rotulo: 'Esporte e retorno à atividade', texto: 'Para quem pratica esporte e quer voltar à atividade com acompanhamento.', ordem: 2 },
   },
   {
     id: 'obstetricaPelvica',
@@ -141,6 +145,7 @@ export const areas: readonly Area[] = [
     responsaveis: ['natalia'],
     titulo: 'Fisioterapia obstétrica e pélvica',
     resumo: 'Atendimento na gestação e no pós-parto, e para as funções do assoalho pélvico.',
+    cartao: { rotulo: 'Gestação e pós-parto', texto: 'Acompanhamento fisioterapêutico na gestação e no pós-parto.', ordem: 1 },
   },
   {
     id: 'pilates',
@@ -149,6 +154,7 @@ export const areas: readonly Area[] = [
     titulo: 'Pilates',
     // Texto decidido em lib/clinica.ts conforme `pilates` (abaixo).
     resumo: '',
+    cartao: { rotulo: 'Pilates', texto: 'Pilates em solo e em aparelhos.', ordem: 4 },
   },
   {
     id: 'geriatrica',
@@ -156,6 +162,7 @@ export const areas: readonly Area[] = [
     responsaveis: [],
     titulo: 'Fisioterapia geriátrica',
     resumo: 'Atendimento à pessoa idosa, com foco em mobilidade, equilíbrio e autonomia no dia a dia.',
+    cartao: null,
   },
 ];
 

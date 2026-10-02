@@ -146,7 +146,7 @@ function checarTextos(out: Pendencia[]): void {
     ['slots.conviteVideo.titulo', slots.conviteVideo.titulo],
     ['slots.compilado.titulo', slots.compilado.titulo],
     ['copy.hero.titulo', copy.hero.titulo.valor],
-    ...Object.entries(copy.hero.subtitulo.valor ?? {}).map(([m, t]): [string, string] => [`copy.hero.subtitulo.${m}`, t]),
+    ...areas.filter((a) => a.ativa && a.cartao).flatMap((a): [string, string][] => [[`areas[${a.id}].cartao.rotulo`, a.cartao?.rotulo ?? ''], [`areas[${a.id}].cartao.texto`, a.cartao?.texto ?? '']]),
     ...Object.entries(copy.areas.intro).map(([m, t]): [string, string] => [`copy.areas.intro.${m}`, t]),
     ...areas.filter((a) => a.ativa).flatMap((a): [string, string][] => [[`areas[${a.id}].titulo`, a.titulo], [`areas[${a.id}].resumo`, a.id === 'pilates' ? resumoPilates() : a.resumo]]),
     ...[...midiaReferenciada()].flatMap((id): [string, string][] => {

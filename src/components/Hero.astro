@@ -1,0 +1,81 @@
+---
+// Hero: título, subtítulo com as áreas ativas, identificação da clínica acima
+// da dobra, CTAs WhatsApp + Instagram e mídia do ESPAÇO em moldura oval
+// (produção: só publicavel; preview: previewOk com selo). Sem foto do espaço:
+// lockup oval sobre fundo sálvia.
+import Button from './ui/Button.astro';
+import BadgeId from './ui/BadgeId.astro';
+import MediaOval from './ui/MediaOval.astro';
+import Marca from './Marca.astro';
+import Provisorio from './Provisorio.astro';
+import { copy } from '../config/copy.config.ts';
+import { areasAtivas, whatsappUrl } from '../lib/clinica.ts';
+import { instagramUrl } from '../lib/contato.ts';
+import { imagemLiberada, manifesto, srcsetImagem } from '../lib/manifesto.ts';
+import { EM_PRODUCAO, provisorio } from '../lib/modo.ts';
+
+// Itens após o primeiro em minúscula, exceto nomes próprios (Pilates).
+const areas = areasAtivas()
+  .sort((x, y) => (x.cartao?.ordem ?? 9) - (y.cartao?.ordem ?? 9))
+  .map((a, i) => {
+    const r = a.cartao?.rotulo ?? a.titulo;
+    return i === 0 || a.id === 'pilates' ? r : `${r.charAt(0).toLowerCase()}${r.slice(1)}`;
+  });
+const lista = areas.length <= 1 ? areas.join('') : `${areas.slice(0, -1).join(', ')} e ${areas.at(-1)}`;
+const subtitulo = `${lista}. Agende uma consulta fisioterapêutica pelo WhatsApp.`;
+const ig = instagramUrl();
+// Primeira imagem do espaço liberada no modo atual.
+const foto = manifesto.itens
+  .filter((i) => i.categoria === 'espaco')
+  .map((i) => imagemLiberada(i.id, EM_PRODUCAO))
+  .find((i) => i !== null);
+const avif = foto ? srcsetImagem(foto, 'avif') : null;
+const webp = foto ? srcsetImagem(foto, 'webp') : null;
+export const SIZES_HERO = '(min-width: 60rem) 26rem, 70vw';
+---
+<section id="inicio" class="hero tom-claro" aria-labelledby="hero-titulo">
+  <div class="wrap hero__grade">
+    <div class="hero__texto">
+      <h1 id="hero-titulo" class="hero__h1">
+        {copy.hero.titulo.valor}<Provisorio ativo={provisorio(copy.hero.titulo)} titulo="Título a confirmar" />
+      </h1>
+      {areas.length > 0 && <p class="lead hero__sub">{subtitulo}</p>}
+      <div class="hero__acoes">
+        <Button href={whatsappUrl()} icone="whatsapp" externo>Falar no WhatsApp</Button>
+        {ig && <Button href={ig} variante="secundario" icone="instagram" externo>Ver o Instagram</Button>}
+      </div>
+      <div class="hero__id"><BadgeId compacto /></div>
+    </div>
+    <div class="hero__midia">
+      {foto && avif && webp ? (
+        <MediaOval formato="4:5">
+          <picture>
+            <source type="image/avif" srcset={avif.srcset} sizes={SIZES_HERO} />
+            <img src={webp.srcset.split(' ')[0]} srcset={webp.srcset} sizes={SIZES_HERO} alt={foto.alt} width={webp.largura} height={webp.altura} fetchpriority="high" decoding="async" />
+          </picture>
+          {!foto.publicavel && <Provisorio ativo titulo="Foto sem liberação: só em preview" />}
+        </MediaOval>
+      ) : (
+        <div class="hero__semfoto">
+          <Marca class="hero__lockup" variante="oval" decorativa />
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: clamp(2.5rem, 6vw, 5.5rem) var(--sec); }
+  .hero__grade { display: grid; gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
+  @media (min-width: 60rem) { .hero__grade { grid-template-columns: 1.15fr 0.85fr; } }
+  .hero__h1 { font-size: clamp(2.7rem, 1.6rem + 5vw, 5.2rem); line-height: 1.02; max-width: 13ch; }
+  .hero__sub { max-width: 34rem; }
+  .hero__acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+  .hero__id { margin-top: 1.75rem; max-width: 36rem; }
+  .hero__midia { justify-self: center; width: min(100%, 26rem); }
+  /* Sem foto do espaço: lockup sobre oval sálvia (proporção 4:5, sem CLS). */
+  .hero__semfoto { aspect-ratio: 4 / 5; border-radius: 50%; background: var(--acento); display: grid; place-items: center; color: var(--acento-texto); }
+  .hero__semfoto :global(.hero__lockup) { width: 62%; height: auto; }
+  /* Mobile: texto, CTAs e identificação primeiro (acima da dobra); mídia depois. */
+  @media (max-width: 59.99rem) { .hero__midia { width: min(62vw, 15rem); } .hero { padding-top: 1.75rem; } .hero__h1 { font-size: clamp(2.5rem, 1.6rem + 5vw, 3.2rem); } }
+</style>

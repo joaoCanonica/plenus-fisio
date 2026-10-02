@@ -160,6 +160,35 @@ export function numeroWhatsapp(area: IdArea | 'geral' = 'geral'): string {
 
 export const whatsappProvisorio = (): boolean => algumWhatsapp() === null;
 
+/**
+ * Número CONFIRMADO para a área (sem número provisório): canal da área →
+ * clínica. Null = a área não tem canal válido e o cartão não aparece.
+ */
+export const canalValido = (area: IdArea): string | null =>
+  numeroDoCanal(atendimentoRapido[area].canal) ?? numeroDoCanal('clinica');
+
+export interface Cartao {
+  readonly area: IdArea;
+  readonly rotulo: string;
+  readonly texto: string;
+  readonly equipe: readonly ProfissionalVisivel[];
+  readonly url: string;
+}
+
+/** "Por onde começar": só áreas ativas com canal válido, na ordem definida. */
+export function cartoesInicio(): Cartao[] {
+  return areasAtivas()
+    .filter((a) => a.cartao && canalValido(a.id))
+    .sort((x, y) => (x.cartao?.ordem ?? 0) - (y.cartao?.ordem ?? 0))
+    .map((a) => ({
+      area: a.id,
+      rotulo: a.cartao?.rotulo ?? a.titulo,
+      texto: a.id === 'pilates' ? resumoPilates() : (a.cartao?.texto ?? a.resumo),
+      equipe: a.equipe,
+      url: `https://wa.me/${canalValido(a.id)}?text=${encodeURIComponent(atendimentoRapido[a.id].mensagem)}`,
+    }));
+}
+
 export const whatsappUrl = (area: IdArea | 'geral' = 'geral', mensagem = atendimentoRapido[area].mensagem): string =>
   `https://wa.me/${numeroWhatsapp(area)}?text=${encodeURIComponent(mensagem)}`;
 

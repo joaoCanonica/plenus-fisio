@@ -11,6 +11,7 @@ import figtree400 from '@fontsource/figtree/files/figtree-latin-400-normal.woff2
 import Cabecalho from '../components/Cabecalho.astro';
 import Rodape from '../components/Rodape.astro';
 import Consentimento from '../components/Consentimento.astro';
+import Entrada from '../components/Entrada.astro';
 import BarraMobile from '../components/BarraMobile.astro';
 import { EM_PRODUCAO } from '../lib/modo.ts';
 import { listarPendencias } from '../lib/validacao.ts';
@@ -24,7 +25,7 @@ const nBloq = pend.filter((p) => p.nivel === 'bloqueante').length;
 const canonico = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-landing={landing ? 'on' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,10 +44,16 @@ const canonico = new URL(Astro.url.pathname, Astro.site);
     <link rel="preload" as="font" type="font/woff2" href={figtree400} crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline>
-      // .js para revelações.
+      // .js para revelações; .entrada ("O Oval") uma vez por sessão, nunca com reduced-motion.
       (function () {
         var h = document.documentElement;
         h.classList.add('js');
+        try {
+          if (h.dataset.landing === 'on' && !matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('plenus-entrada')) {
+            sessionStorage.setItem('plenus-entrada', '1');
+            h.classList.add('entrada');
+          }
+        } catch (e) {}
         try {
           // Tema escolhido pela pessoa (só existe depois de um clique no seletor).
           var t = localStorage.getItem('plenus-tema');
@@ -56,6 +63,7 @@ const canonico = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body>
+    {landing && <Entrada />}
     <a class="pular" href="#conteudo">Pular para o conteúdo</a>
     {!EM_PRODUCAO && (
       <aside aria-label="Versão em revisão"><a class="faixa-preview" href="/pendencias">

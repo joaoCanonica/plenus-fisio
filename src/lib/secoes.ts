@@ -1,6 +1,6 @@
 import { copy } from '../config/copy.config.ts';
 import { renderCompilado, renderConvite } from './slots.ts';
-import { areasAtivas, equipeVisivel } from './clinica.ts';
+import { cartoesInicio, equipeVisivel } from './clinica.ts';
 
 /** Seções da landing, na ordem da página. Fonte única para o menu. */
 export interface Secao {
@@ -12,7 +12,7 @@ export interface Secao {
 export function secoes(): Secao[] {
   return [
     { id: 'inicio', rotulo: 'Início', noMenu: false },
-    ...(areasAtivas().length ? [{ id: 'areas', rotulo: 'Áreas', noMenu: true }] : []),
+    ...(cartoesInicio().length ? [{ id: 'comecar', rotulo: 'Por onde começar', noMenu: true }] : []),
     ...(equipeVisivel().length ? [{ id: 'equipe', rotulo: 'Equipe', noMenu: true }] : []),
     ...(renderConvite() ? [{ id: 'convite', rotulo: 'Conheça', noMenu: false }] : []),
     ...(renderCompilado() ? [{ id: 'videos', rotulo: 'Atendimentos em vídeo', noMenu: false }] : []),

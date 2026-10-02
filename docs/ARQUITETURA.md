@@ -48,13 +48,14 @@ Regras:
 - **Bloqueia produção**: registro da empresa, RT (nome + CREFITO), WhatsApp real, termo vetado em texto publicado, mídia referenciada sem consentimento. Qualquer outro problema de mídia referenciada só a tira da produção (aviso).
 
 ## Orçamento de JS (cliente, home)
-Medido no build atual: **1,49 kB gzip** em 4 scripts inline, sem bundle em `/_astro`.
+Medido no build atual: **1,86 kB gzip** (com a entrada "O Oval"), sem bundle em `/_astro`. Lighthouse mobile: LCP 1,4 s, CLS 0,001.
 
 | Ilha | Hoje (gzip) | Teto |
 |---|---|---|
 | Tema inicial no `<head>` (aplica a escolha salva, evita flash) | 0,27 kB | 0,3 kB |
 | Seletor de tema (cabeçalho) | 0,33 kB | 0,4 kB |
 | Consentimento (banner + liberar terceiros) | 0,67 kB | 1,0 kB |
+| Entrada "O Oval" (fim, Pular, Esc, rede de 5 s; animação em CSS) | — | 0,3 kB |
 | Revelação ao rolar (IntersectionObserver; desligada com `prefers-reduced-motion`) | 0,23 kB | 0,3 kB |
 | Player de vídeo (nativo `<video>`; script só se houver slot preenchido) | 0 | 0,8 kB |
 | **Total** | **1,49 kB** | **≤ 3 kB** (já verificado por `audit-lighthouse.ts`) |

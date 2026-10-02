@@ -1,0 +1,68 @@
+---
+// "Por onde começar": um cartão por área ativa que tenha canal de WhatsApp
+// CONFIRMADO (canal da área → clínica). Sem canal válido, o cartão não existe.
+// Mensagem neutra; nada é coletado e nenhum sintoma é perguntado.
+import Icon from './ui/Icon.astro';
+import Provisorio from './Provisorio.astro';
+import { cartoesInicio } from '../lib/clinica.ts';
+import { EM_PRODUCAO } from '../lib/modo.ts';
+const cartoes = cartoesInicio();
+---
+{cartoes.length > 0 ? (
+  <section id="comecar" class="sec comecar tom-claro" aria-labelledby="comecar-titulo">
+    <div class="wrap">
+      <h2 id="comecar-titulo" class="titulo" data-revelar>Por onde começar</h2>
+      <p class="lead" data-revelar>Escolha o assunto e fale direto pelo WhatsApp. A primeira etapa é sempre uma consulta fisioterapêutica.</p>
+      <ul class="comecar__grade">
+        {cartoes.map((c, i) => (
+          <li data-revelar style={`--i:${i}`}>
+            <a class="comecar__card" href={c.url} target="_blank" rel="noopener">
+              <span class="comecar__oval" aria-hidden="true"></span>
+              <span class="comecar__rot">{c.rotulo}</span>
+              <span class="comecar__txt">{c.texto}</span>
+              {c.equipe.length > 0 && <span class="comecar__quem">Com {c.equipe.map((p) => `${p.nomeCompleto} (${p.registro})`).join(' e ')}</span>}
+              <span class="comecar__cta"><Icon nome="whatsapp" />Falar no WhatsApp<span class="sr-only"> sobre {c.rotulo} (abre em nova aba)</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+) : !EM_PRODUCAO && (
+  <section class="sec comecar tom-claro" aria-label="Por onde começar (provisório)">
+    <div class="wrap">
+      <p class="comecar__vazio"><Provisorio ativo titulo="Sem WhatsApp confirmado" /> "Por onde começar": os cartões aparecem quando houver WhatsApp confirmado (da clínica ou do profissional da área). Em produção, sem canal, a seção não existe.</p>
+    </div>
+  </section>
+)}
+<style>
+  .comecar__grade { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+  .comecar__grade li { display: flex; }
+  .comecar__card {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 0.75rem;
+    width: 100%;
+    min-height: 15rem;
+    padding: 1.75rem 1.5rem 1.5rem;
+    border-radius: var(--raio-g);
+    background: var(--superficie);
+    border: 1px solid var(--linha);
+    color: var(--texto);
+    text-decoration: none;
+    overflow: hidden;
+    transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.25s;
+  }
+  .comecar__card:hover { transform: translateY(-3px); box-shadow: var(--sombra-suave); border-color: var(--destaque); }
+  .comecar__card:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+  /* Oval do logo, discreta, no canto do cartão. */
+  .comecar__oval { position: absolute; right: -1.5rem; top: -2rem; width: 6rem; height: 8.5rem; border: 1.5px solid var(--acento); border-radius: 50%; }
+  .comecar__rot { font: 400 clamp(1.5rem, 1.2rem + 1vw, 1.9rem)/1.1 var(--fonte-display); max-width: 12ch; }
+  .comecar__txt { color: var(--texto-suave); }
+  .comecar__quem { font-size: 0.85rem; color: var(--texto-suave); }
+  .comecar__cta { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem; font-weight: 600; color: var(--destaque); }
+  .comecar__cta :global(svg) { width: 1.1rem; height: 1.1rem; }
+  .comecar__vazio { font-size: 0.9rem; color: var(--texto-suave); }
+  @media (prefers-reduced-motion: reduce) { .comecar__card:hover { transform: none; } }
+</style>
