@@ -12,5 +12,12 @@ Níveis usados (simplificado):
 
 Cada afirmação do site aponta para o arquivo e o item correspondente (ex.: `<tema>.md#1`).
 
+
 Arquivos:
 - [regulacao-coffito.md](regulacao-coffito.md)
+- [traumato-ortopedica.md](traumato-ortopedica.md)
+- [esportiva-retorno-ao-esporte.md](esportiva-retorno-ao-esporte.md)
+- [gestacao-pos-parto.md](gestacao-pos-parto.md)
+- [fisioterapia-pelvica.md](fisioterapia-pelvica.md)
+- [pilates.md](pilates.md)
+- [recursos-terapeuticos.md](recursos-terapeuticos.md)
