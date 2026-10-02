@@ -19,3 +19,11 @@ Itens que não impedem a publicação. Bloqueantes ficam só os três listados e
 - [ ] Fotos dos profissionais em **alta resolução** (as atuais são avatares 150x150).
 - [ ] Dizer qual foto é de qual profissional (`pessoa-foto-a` / `pessoa-foto-b`).
 - [ ] Autorização de uso de imagem **por escrito** de cada profissional (hoje: confirmada pelo cliente).
+
+## Vídeos lote 01 (ver docs/midia/VIDEOS-LOTE-01.md)
+- [ ] Transcrever o áudio dos 3 vídeos e revisar os `.vtt` (confirmar se é fala ou música; música exige checar direito autoral).
+- [ ] P-001: TCLE da paciente, data de gravação, quem atende (nome completo + CREFITO), quem aplica o laser; decidir se vale o corte ~34–52 s com marca coberta.
+- [ ] P-002: TCLE, data; regravar sem texto sobreposto; escrever o conteúdo educativo sobre retorno ao esporte com pesquisa em `docs/pesquisa/`.
+- [ ] Confirmar que o espaço dos vídeos 2 e 3 é a Plenus.
+- [ ] Curso: autorização da instrutora, título/registro, termo de imagem dos participantes e dados do curso (módulo futuro "Cursos").
+- [ ] Guardar os vídeos (originais e derivados) em armazenamento privado fora do git; o repositório é público. Conferir com o sha256 do manifesto.

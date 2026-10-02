@@ -61,7 +61,8 @@ export function validar(man) {
       if (b.length !== it.bytes) e('bytes não conferem com o arquivo');
       if (createHash('sha256').update(b).digest('hex') !== it.sha256) e('sha256 não confere: original alterado?');
     } catch {
-      e('arquivo original não encontrado');
+      // foraDoRepo: arquivo guardado fora do git (ex.: vídeo de paciente); ausência não é erro.
+      if (!it.foraDoRepo) e('arquivo original não encontrado');
     }
   }
   return erros;
@@ -90,7 +91,7 @@ for (const it of man.itens.filter((i) => liberado(i, modo))) {
     const arquivos = {};
     for (const d of it.derivados ?? []) {
       const nome = d.split('/').pop();
-      copyFileSync(d, `public/midia/${nome}`);
+      try { copyFileSync(d, `public/midia/${nome}`); } catch { if (!it.foraDoRepo) throw new Error(`derivado ausente: ${d}`); continue; }
       arquivos[nome.replace(/^.*?-(secao|loop|poster)/, '$1')] = `/midia/${nome}`;
     }
     saida[it.id] = { alt: it.alt, provisorio: !it.publicavel, arquivos };

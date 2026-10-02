@@ -7,3 +7,9 @@ dist/
 .DS_Store
 public/midia/
 src/data/midia.gerada.json
+
+# Vídeos de pacientes/terceiros NÃO vão para o repositório (público). Guardar fora do git;
+# o manifesto mantém sha256/bytes para conferir a integridade (campo foraDoRepo: true).
+assets-originais/videos/**/*.mp4
+assets-originais/videos/**/*.webm
+assets-originais/videos/**/*.webp

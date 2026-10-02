@@ -113,6 +113,146 @@
         "Uso de imagem confirmado pelo cliente: CONFIRMAR por escrito com o próprio profissional.",
         "Identificar qual profissional é (Adrian ou Natalia) e só exibir com nome completo + CREFITO."
       ]
+    },
+    {
+      "id": "video-P-001-posparto",
+      "arquivo": "assets-originais/videos/P-001_posparto-original.mp4",
+      "tipo": "video",
+      "categoria": "videos",
+      "autoria": "propria",
+      "consentimento": "pendente",
+      "tcleRef": null,
+      "publicavel": false,
+      "menorDeIdade": false,
+      "dataRegistro": "CONFIRMAR",
+      "crop": null,
+      "edicoes": [],
+      "antesDepois": false,
+      "bytes": 2120646,
+      "sha256": "24b4e9df4bef356efffc530098e64a0931b9e0ba7db6a64a519d28c57a6686c9",
+      "largura": 360,
+      "altura": 640,
+      "duracaoSeg": 52.4,
+      "pacienteRef": "P-001",
+      "profissionalResponsavelRef": "CONFIRMAR (texto no vídeo: \"Drª. Natália Pereira\"; aos ~26 s outra pessoa aplica laser)",
+      "previewOk": false,
+      "descricao": "Atendimento no pós-parto: taping abdominal, laser e bota de compressão pneumática. Ambiente parece domiciliar (CONFIRMAR).",
+      "alt": "Fisioterapeuta aplica fita elástica no abdome de uma paciente deitada",
+      "usoSugerido": "NÃO publicável como está. Único trecho candidato: ~34–52 s (botas nas pernas), com marca coberta, TCLE e data. Moldura de no máximo 360 px de largura.",
+      "legenda": {
+        "status": "pendente",
+        "arquivo": "assets-originais/videos/derivados/video-P-001-posparto.vtt"
+      },
+      "derivados": [
+        "assets-originais/videos/derivados/video-P-001-posparto-secao.mp4",
+        "assets-originais/videos/derivados/video-P-001-posparto-secao.webm",
+        "assets-originais/videos/derivados/video-P-001-posparto-poster.webp"
+      ],
+      "derivacao": "2x (720x1280) Lanczos + hqdn3d leve + unsharp moderado; sem IA generativa. scripts/derivar-videos.sh",
+      "problemas": [
+        "Exposição íntima: roupa íntima descartável e abdome expostos de ~0 a ~30 s, inclusive nos quadros de mãos+fita (recorte não resolve nesse trecho).",
+        "TCLE da paciente ausente.",
+        "dataRegistro a confirmar.",
+        "Texto sobreposto \"PÓS-PARTO\" identifica condição clínica: cobrir ou cortar.",
+        "Nome sobreposto \"Drª. Natália Pereira\" sem CREFITO; confirmar uso de \"Drª.\" pela norma vigente.",
+        "Outra pessoa aplica laser (~26 s): quem é? Se terceiro, autorização formal.",
+        "Marca do equipamento visível na bota (AVABODY?): cobrir.",
+        "Baixa resolução de origem (360x640).",
+        "previewOk:false de propósito: o build de preview copia derivados para uma URL pública; não expor conteúdo íntimo sem TCLE."
+      ],
+      "foraDoRepo": true
+    },
+    {
+      "id": "video-P-002-retorno-esporte",
+      "arquivo": "assets-originais/videos/P-002_retorno-esporte-original.mp4",
+      "tipo": "video",
+      "categoria": "videos",
+      "autoria": "propria",
+      "consentimento": "pendente",
+      "tcleRef": null,
+      "publicavel": false,
+      "menorDeIdade": false,
+      "dataRegistro": "CONFIRMAR",
+      "crop": null,
+      "edicoes": [],
+      "antesDepois": false,
+      "bytes": 6403299,
+      "sha256": "6841ea3d8eedafb34e1d21ec4e751960985e759ed879da5db9c83986331b452a",
+      "largura": 720,
+      "altura": 1280,
+      "duracaoSeg": 22.2,
+      "pacienteRef": "P-002",
+      "profissionalResponsavelRef": "CONFIRMAR",
+      "previewOk": true,
+      "descricao": "Paciente adulto realiza testes de salto unipodal (hop tests) em pista de grama sintética. Mesmo espaço do vídeo do curso (prancha de surfe na parede): CONFIRMAR que é a Plenus.",
+      "alt": "Paciente realiza saltos em uma perna sobre fita de medição em pista de grama sintética",
+      "usoSugerido": "Refazer sem texto (o texto é queimado na imagem e cobre a área central). Base para conteúdo educativo sobre critérios de retorno ao esporte, com texto próprio e fonte em docs/pesquisa.",
+      "legenda": {
+        "status": "pendente",
+        "arquivo": "assets-originais/videos/derivados/video-P-002-retorno-esporte.vtt"
+      },
+      "derivados": [
+        "assets-originais/videos/derivados/video-P-002-retorno-esporte-secao.mp4",
+        "assets-originais/videos/derivados/video-P-002-retorno-esporte-secao.webm",
+        "assets-originais/videos/derivados/video-P-002-retorno-esporte-poster.webp"
+      ],
+      "problemas": [
+        "Texto queimado expõe cirurgia/diagnóstico: \"P.O. TENORRAFIA CALCÂNEA, fase final\".",
+        "\"Fail ❌😂\" ridiculariza o paciente (exposição vexatória).",
+        "\"garantir performance\" e \"reduzir risco de relesão\" (promessa de resultado).",
+        "\"Dia de avaliar!\" (vocabulário: consulta fisioterapêutica).",
+        "Rosto do paciente visível.",
+        "TCLE ausente; dataRegistro a confirmar.",
+        "Cobrir o texto exigiria tarjas sobre metade do quadro: preferir regravar."
+      ],
+      "foraDoRepo": true
+    },
+    {
+      "id": "video-curso-pilates",
+      "arquivo": "assets-originais/videos/curso-pilates-original.mp4",
+      "tipo": "video",
+      "categoria": "videos",
+      "autoria": "propria",
+      "consentimento": "pendente",
+      "tcleRef": null,
+      "publicavel": false,
+      "menorDeIdade": false,
+      "dataRegistro": "CONFIRMAR",
+      "crop": null,
+      "edicoes": [],
+      "antesDepois": false,
+      "bytes": 7765034,
+      "sha256": "c4e7eacfdfefbca09b4ff2fdafc2e513a79ba597979f19a5cd780b5ecb5adcad",
+      "largura": 720,
+      "altura": 1280,
+      "duracaoSeg": 60.3,
+      "pacienteRef": null,
+      "profissionalResponsavelRef": "Terceira: instrutora identificada como \"Dra. Ana Inês Gonzáles\" (CONFIRMAR título e registro)",
+      "previewOk": false,
+      "modulo": "cursos (futuro; cursos.ativo: false)",
+      "autoriaInstituicao": "Instrutora externa do curso",
+      "autorizacaoInstituicao": "pendente",
+      "comprovanteAutorizacao": null,
+      "descricao": "Curso \"Formação Pilates (básico/intermediário)\" com vários participantes em aparelhos e no solo. Outro produto (curso), não atendimento.",
+      "alt": "Participantes de um curso de formação em Pilates praticam em aparelhos",
+      "usoSugerido": "Fora da versão 1. Reservado para o módulo futuro \"Cursos\".",
+      "legenda": {
+        "status": "pendente",
+        "arquivo": "assets-originais/videos/derivados/video-curso-pilates.vtt"
+      },
+      "derivados": [
+        "assets-originais/videos/derivados/video-curso-pilates-secao.mp4",
+        "assets-originais/videos/derivados/video-curso-pilates-secao.webm",
+        "assets-originais/videos/derivados/video-curso-pilates-poster.webp"
+      ],
+      "problemas": [
+        "Terceira pessoa (instrutora): autorização formal e título/registro a confirmar.",
+        "Vários participantes com rosto visível: termo de imagem de cada um.",
+        "Dados do curso (carga horária, certificação, público) inexistentes.",
+        "Celular com conteúdo de tela visível em um quadro.",
+        "dataRegistro a confirmar."
+      ],
+      "foraDoRepo": true
     }
   ]
 }
