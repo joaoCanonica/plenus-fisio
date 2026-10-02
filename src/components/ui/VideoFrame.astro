@@ -1,0 +1,31 @@
+---
+// Player nativo (sem JS): preload="none", poster leve, legenda .vtt quando revisada.
+// Junto do vídeo: data do registro + identificação (COFFITO).
+import MediaFrame from './MediaFrame.astro';
+import BadgeId from './BadgeId.astro';
+interface Fonte { src: string; type: 'video/mp4' | 'video/webm' }
+interface Props {
+  fontes: Fonte[];
+  poster?: string | undefined;
+  rotulo: string;
+  formato?: '4:5' | '9:16' | '9:5';
+  legendaVtt?: string | undefined;
+  semAudio?: boolean;
+  dataRegistro: string | null;
+}
+const { fontes, poster, rotulo, formato = '9:16', legendaVtt, semAudio = false, dataRegistro } = Astro.props;
+const data = dataRegistro ? new Date(`${dataRegistro}T12:00:00`).toLocaleDateString('pt-BR') : 'data a registrar';
+---
+<MediaFrame formato={formato}>
+  <video controls preload="none" playsinline muted={semAudio} poster={poster} aria-label={rotulo}>
+    {fontes.map((f) => <source src={f.src} type={f.type} />)}
+    {legendaVtt && <track kind="captions" srclang="pt-BR" label="Português" src={legendaVtt} default />}
+  </video>
+  <figcaption slot="legenda" class="vf__leg">
+    <span>Registro de {data}{semAudio ? ' · vídeo sem áudio' : ''}</span>
+    <BadgeId compacto />
+  </figcaption>
+</MediaFrame>
+<style>
+  .vf__leg { display: grid; gap: 0.25rem; }
+</style>

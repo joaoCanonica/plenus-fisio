@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import Identificacao from '../components/Identificacao.astro';
+import Provisorio from '../components/Provisorio.astro';
+import { profile, sede } from '../config/profile.config.ts';
+import { contato } from '../config/contato.config.ts';
+import { exibir, provisorio } from '../lib/modo.ts';
+import { revogacaoUrl, whatsappUrl } from '../lib/contato.ts';
+const p = profile;
+const email = exibir(contato.emailPrivacidade);
+const temMedicao = contato.analytics.tipo !== 'nenhum';
+const atualizada = '01/10/2026';
+---
+<Base titulo={`Privacidade e cookies · ${p.nomeMarca.valor}`} descricao="Como este site trata dados pessoais, cookies e imagens de pacientes, e como pedir a retirada de uma imagem ou vídeo.">
+  <article class="sec wrap texto">
+    <p class="eyebrow">Privacidade</p>
+    <h1 class="titulo">Política de privacidade e cookies</h1>
+    <p class="lead">Este é um site de apresentação profissional. Ele não agenda atendimentos, não tem formulários e não coleta dados de saúde.</p>
+    <p class="atualizada">Última atualização: {atualizada}.</p>
+
+    <nav aria-label="Nesta página" class="indice">
+      <ol>
+        <li><a href="#controlador">Quem é o responsável</a></li>
+        <li><a href="#dados">Dados tratados e finalidades</a></li>
+        <li><a href="#cookies">Cookies e preferências</a></li>
+        <li><a href="#imagens">Imagens de pacientes</a></li>
+        <li><a href="#revogacao">Como pedir a retirada (revogação do TCLE)</a></li>
+        <li><a href="#direitos">Seus direitos</a></li>
+      </ol>
+    </nav>
+
+    <h2 id="controlador">1. Quem é o responsável</h2>
+    <p>O controlador dos dados é o fisioterapeuta abaixo, que também responde pelos pedidos de privacidade (canal de atendimento ao titular, LGPD, art. 41).</p>
+    <div class="cartao"><Identificacao /></div>
+    <p>Endereço profissional: {sede().nome}, {sede().endereco.valor}.</p>
+
+    <h2 id="dados">2. Dados tratados e finalidades</h2>
+    <div class="tab-rolagem" tabindex="0" role="region" aria-label="Tabela: dados, finalidades e bases legais">
+    <table class="tab">
+      <caption class="sr-only">Dados, finalidades e bases legais</caption>
+      <thead><tr><th scope="col">Situação</th><th scope="col">Dados</th><th scope="col">Finalidade</th><th scope="col">Base legal (LGPD)</th></tr></thead>
+      <tbody>
+        <tr><td>Navegar no site</td><td>Dados técnicos de acesso registrados pela hospedagem (endereço IP, data e hora, navegador)</td><td>Segurança e funcionamento do site</td><td>Legítimo interesse (art. 7º, IX) e guarda de registros de acesso (Marco Civil da Internet, art. 15)</td></tr>
+        <tr><td>Escolha de privacidade</td><td>Sua preferência de cookies, guardada só no seu navegador</td><td>Lembrar a sua escolha</td><td>Necessário para atender ao seu pedido</td></tr>
+        <tr><td>Medição de audiência</td><td>{temMedicao ? 'Dados de navegação agregados' : 'Nenhum: não utilizada neste site'}</td><td>{temMedicao ? 'Entender o uso do site' : '-'}</td><td>{temMedicao ? 'Consentimento (art. 7º, I), revogável a qualquer momento' : '-'}</td></tr>
+        <tr><td>Contato por WhatsApp ou Instagram</td><td>O que você enviar ao iniciar a conversa, tratado no aplicativo, fora deste site</td><td>Responder e combinar a consulta fisioterapêutica</td><td>Procedimentos preliminares a pedido do titular (art. 7º, V)</td></tr>
+        <tr><td>Imagens e vídeos de pacientes</td><td>Imagem e voz, sem nome, escola, cidade ou rotina</td><td>Mostrar o trabalho fisioterapêutico</td><td>Consentimento específico e por escrito do responsável legal (arts. 11, I e 14, §1º), por meio do TCLE</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>O site não tem formulários e não pede dados de saúde. Por privacidade, evite enviar exames ou informações de saúde por mensagem antes da consulta.</p>
+
+    <h2 id="cookies">3. Cookies e preferências</h2>
+    <ul>
+      <li><strong>Necessários:</strong> só a sua escolha de privacidade, guardada no armazenamento local do navegador.</li>
+      <li><strong>Preferência de tema:</strong> se você escolher Claro ou Escuro no seletor do topo, essa escolha fica guardada no seu navegador para as próximas visitas. Nada é gravado enquanto você não clicar, e a informação não é enviada a ninguém.</li>
+      <li><strong>Medição de audiência:</strong> {temMedicao ? 'carregada somente depois que você aceita.' : 'não é utilizada.'}</li>
+      <li><strong>Conteúdo de terceiros:</strong> nenhum. O site não carrega mapas, publicações do Instagram, fontes ou scripts de outros serviços. Os links para o Instagram, o WhatsApp e o Google Maps só abrem esses serviços quando você clica neles.</li>
+    </ul>
+    <p>As opções Aceitar, Recusar e Personalizar têm o mesmo destaque, e você pode mudar de ideia a qualquer momento:</p>
+    <p><button type="button" class="btn btn--linha" data-reabrir-consentimento>Revisar preferências de cookies</button></p>
+
+    <h2 id="imagens">4. Imagens de pacientes</h2>
+    <ul>
+      <li>Só publicamos imagens, vídeos, textos ou áudios de pacientes com o Termo de Consentimento Livre e Esclarecido (TCLE) assinado. No caso de menores de idade, quem assina é o responsável legal.</li>
+      <li>Não publicamos nome, diagnóstico, cirurgia ou qualquer dado clínico que identifique o paciente, nem exposição íntima do corpo.</li>
+      <li>O conteúdo é autêntico, sem retoque. A única edição permitida é o recorte ou a cobertura de detalhes que identifiquem o paciente.</li>
+      <li>Junto de cada publicação aparecem a data do registro e a identificação do profissional.</li>
+      <li>Não publicamos comparações de "antes e depois".</li>
+    </ul>
+
+    <h2 id="revogacao">5. Como pedir a retirada (revogação do TCLE)</h2>
+    <p>O consentimento pode ser revogado a qualquer momento, sem precisar justificar e sem nenhum prejuízo ao atendimento. {contato.revogacao.prazo}</p>
+    <ol>
+      <li>Envie o pedido pelo WhatsApp, informando qual imagem ou vídeo deve ser retirado (por exemplo, a data que aparece na legenda). Não é preciso enviar dados de saúde.</li>
+      <li>Confirmamos a sua identidade como responsável legal.</li>
+      <li>O conteúdo sai do site e você recebe a confirmação.</li>
+    </ol>
+    <p><a class="btn" href={revogacaoUrl()} target="_blank" rel="noopener">Pedir retirada pelo WhatsApp<span class="sr-only"> (abre em nova aba)</span></a></p>
+    {email && <p>Também por e-mail: <a href={`mailto:${email}`}>{email}</a><Provisorio ativo={provisorio(contato.emailPrivacidade)} /></p>}
+
+    <h2 id="direitos">6. Seus direitos</h2>
+    <p>Pela LGPD (art. 18), você pode pedir: confirmação de que tratamos seus dados, acesso, correção, anonimização ou eliminação, informação sobre compartilhamento, e revogação do consentimento. Os pedidos são feitos pelo <a href={whatsappUrl()} target="_blank" rel="noopener">WhatsApp</a>. Você também pode reclamar à Autoridade Nacional de Proteção de Dados (ANPD).</p>
+  </article>
+</Base>
+
+<style>
+  .texto { max-width: 52rem; }
+  .texto h2 { font-size: 1.3rem; margin: 3rem 0 1rem; }
+  .texto ul, .texto ol { padding-left: 1.2rem; display: grid; gap: 0.6rem; }
+  .texto p + p { margin-top: 1rem; }
+  .atualizada { font-size: 0.85rem; color: var(--texto-suave); margin-top: 0.75rem; }
+  .indice { margin-top: 2rem; padding: 1.25rem 1.5rem; border: 1px solid var(--linha); border-radius: var(--raio); background: var(--superficie); }
+  .cartao { margin: 1.25rem 0; padding: 1.25rem; border: 1px solid var(--linha); border-radius: var(--raio); background: var(--superficie); }
+  .tab-rolagem { overflow-x: auto; margin: 1rem 0; }
+  .tab { width: 100%; min-width: 36rem; border-collapse: collapse; font-size: 0.88rem; }
+  .tab th, .tab td { text-align: left; vertical-align: top; padding: 0.6rem; border-bottom: 1px solid var(--linha); }
+</style>

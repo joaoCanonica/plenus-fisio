@@ -1,0 +1,17 @@
+---
+interface Props { variante?: 'neutra' | 'acento' }
+const { variante = 'neutra' } = Astro.props;
+---
+<span class:list={['tag', `tag--${variante}`]}><slot /></span>
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font: 700 0.82rem/1.2 var(--fonte-texto);
+    letter-spacing: 0.02em;
+  }
+  .tag--neutra { background: var(--superficie); color: var(--texto); border: 1px solid var(--linha); }
+  .tag--acento { background: var(--acento); color: var(--acento-texto); border: 1px solid var(--acento); }
+</style>

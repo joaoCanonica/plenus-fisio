@@ -1,0 +1,49 @@
+---
+// Barra fixa no mobile (WhatsApp + Instagram). Não cobre conteúdo: o <body>
+// ganha padding-bottom do mesmo tamanho (--barra-mobile), e o banner de
+// privacidade sobe junto. Some em telas ≥ 48rem (lá o cabeçalho tem o CTA).
+import { whatsappUrl, instagramUrl } from '../lib/contato.ts';
+const ig = instagramUrl();
+---
+<nav class="barra" aria-label="Contato rápido">
+  <a class="barra__wa" href={whatsappUrl()} target="_blank" rel="noopener">
+    Chamar no WhatsApp<span class="sr-only"> (abre em nova aba)</span>
+  </a>
+  {ig && (
+    <a class="barra__ig" href={ig} target="_blank" rel="noopener">
+      Instagram<span class="sr-only"> (abre em nova aba)</span>
+    </a>
+  )}
+</nav>
+<style>
+  .barra { display: none; }
+  @media (max-width: 47.99rem) {
+    :global(:root) { --barra-mobile: calc(3.5rem + env(safe-area-inset-bottom)); }
+    :global(body) { padding-bottom: var(--barra-mobile); }
+    .barra {
+      position: fixed;
+      z-index: 70;
+      inset: auto 0 0 0;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 0.5rem;
+      height: var(--barra-mobile);
+      padding: 0.45rem 0.75rem calc(0.45rem + env(safe-area-inset-bottom));
+      background: color-mix(in oklab, var(--superficie) 94%, transparent);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--linha);
+    }
+    .barra a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border-radius: 999px;
+      font: 700 0.92rem/1 var(--fonte-texto);
+      text-decoration: none;
+    }
+    .barra :global(svg) { width: 1.15rem; height: 1.15rem; }
+    .barra__wa { background: var(--acao); color: var(--acao-texto); }
+    .barra__ig { border: 1.5px solid var(--destaque); color: var(--destaque); }
+  }
+</style>

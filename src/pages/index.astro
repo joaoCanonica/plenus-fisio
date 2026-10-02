@@ -1,0 +1,60 @@
+---
+// Esqueleto da landing: só a estrutura herdada do template, sem conteúdo de saúde.
+// As seções da Plenus entram depois do copy deck aprovado (ver docs/ARQUITETURA.md).
+import Base from '../layouts/Base.astro';
+import Button from '../components/ui/Button.astro';
+import BadgeId from '../components/ui/BadgeId.astro';
+import Provisorio from '../components/Provisorio.astro';
+import SlotConvite from '../components/SlotConvite.astro';
+import SlotAtendimentos from '../components/SlotAtendimentos.astro';
+import Onde from '../components/Onde.astro';
+import Faq from '../components/Faq.astro';
+import Contato from '../components/Contato.astro';
+import { copy } from '../config/copy.config.ts';
+import { profile, registroCrefito, sede } from '../config/profile.config.ts';
+import { whatsappUrl } from '../lib/contato.ts';
+import { EM_PRODUCAO, exibir, provisorio } from '../lib/modo.ts';
+const p = profile;
+const subtitulo = exibir(copy.hero.subtitulo);
+const titulo = `${p.nomeMarca.valor} · Fisioterapia e Pilates em Lages (SC)`;
+const descricao = `${p.nomeMarca.valor}, clínica de fisioterapia em Lages (SC). Agende uma consulta fisioterapêutica pelo WhatsApp.`;
+// Dados estruturados só em produção (com dados confirmados).
+const ld = EM_PRODUCAO
+  ? JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Physiotherapy',
+      name: p.nomeMarca.valor,
+      url: p.dominio.valor,
+      address: sede().endereco.valor,
+      employee: {
+        '@type': 'Person',
+        name: p.nomeCompleto.valor,
+        jobTitle: p.profissao.valor,
+        identifier: registroCrefito(),
+      },
+    })
+  : null;
+---
+<Base titulo={titulo} descricao={descricao} landing>
+  {ld && <script type="application/ld+json" set:html={ld} />}
+  <section id="inicio" class="sec tom-claro" aria-labelledby="hero-titulo">
+    <div class="wrap">
+      <h1 id="hero-titulo" class="titulo">
+        {copy.hero.titulo.valor}<Provisorio ativo={provisorio(copy.hero.titulo)} titulo="Título a aprovar" />
+      </h1>
+      {subtitulo && <p class="lead">{subtitulo}<Provisorio ativo={provisorio(copy.hero.subtitulo)} /></p>}
+      <div class="inicio__acoes"><Button href={whatsappUrl()} externo>Chamar no WhatsApp</Button></div>
+      <div class="inicio__id"><BadgeId compacto /></div>
+    </div>
+  </section>
+  <SlotConvite />
+  <SlotAtendimentos />
+  <Onde />
+  <Faq />
+  <Contato />
+</Base>
+
+<style>
+  .inicio__acoes { margin-top: 2rem; }
+  .inicio__id { margin-top: 1.5rem; }
+</style>

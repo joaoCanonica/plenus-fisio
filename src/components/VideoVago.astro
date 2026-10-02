@@ -1,0 +1,34 @@
+---
+// Slot vago (só dev/preview): poster tipográfico "Vídeo em breve" para aprovar o layout.
+import Provisorio from './Provisorio.astro';
+interface Props { titulo: string; formato: '9:16' | '9:5' }
+const { titulo, formato } = Astro.props;
+---
+<figure class:list={['vago', `vago--${formato === '9:16' ? 'vertical' : 'paisagem'}`]}>
+  <div class="vago__poster tom-marca" aria-hidden="true">
+    <span class="vago__emb">Vídeo em breve</span>
+    <span class="vago__tit">{titulo}</span>
+  </div>
+  <figcaption>
+    <Provisorio ativo titulo="Slot vago: aparece só em preview e some em produção" />
+    Espaço reservado. Em produção, esta seção não aparece enquanto o slot estiver vago.
+  </figcaption>
+</figure>
+<style>
+  .vago { margin: 0; }
+  .vago__poster {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    text-align: center;
+    border-radius: var(--raio-g);
+    background: radial-gradient(40rem 24rem at 85% 0%, color-mix(in oklab, var(--superficie-alt) 70%, transparent), transparent 60%), var(--fundo);
+  }
+  .vago--vertical .vago__poster { aspect-ratio: 9 / 16; }
+  .vago--paisagem .vago__poster { aspect-ratio: 16 / 7; }
+  .vago__emb { font: 700 0.72rem/1 var(--fonte-texto); letter-spacing: 0.22em; text-transform: uppercase; color: var(--destaque); }
+  .vago__tit { font: 400 clamp(1.3rem, 1rem + 1.6vw, 2.1rem)/1.15 var(--fonte-display); text-transform: uppercase; letter-spacing: 0.05em; max-width: 18ch; }
+  figcaption { margin-top: 0.9rem; font-size: 0.85rem; color: var(--texto-suave); }
+</style>

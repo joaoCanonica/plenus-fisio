@@ -1,0 +1,53 @@
+---
+// Instagram sem embed: botão "Seguir" (link) + até 6 publicações locais do
+// manifesto. Nenhum request ao Instagram é feito pelo site.
+import Button from './ui/Button.astro';
+import Provisorio from './Provisorio.astro';
+import { instagram } from '../config/instagram.config.ts';
+import { imagemLiberada, srcsetImagem } from '../lib/manifesto.ts';
+import { EM_PRODUCAO } from '../lib/modo.ts';
+import { instagramUrl, instagramUser } from '../lib/contato.ts';
+const posts = instagram.posts
+  .slice(0, 6)
+  .flatMap((p) => {
+    const item = imagemLiberada(p.midiaId, EM_PRODUCAO);
+    return item ? [{ ...p, item, webp: srcsetImagem(item, 'webp'), avif: srcsetImagem(item, 'avif') }] : [];
+  });
+// Em preview, sem posts cadastrados, mostra 6 espaços para aprovar o layout.
+const ig = instagramUrl();
+const vagos = !EM_PRODUCAO && posts.length === 0 ? 6 : 0;
+---
+<div class="ig">
+  {ig && <Button href={ig} variante="secundario" externo>Seguir @{instagramUser()}</Button>}
+  {posts.length > 0 && (
+    <ul class="ig__grade">
+      {posts.map((p) => (
+        <li>
+          <a href={p.url} target="_blank" rel="noopener" aria-label={`${p.legenda} (publicação no Instagram, abre em nova aba)`}>
+            <picture>
+              <source type="image/avif" srcset={p.avif.srcset} sizes="(min-width: 60rem) 10rem, 30vw" />
+              <img src={p.webp.srcset.split(', ')[0]?.split(' ')[0]} srcset={p.webp.srcset} sizes="(min-width: 60rem) 10rem, 30vw" alt={p.item.alt} loading="lazy" decoding="async" width={p.webp.largura} height={p.webp.altura} />
+            </picture>
+          </a>
+          {!p.item.publicavel && <Provisorio ativo />}
+        </li>
+      ))}
+    </ul>
+  )}
+  {vagos > 0 && (
+    <>
+      <ul class="ig__grade" aria-hidden="true">
+        {Array.from({ length: vagos }, () => <li class="ig__vago"></li>)}
+      </ul>
+      <p class="ig__nota"><Provisorio ativo titulo="Sem publicações selecionadas" /> Até 6 publicações selecionadas, como arquivos locais (com TCLE quando houver paciente). Em produção, sem publicações, aparece só o botão.</p>
+    </>
+  )}
+</div>
+<style>
+  .ig { display: grid; gap: 1.25rem; justify-items: start; margin-top: 1.25rem; }
+  .ig__grade { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .ig__grade li { position: relative; aspect-ratio: 1; border-radius: 0.75rem; overflow: hidden; background: var(--superficie); }
+  .ig__grade img { width: 100%; height: 100%; object-fit: cover; }
+  .ig__vago { border: 1px dashed var(--linha); }
+  .ig__nota { font-size: 0.8rem; color: var(--texto-suave); }
+</style>

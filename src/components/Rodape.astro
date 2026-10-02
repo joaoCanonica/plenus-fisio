@@ -1,0 +1,99 @@
+---
+import Marca from './Marca.astro';
+import Identificacao from './Identificacao.astro';
+import Provisorio from './Provisorio.astro';
+import { profile, sede } from '../config/profile.config.ts';
+import { exibir, provisorio } from '../lib/modo.ts';
+import { instagramUrl, revogacaoUrl, whatsappUrl } from '../lib/contato.ts';
+const ig = instagramUrl();
+const p = profile;
+const lattes = exibir(p.lattes);
+const endereco = sede().endereco;
+const ano = new Date().getFullYear();
+---
+<footer class="rod tom-claro">
+  <div class="wrap rod__grade">
+    <div class="rod__marca">
+      <Marca class="rod__logo" />
+      <p class="rod__frase">{p.nomeMarca.valor}</p>
+    </div>
+    <div>
+      <h2 class="rod__h">Identificação profissional</h2>
+      <Identificacao />
+    </div>
+    <div>
+      <h2 class="rod__h">Endereço</h2>
+      <address>{sede().nome} · {endereco.valor}<Provisorio ativo={provisorio(endereco)} /></address>
+      <h2 class="rod__h">Links</h2>
+      <ul class="rod__links">
+        <li><a href={whatsappUrl()} target="_blank" rel="noopener">WhatsApp</a></li>
+        {ig && <li><a href={ig} target="_blank" rel="noopener">Instagram</a></li>}
+        {lattes && <li><a href={lattes} target="_blank" rel="noopener">Currículo Lattes</a></li>}
+        <li><a href="/privacidade">Política de privacidade e cookies</a></li>
+        <li><button type="button" class="rod__btn" data-reabrir-consentimento>Preferências de cookies</button></li>
+      </ul>
+      <h2 class="rod__h">Imagens de pacientes</h2>
+      <ul class="rod__links">
+        <li><a href={revogacaoUrl()} target="_blank" rel="noopener">Pedir retirada de imagem ou vídeo (revogar o TCLE)<span class="sr-only"> (abre o WhatsApp em nova aba)</span></a></li>
+        <li><a href="/privacidade#revogacao">Como funciona a retirada</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap rod__base">
+    <p>
+      © {ano} {p.nomeMarca.valor}. As informações deste site têm caráter educativo e
+      não substituem a consulta com profissional de saúde. Este site não agenda
+      atendimentos nem coleta dados de saúde.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .rod {
+    padding-block: 4.5rem 2rem;
+    border-top: 1px solid var(--linha);
+  }
+  .rod a { color: var(--destaque); }
+  .rod :global(dt) { color: var(--texto-suave); }
+  .rod :global(.id__link) { color: var(--destaque); }
+  .rod__grade {
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+  .rod :global(.rod__logo) { width: 4.5rem; height: 4.1rem; color: var(--destaque); }
+  .rod__frase {
+    font: 400 1.25rem/1.4 var(--fonte-display);
+    margin-top: 1.25rem;
+    max-width: 18rem;
+    color: var(--texto);
+  }
+  .rod__h {
+    font: 700 0.7rem/1 var(--fonte-texto);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+    margin-bottom: 1rem;
+  }
+  .rod__h:not(:first-child) { margin-top: 2rem; }
+  address { font-style: normal; }
+  .rod__links { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
+  .rod__btn {
+    font: inherit;
+    color: var(--destaque);
+    background: none;
+    border: 0;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+    text-align: left;
+  }
+  .rod__base {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--linha);
+    font-size: 0.82rem;
+    color: var(--texto-suave);
+  }
+</style>

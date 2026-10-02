@@ -1,0 +1,38 @@
+---
+// SLOT A "convite": logo após o hero. Vertical 9:16 + CTA.
+import Button from './ui/Button.astro';
+import VideoPlayer from './VideoPlayer.astro';
+import VideoVago from './VideoVago.astro';
+import { slots } from '../config/slots-video.config.ts';
+import { renderConvite } from '../lib/slots.ts';
+import { whatsappUrl } from '../lib/contato.ts';
+const s = slots.conviteVideo;
+const r = renderConvite();
+---
+{r && (
+  <section id="convite" class="sec convite tom-claro" aria-labelledby="convite-titulo">
+    <div class="wrap convite__grade">
+      <div class="convite__texto" data-revelar>
+        <h2 id="convite-titulo" class="titulo">{s.titulo}</h2>
+        <p class="lead">{s.texto}</p>
+        <div class="convite__cta">
+          <Button href={whatsappUrl()} externo>{s.cta}</Button>
+        </div>
+      </div>
+      <div class="convite__video" data-revelar style="--i:1">
+        {r.tipo === 'placeholder' ? (
+          <VideoVago titulo={s.titulo} formato="9:16" />
+        ) : (
+          r.itens.map((v) => <VideoPlayer video={v} formato="9:16" />)
+        )}
+      </div>
+    </div>
+  </section>
+)}
+<style>
+  .convite { background: var(--superficie); border-block: 1px solid var(--linha); }
+  .convite__grade { display: grid; gap: 2.5rem; align-items: center; }
+  @media (min-width: 60rem) { .convite__grade { grid-template-columns: 1.1fr 1fr; gap: 5rem; } }
+  .convite__cta { margin-top: 2rem; }
+  .convite__video { justify-self: center; width: min(100%, 22rem); }
+</style>

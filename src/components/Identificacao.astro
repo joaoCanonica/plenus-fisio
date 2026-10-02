@@ -1,0 +1,66 @@
+---
+// Bloco de identificação exigido pelo COFFITO: nome completo, profissão e CREFITO,
+// com link para a consulta pública do registro (quando informado).
+import Provisorio from './Provisorio.astro';
+import Icone from './ui/Icon.astro';
+import { profile, registroCrefito, tituloProfissional } from '../config/profile.config.ts';
+import { exibir, provisorio } from '../lib/modo.ts';
+interface Props { variante?: 'cartao' | 'linha' }
+const { variante = 'cartao' } = Astro.props;
+const p = profile;
+const crefitoProv = provisorio(p.crefito.regiao) || provisorio(p.crefito.numero);
+const verificacao = exibir(p.linkVerificacaoCrefito);
+---
+{variante === 'cartao' ? (
+  <dl class="id">
+    <div>
+      <dt>Profissional</dt>
+      <dd>{p.nomeCompleto.valor}<Provisorio ativo={provisorio(p.nomeCompleto)} /></dd>
+    </div>
+    <div>
+      <dt>Profissão</dt>
+      <dd>{p.profissao.valor} · {tituloProfissional()}</dd>
+    </div>
+    <div>
+      <dt>Registro</dt>
+      <dd>
+        {registroCrefito()}<Provisorio ativo={crefitoProv} />
+        {verificacao ? (
+          <a class="id__link" href={verificacao} target="_blank" rel="noopener">
+            Consultar registro no conselho<Icone nome="externo" /><span class="sr-only"> (abre em nova aba)</span>
+          </a>
+        ) : (
+          null
+        )}
+      </dd>
+    </div>
+  </dl>
+) : (
+  <p class="id-linha">
+    {p.nomeCompleto.valor} · {p.profissao.valor} · {registroCrefito()}
+    <Provisorio ativo={provisorio(p.nomeCompleto) || crefitoProv} />
+  </p>
+)}
+
+<style>
+  .id { display: grid; gap: 1rem; margin: 0; }
+  .id div { display: grid; gap: 0.2rem; }
+  dt {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+  }
+  dd { margin: 0; font-weight: 500; }
+  .id__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.35rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+  .id__link :global(svg) { width: 0.95rem; height: 0.95rem; }
+  .id-linha { font-size: 0.85rem; color: var(--texto-suave); }
+</style>

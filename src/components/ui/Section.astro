@@ -1,0 +1,14 @@
+---
+// Seção com tom: "claro" segue o esquema da página (claro/escuro do sistema);
+// "escuro" (grafite) e "marca" (verde) são fixos. Cada tom redefine os tokens semânticos.
+import type { Tom } from '../../config/theme.config.ts';
+interface Props { tom?: Tom; id?: string; rotulo?: string; class?: string; compacta?: boolean }
+const { tom = 'claro', id, rotulo, class: cls, compacta = false } = Astro.props;
+---
+<section id={id} aria-labelledby={rotulo} class:list={['secao', `tom-${tom}`, { 'secao--compacta': compacta }, cls]}>
+  <slot />
+</section>
+<style>
+  .secao { padding-block: var(--sec); }
+  .secao--compacta { padding-block: calc(var(--sec) * 0.55); }
+</style>

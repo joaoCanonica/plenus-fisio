@@ -1,0 +1,19 @@
+---
+// Linha "Fonte:" com links. Toda afirmação clínica da página usa este componente.
+import type { Fonte } from '../../config/copy.config.ts';
+interface Props { fontes: readonly Fonte[]; class?: string }
+const { fontes, class: cls } = Astro.props;
+---
+<p class:list={['fontes', cls]}>
+  {fontes.length > 1 ? 'Fontes: ' : 'Fonte: '}
+  {fontes.map((f, i) => (
+    <>
+      {f.url ? <a href={f.url} target="_blank" rel="noopener">{f.texto}<span class="sr-only"> (abre em nova aba)</span></a> : f.texto}
+      {i < fontes.length - 1 ? '; ' : '.'}
+    </>
+  ))}
+</p>
+<style>
+  .fontes { font-size: 0.8rem; line-height: 1.5; color: var(--texto-suave); margin-top: 0.75rem; }
+  .fontes a { color: inherit; }
+</style>

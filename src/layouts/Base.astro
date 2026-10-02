@@ -1,0 +1,89 @@
+---
+import '@fontsource/lato/latin-400.css';
+import '@fontsource/lato/latin-400-italic.css';
+import '@fontsource/lato/latin-700.css';
+import '../styles/global.css';
+// Fontes críticas pré-carregadas para evitar troca tardia (CLS).
+import lato400 from '@fontsource/lato/files/lato-latin-400-normal.woff2?url';
+import lato700 from '@fontsource/lato/files/lato-latin-700-normal.woff2?url';
+import Cabecalho from '../components/Cabecalho.astro';
+import Rodape from '../components/Rodape.astro';
+import Consentimento from '../components/Consentimento.astro';
+import BarraMobile from '../components/BarraMobile.astro';
+import { EM_PRODUCAO } from '../lib/modo.ts';
+import { listarPendencias } from '../lib/validacao.ts';
+import { identificacao } from '../lib/contato.ts';
+import { cssDoTema, themeColor } from '../lib/tema.ts';
+
+interface Props { titulo: string; descricao: string; noindex?: boolean; landing?: boolean; preload?: { srcset: string; sizes: string; type: string } | undefined }
+const { titulo, descricao, noindex = false, landing = false, preload } = Astro.props;
+const pend = EM_PRODUCAO ? [] : listarPendencias();
+const nBloq = pend.filter((p) => p.nivel === 'bloqueante').length;
+const canonico = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descricao} />
+    <meta name="author" content={identificacao()} />
+    <meta name="theme-color" content={themeColor()} />
+    <style is:global set:html={cssDoTema()}></style>
+    {EM_PRODUCAO && !noindex ? <link rel="canonical" href={canonico} /> : <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descricao} />
+    {preload && <link rel="preload" as="image" imagesrcset={preload.srcset} imagesizes={preload.sizes} type={preload.type} fetchpriority="high" />}
+    <link rel="preload" as="font" type="font/woff2" href={lato400} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={lato700} crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      // .js para revelações.
+      (function () {
+        var h = document.documentElement;
+        h.classList.add('js');
+        try {
+          // Tema escolhido pela pessoa (só existe depois de um clique no seletor).
+          var t = localStorage.getItem('plenus-tema');
+          if (t === 'claro' || t === 'escuro') h.setAttribute('data-tema', t);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+    {!EM_PRODUCAO && (
+      <aside aria-label="Versão em revisão"><a class="faixa-preview" href="/pendencias">
+        Em revisão · versão provisória, não indexada · {nBloq} pendência(s) bloqueante(s) · ver lista
+      </a></aside>
+    )}
+    <Cabecalho />
+    <main id="conteudo" tabindex="-1">
+      <slot />
+    </main>
+    <Rodape />
+    <Consentimento />
+    {landing && <BarraMobile />}
+    <script>
+      import '../scripts/revelar.ts';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .faixa-preview {
+    display: block;
+    padding: 0.45rem var(--gutter);
+    background: var(--aviso-fundo);
+    color: var(--aviso-texto);
+    font: 700 0.75rem/1.4 var(--fonte-texto);
+    letter-spacing: 0.06em;
+    text-align: center;
+    text-decoration: none;
+    border-bottom: 1px dashed var(--aviso-borda);
+  }
+  main:focus { outline: none; }
+</style>

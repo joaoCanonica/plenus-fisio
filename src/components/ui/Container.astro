@@ -1,0 +1,11 @@
+---
+interface Props { largura?: 'texto' | 'padrao' | 'larga'; class?: string }
+const { largura = 'padrao', class: cls } = Astro.props;
+---
+<div class:list={['container', `container--${largura}`, cls]}><slot /></div>
+<style>
+  .container { width: min(100% - 2 * var(--gutter), var(--w)); margin-inline: auto; }
+  .container--texto { --w: 44rem; }
+  .container--padrao { --w: 72rem; }
+  .container--larga { --w: 84rem; }
+</style>

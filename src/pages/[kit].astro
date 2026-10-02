@@ -1,0 +1,149 @@
+---
+// /_kit: vitrine do design system (noindex). Arquivos com "_" são ignorados
+// como página pelo Astro, por isso a rota é dinâmica.
+import Base from '../layouts/Base.astro';
+import Section from '../components/ui/Section.astro';
+import Container from '../components/ui/Container.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+import Button from '../components/ui/Button.astro';
+import Link from '../components/ui/Link.astro';
+import Card from '../components/ui/Card.astro';
+import Tag from '../components/ui/Tag.astro';
+import Icon from '../components/ui/Icon.astro';
+import MediaFrame from '../components/ui/MediaFrame.astro';
+import VideoFrame from '../components/ui/VideoFrame.astro';
+import BadgeId from '../components/ui/BadgeId.astro';
+import { theme, type Tokens } from '../config/theme.config.ts';
+import { verificarContraste } from '../lib/tema.ts';
+import { midiaPorId, urlDerivado } from '../lib/manifesto.ts';
+import { EM_PRODUCAO } from '../lib/modo.ts';
+
+export function getStaticPaths() {
+  return [{ params: { kit: '_kit' } }];
+}
+
+const tons = ['claro', 'escuro', 'marca'] as const;
+const resultados = verificarContraste();
+const tokens = Object.keys(theme.esquemas.claro) as (keyof Tokens)[];
+const kebab = (s: string) => s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+// Em produção, o kit só mostra mídia publicável (as demais nem são copiadas).
+const liberada = (id: string) => { const m = midiaPorId(id); return m && (!EM_PRODUCAO || m.publicavel) ? m : undefined; };
+// Exemplos de vídeo: ids do manifesto (vazio = não renderiza).
+const v = liberada('');
+const nk = liberada('');
+const icones = ['whatsapp', 'instagram', 'seta', 'externo', 'mapa'] as const;
+---
+<Base titulo="Kit · design system" descricao="Componentes e tokens do design system (uso interno)." noindex>
+  <Section tom="claro" compacta>
+    <Container>
+      <Eyebrow>Design system</Eyebrow>
+      <h1 class="kit-h1">Kit de componentes</h1>
+      <p class="lead">Paleta provisória: verde, off-white e areia (amostrar o verde do logo da Plenus). Texto em Lato. Todas as cores vêm de <code>src/config/theme.config.ts</code>.</p>
+    </Container>
+  </Section>
+
+  <Section tom="claro" compacta>
+    <Container>
+      <h2 class="kit-h2">Tokens</h2>
+      {(['claro', 'escuro'] as const).map((esq) => (
+        <div data-tema={esq} class="kit-esq tom-claro">
+          <p class="kit-rot">Esquema {esq}</p>
+          <ul class="kit-tokens">
+            {tokens.map((t) => (
+              <li><span class="kit-sw" style={`background: var(--${kebab(t)})`}></span><code>--{kebab(t)}</code></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <h2 class="kit-h2">Contraste AA ({resultados.filter((r) => r.ok).length}/{resultados.length} pares aprovados)</h2>
+      <table class="kit-tab">
+        <thead><tr><th scope="col">Contexto</th><th scope="col">Par</th><th scope="col">Razão</th><th scope="col">Mínimo</th><th scope="col">Status</th></tr></thead>
+        <tbody>
+          {resultados.map((r) => (
+            <tr><td>{r.contexto}</td><td>{r.frente} / {r.fundo}</td><td>{r.razao.toFixed(2)}:1</td><td>{r.minimo}:1</td><td>{r.ok ? 'AA ✔' : 'falha ✖'}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </Container>
+  </Section>
+
+  {(['claro', 'escuro'] as const).map((esq) => (
+    <div data-tema={esq}>
+      {tons.map((tom) => (
+        <Section tom={tom} compacta>
+          <Container>
+            <Eyebrow>Tom {tom} · esquema {esq}</Eyebrow>
+            <h2 class="kit-h2">Fisioterapia e Pilates</h2>
+            <p>Texto corrido em Lato. <span class="kit-suave">Texto suave para apoio.</span> <Link href="#">Link interno</Link> · <Link href="https://www.coffito.gov.br/" externo>Link externo</Link></p>
+            <div class="kit-linha">
+              <Button href="#" icone="whatsapp">Primário</Button>
+              <Button href="#" variante="secundario" icone="instagram">Secundário</Button>
+              <Button>Botão</Button>
+            </div>
+            <div class="kit-linha">
+              <Tag>Neutra</Tag><Tag variante="acento">Acento</Tag>
+              {icones.map((i) => <span class="kit-ico" title={i}><Icon nome={i} /></span>)}
+            </div>
+            <div class="kit-cards">
+              <Card><h3 class="kit-h3">Card</h3><p>Superfície padrão.</p></Card>
+              <Card destaque><h3 class="kit-h3">Card destaque</h3><p>Superfície alternativa.</p></Card>
+              <Card><BadgeId /><p class="kit-mt">Badge de identificação</p></Card>
+            </div>
+          </Container>
+        </Section>
+      ))}
+    </div>
+  ))}
+
+  <Section tom="claro" compacta>
+    <Container>
+      <h2 class="kit-h2">Mídia</h2>
+      <div class="kit-midia">
+                <MediaFrame formato="4:5"><div class="kit-ph">MediaFrame 4:5</div><figcaption slot="legenda">4:5</figcaption></MediaFrame>
+        <MediaFrame formato="9:16"><div class="kit-ph">MediaFrame 9:16</div><figcaption slot="legenda">9:16</figcaption></MediaFrame>
+        {nk && (
+          <VideoFrame
+            formato="9:16"
+            rotulo={nk.alt}
+            poster={urlDerivado(nk, 'poster', 'webp') ?? undefined}
+            fontes={[{ src: urlDerivado(nk, 'secao', 'webm') ?? '', type: 'video/webm' }, { src: urlDerivado(nk, 'secao', 'mp4') ?? '', type: 'video/mp4' }]}
+            dataRegistro={nk.dataRegistro}
+          />
+        )}
+      </div>
+      {v && (
+        <div class="kit-mt">
+          <VideoFrame
+            formato="9:5"
+            rotulo={v.alt}
+            semAudio
+            poster={urlDerivado(v, 'poster', 'webp') ?? undefined}
+            fontes={[{ src: urlDerivado(v, 'secao', 'webm') ?? '', type: 'video/webm' }, { src: urlDerivado(v, 'secao', 'mp4') ?? '', type: 'video/mp4' }]}
+            dataRegistro={v.dataRegistro}
+          />
+        </div>
+      )}
+    </Container>
+  </Section>
+</Base>
+
+<style>
+  .kit-h1 { font-size: clamp(2rem, 1.4rem + 3vw, 3.4rem); margin-top: 1rem; }
+  .kit-h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; }
+  .kit-h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+  .kit-esq { padding: 1.25rem; border-radius: var(--raio); border: 1px solid var(--linha); margin-bottom: 1rem; }
+  .kit-rot { font-weight: 700; margin-bottom: 0.75rem; }
+  .kit-tokens { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); }
+  .kit-tokens li { display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem; }
+  .kit-sw { width: 2rem; height: 2rem; border-radius: 0.5rem; border: 1px solid var(--linha); flex: none; }
+  .kit-tab { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .kit-tab th, .kit-tab td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--linha); }
+  .kit-linha { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.5rem; }
+  .kit-ico { display: inline-grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 1px solid var(--linha); color: var(--destaque); }
+  .kit-ico :global(svg) { width: 1.2rem; height: 1.2rem; }
+  .kit-cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); margin-top: 1.5rem; }
+  .kit-suave { color: var(--texto-suave); }
+  .kit-mt { margin-top: 1rem; }
+  .kit-midia { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); align-items: start; }
+  .kit-ph { height: 100%; display: grid; place-items: center; padding: 1rem; text-align: center; color: var(--texto-suave); font-size: 0.85rem; }
+</style>

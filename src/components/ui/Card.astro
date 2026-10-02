@@ -1,0 +1,18 @@
+---
+interface Props { as?: 'div' | 'li' | 'article'; destaque?: boolean; class?: string }
+const { as: Tag = 'div', destaque = false, class: cls } = Astro.props;
+---
+<Tag class:list={['card', { 'card--destaque': destaque }, cls]}><slot /></Tag>
+<style>
+  .card {
+    background: var(--superficie);
+    color: var(--texto);
+    border: 1px solid var(--linha);
+    border-radius: var(--raio);
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+    transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--sombra-suave); }
+  .card--destaque { background: var(--superficie-alt); }
+  @media (prefers-reduced-motion: reduce) { .card:hover { transform: none; } }
+</style>

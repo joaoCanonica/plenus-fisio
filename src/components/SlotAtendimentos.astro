@@ -1,0 +1,31 @@
+---
+// SLOT B "Atendimentos": compilado com capítulos por conduta/tema, ou lista de vídeos.
+import VideoPlayer from './VideoPlayer.astro';
+import VideoVago from './VideoVago.astro';
+import { slots } from '../config/slots-video.config.ts';
+import { renderCompilado } from '../lib/slots.ts';
+const s = slots.compilado;
+const r = renderCompilado();
+---
+{r && (
+  <section id="videos" class="sec atend-v tom-claro" aria-labelledby="videos-titulo">
+    <div class="wrap">
+      <div class="atend-v__topo" data-revelar>
+        <h2 id="videos-titulo" class="titulo">{s.titulo}</h2>
+        <p class="lead">{s.texto}</p>
+      </div>
+      <div class="atend-v__lista">
+        {r.tipo === 'placeholder' ? (
+          <VideoVago titulo={s.titulo} formato="9:5" />
+        ) : (
+          r.itens.map((v) => <VideoPlayer video={v} formato="9:5" />)
+        )}
+      </div>
+    </div>
+  </section>
+)}
+<style>
+  .atend-v { background: var(--superficie-alt); }
+  .atend-v__topo { max-width: 44rem; }
+  .atend-v__lista { display: grid; gap: 3rem; margin-top: 3rem; }
+</style>

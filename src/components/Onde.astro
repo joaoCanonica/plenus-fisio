@@ -1,0 +1,67 @@
+---
+// Onde atende. Sem mapa incorporado (nada de terceiros sem consentimento): um
+// cartão de localização desenhado e o link para abrir no Google Maps.
+import Provisorio from './Provisorio.astro';
+import Icon from './ui/Icon.astro';
+import { profile } from '../config/profile.config.ts';
+import { copy } from '../config/copy.config.ts';
+import { exibir, provisorio } from '../lib/modo.ts';
+const p = profile;
+const c = copy.onde;
+const mapsDe = (nome: string, endereco: string, url: string | null) =>
+  url ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${nome}, ${endereco}`)}`;
+---
+<section id="onde" class="sec onde" aria-labelledby="onde-titulo">
+  <div class="wrap">
+    <div data-revelar>
+      <h2 id="onde-titulo" class="titulo">{c.titulo}</h2>
+      <p class="lead">{c.regiao}</p>
+    </div>
+    <ul class="onde__grade">
+      {p.unidades.map((u, i) => (
+        <li class:list={['onde__card', { 'onde__card--principal': u.id === p.sedePrincipal }]} data-revelar style={`--i:${i}`}>
+          <div class="onde__mapa" aria-hidden="true">
+            <span class="onde__pino"><Icon nome="mapa" /></span>
+          </div>
+          <div class="onde__info">
+            <h3>{u.nome}{u.id === p.sedePrincipal ? <span class="onde__sede">Local principal de atendimento</span> : <span class="onde__sede onde__sede--sec">Também atua</span>}</h3>
+            <address>{u.endereco.valor}<Provisorio ativo={provisorio(u.endereco)} titulo="Endereço por extenso a informar" /></address>
+            <a class="onde__link" href={mapsDe(u.nome, u.endereco.valor, exibir(u.mapsUrl))} target="_blank" rel="noopener">
+              Abrir no Google Maps<Icon nome="externo" /><span class="sr-only"> (abre em nova aba)</span>
+            </a>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <p class="onde__nota">{c.notaMapa}</p>
+  </div>
+</section>
+
+<style>
+  .onde__grade { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 1.5rem; }
+  @media (min-width: 60rem) { .onde__grade { grid-template-columns: 1.5fr 1fr; align-items: center; } }
+  .onde__card--principal { padding: 1.75rem; grid-template-columns: 9rem 1fr; border: 2px solid var(--destaque); }
+  .onde__card--principal h3 { font-size: 1.35rem; }
+  .onde__sede--sec { color: var(--texto-suave); }
+  .onde__card { display: grid; grid-template-columns: 7rem 1fr; gap: 1.25rem; align-items: center; padding: 1.25rem; border-radius: var(--raio-g); background: var(--superficie); border: 1px solid var(--linha); }
+  .onde__mapa {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 1rem;
+    display: grid;
+    place-items: center;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 13px, color-mix(in oklab, var(--borda) 70%, transparent) 13px 14px),
+      repeating-linear-gradient(90deg, transparent 0 13px, color-mix(in oklab, var(--borda) 70%, transparent) 13px 14px),
+      var(--superficie-alt);
+  }
+  .onde__pino { display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: var(--acao); color: var(--acao-texto); }
+  .onde__pino :global(svg) { width: 1.3rem; height: 1.3rem; }
+  .onde__info h3 { font-size: 1.05rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: baseline; }
+  .onde__sede { font: 700 0.68rem/1 var(--fonte-texto); letter-spacing: 0.12em; color: var(--destaque); text-transform: uppercase; }
+  address { font-style: normal; margin-top: 0.5rem; color: var(--texto-suave); }
+  .onde__link { display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.75rem; font-weight: 700; }
+  .onde__link :global(svg) { width: 0.95rem; height: 0.95rem; }
+  .onde__nota { margin-top: 1.25rem; font-size: 0.82rem; color: var(--texto-suave); }
+  @media (max-width: 26rem) { .onde__card { grid-template-columns: 1fr; } .onde__mapa { width: 7rem; } }
+</style>

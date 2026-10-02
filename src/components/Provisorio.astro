@@ -1,0 +1,25 @@
+---
+// Selo exibido apenas em dev/preview quando o conteúdo ainda é provisório.
+import { EM_PRODUCAO } from '../lib/modo.ts';
+interface Props { ativo: boolean; titulo?: string }
+const { ativo, titulo = 'Conteúdo provisório: pendente de confirmação' } = Astro.props;
+---
+{ativo && !EM_PRODUCAO && (
+  <span class="prov" title={titulo}>Provisório</span>
+)}
+<style>
+  .prov {
+    display: inline-block;
+    vertical-align: middle;
+    margin-inline: 0.4em;
+    padding: 0.15em 0.55em;
+    border: 1px dashed var(--aviso-borda);
+    border-radius: 0.4em;
+    background: var(--aviso-fundo);
+    color: var(--aviso-texto);
+    font: 700 0.62rem/1.4 var(--fonte-texto);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+</style>

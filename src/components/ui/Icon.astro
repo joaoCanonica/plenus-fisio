@@ -1,0 +1,27 @@
+---
+interface Props { nome: 'whatsapp' | 'instagram' | 'seta' | 'externo' | 'mapa'; class?: string }
+const { nome, class: cls } = Astro.props;
+---
+<svg class={cls} viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  {nome === 'whatsapp' && (
+    <>
+      <path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.4z" />
+      <path d="M9 8.6c.2 2.9 2.6 5.5 5.6 6.1l1.2-1.4-1.9-1-1 .8a5 5 0 0 1-2.5-2.5l.8-1-.9-1.9z" fill="currentColor" stroke-width="0.6" />
+    </>
+  )}
+  {nome === 'instagram' && (
+    <>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none" />
+    </>
+  )}
+  {nome === 'seta' && <path d="M5 12h14M13 6l6 6-6 6" />}
+  {nome === 'externo' && <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />}
+  {nome === 'mapa' && (
+    <>
+      <path d="M12 21s-7-6.1-7-11.5a7 7 0 1 1 14 0C19 14.9 12 21 12 21z" />
+      <circle cx="12" cy="9.5" r="2.5" />
+    </>
+  )}
+</svg>

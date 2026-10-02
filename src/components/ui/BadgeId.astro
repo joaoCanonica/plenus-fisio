@@ -1,0 +1,37 @@
+---
+// Badge de identificação COFFITO: "Nome · Fisioterapeuta · CREFITO número".
+import { profile } from '../../config/profile.config.ts';
+import Provisorio from '../Provisorio.astro';
+import { provisorio } from '../../lib/modo.ts';
+interface Props { compacto?: boolean }
+const { compacto = false } = Astro.props;
+const p = profile;
+---
+<p class:list={['badge-id', { 'badge-id--compacto': compacto }]}>
+  <span class="badge-id__nome">{p.nomeCompleto.valor}</span>
+  <span aria-hidden="true">·</span>
+  <span>{p.profissao.valor}</span>
+  <span aria-hidden="true">·</span>
+  <span>CREFITO {p.crefito.numero.valor}</span>
+  <Provisorio ativo={provisorio(p.nomeCompleto) || provisorio(p.crefito.regiao)} titulo="Nome completo e região do CREFITO a confirmar" />
+</p>
+<style>
+  .badge-id {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: var(--superficie);
+    border: 1px solid var(--linha);
+    color: var(--texto);
+    font: 700 0.78rem/1.3 var(--fonte-texto);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .badge-id__nome { color: var(--destaque); }
+  .badge-id--compacto { padding: 0; border: 0; background: none; font: 400 0.92rem/1.5 var(--fonte-texto); letter-spacing: 0; text-transform: none; color: var(--texto-suave); }
+  .badge-id--compacto .badge-id__nome { color: var(--texto); font-weight: 700; }
+</style>

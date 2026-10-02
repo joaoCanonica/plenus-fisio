@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+interface Props { href: string; externo?: boolean; class?: string }
+const { href, externo = false, class: cls } = Astro.props;
+---
+<a class:list={['link', cls]} href={href} target={externo ? '_blank' : undefined} rel={externo ? 'noopener' : undefined}>
+  <slot />{externo && <><Icon nome="externo" /><span class="sr-only"> (abre em nova aba)</span></>}
+</a>
+<style>
+  .link { display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 700; color: var(--destaque); }
+  .link :global(svg) { width: 0.9em; height: 0.9em; }
+</style>

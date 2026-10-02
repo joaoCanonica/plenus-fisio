@@ -1,0 +1,123 @@
+---
+// Consentimento (LGPD). O site não carrega nada de terceiros: sem embeds, mapas
+// ou scripts externos. A única categoria opcional é "Medição de audiência"
+// (contato.config.ts → analytics). Com analytics 'nenhum', o banner não aparece
+// (não há o que consentir), mas as preferências ficam acessíveis no rodapé.
+// Aceitar, Recusar e Personalizar têm o mesmo peso visual.
+import { contato } from '../config/contato.config.ts';
+const a = contato.analytics;
+const temOpcional = a.tipo !== 'nenhum';
+---
+<section
+  class="cons"
+  data-consentimento
+  data-opcional={temOpcional ? 'sim' : 'nao'}
+  data-analytics-src={a.tipo === 'script' ? a.src : undefined}
+  data-analytics-dominio={a.tipo === 'script' ? a.dominio : undefined}
+  hidden
+  role="region"
+  aria-labelledby="cons-titulo"
+>
+  <div class="cons__in">
+    <div>
+      <h2 id="cons-titulo">Privacidade e cookies</h2>
+      <p>
+        {temOpcional
+          ? 'Usamos uma ferramenta de medição de audiência só se você permitir. Este site não tem anúncios nem carrega conteúdo de terceiros.'
+          : 'Este site não usa cookies de medição nem de publicidade e não carrega conteúdo de terceiros. Nenhuma categoria opcional está ativa.'}
+        {' '}<a href="/privacidade">Política de privacidade e cookies</a>.
+      </p>
+      <div class="cons__painel" data-painel hidden>
+        <label class="cons__opcao">
+          <input type="checkbox" checked disabled />
+          <span><strong>Necessários</strong> · guardam só esta escolha, no seu navegador.</span>
+        </label>
+        <label class="cons__opcao">
+          <input type="checkbox" data-medicao disabled={!temOpcional} />
+          <span><strong>Medição de audiência</strong> · {temOpcional ? `${a.tipo === 'script' ? a.nome : ''}, sem dados de saúde.` : 'não utilizada neste site.'}</span>
+        </label>
+        <button type="button" class="btn btn--linha" data-salvar>Salvar preferências</button>
+      </div>
+    </div>
+    <div class="cons__acoes">
+      <button type="button" class="btn btn--linha" data-recusar>Recusar</button>
+      <button type="button" class="btn btn--linha" data-personalizar aria-expanded="false">Personalizar</button>
+      <button type="button" class="btn btn--linha" data-aceitar>Aceitar</button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cons {
+    position: fixed;
+    inset: auto 1rem calc(1rem + var(--barra-mobile, 0px));
+    z-index: 80;
+    max-width: 48rem;
+    margin-inline: auto;
+    background: var(--superficie);
+    color: var(--texto);
+    border: 1px solid var(--linha);
+    border-radius: var(--raio);
+    box-shadow: var(--sombra-suave);
+    padding: 1.25rem 1.4rem;
+  }
+  .cons__in { display: grid; gap: 1rem; }
+  h2 { font-size: 1.05rem; }
+  p { font-size: 0.9rem; color: var(--texto-suave); margin-top: 0.4rem; }
+  .cons__acoes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .cons__acoes .btn { padding-inline: 0.75rem; }
+  .cons__painel { display: grid; gap: 0.6rem; margin-top: 1rem; }
+  .cons__opcao { display: flex; gap: 0.6rem; align-items: start; font-size: 0.9rem; }
+  .cons__opcao input { width: 1.2rem; height: 1.2rem; margin-top: 0.15rem; accent-color: var(--acao); }
+  .cons__painel .btn { justify-self: start; min-height: 2.75rem; }
+</style>
+
+<script>
+  import { aoMudar, gravarPreferencias, lerPreferencias } from '../scripts/consentimento.ts';
+  const el = document.querySelector<HTMLElement>('[data-consentimento]');
+  if (el) {
+    const temOpcional = el.dataset['opcional'] === 'sim';
+    const painel = el.querySelector<HTMLElement>('[data-painel]');
+    const caixa = el.querySelector<HTMLInputElement>('[data-medicao]');
+    const personalizar = el.querySelector<HTMLButtonElement>('[data-personalizar]');
+
+    // Analytics: só é inserido DEPOIS do aceite. Nunca antes.
+    const carregarMedicao = () => {
+      const src = el.dataset['analyticsSrc'];
+      if (!src || document.querySelector('script[data-medicao]')) return;
+      const s = document.createElement('script');
+      s.src = src;
+      s.defer = true;
+      s.dataset['medicao'] = '';
+      if (el.dataset['analyticsDominio']) s.dataset['domain'] = el.dataset['analyticsDominio'];
+      document.head.append(s);
+    };
+    const fechar = () => { el.hidden = true; };
+    const escolher = (medicao: boolean) => { gravarPreferencias(medicao); fechar(); };
+
+    const atual = lerPreferencias();
+    if (atual?.medicao && temOpcional) carregarMedicao();
+    if (!atual && temOpcional) el.hidden = false;
+
+    aoMudar((p) => {
+      if (p.medicao && temOpcional) carregarMedicao();
+      else if (document.querySelector('script[data-medicao]')) location.reload(); // revogação
+    });
+
+    el.querySelector('[data-aceitar]')?.addEventListener('click', () => escolher(true));
+    el.querySelector('[data-recusar]')?.addEventListener('click', () => escolher(false));
+    el.querySelector('[data-salvar]')?.addEventListener('click', () => escolher(!!caixa?.checked));
+    personalizar?.addEventListener('click', () => {
+      if (!painel) return;
+      painel.hidden = !painel.hidden;
+      personalizar.setAttribute('aria-expanded', String(!painel.hidden));
+      if (caixa) caixa.checked = !!lerPreferencias()?.medicao;
+    });
+    document.querySelectorAll('[data-reabrir-consentimento]').forEach((b) =>
+      b.addEventListener('click', () => {
+        el.hidden = false;
+        el.querySelector<HTMLButtonElement>('[data-personalizar]')?.focus();
+      }),
+    );
+  }
+</script>

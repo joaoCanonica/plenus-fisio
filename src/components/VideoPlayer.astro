@@ -1,0 +1,117 @@
+---
+// Player acessível (nativo): controles do navegador (teclado incluso), sem
+// autoplay, preload="none" (carrega só ao tocar), poster leve, legendas .vtt e
+// capítulos. Junto ao vídeo: título neutro, data do registro e identificação.
+import Provisorio from './Provisorio.astro';
+import BadgeId from './ui/BadgeId.astro';
+import { urlDerivado } from '../lib/manifesto.ts';
+import { dataBR, type VideoResolvido } from '../lib/slots.ts';
+
+interface Props { video: VideoResolvido; formato: '9:16' | '9:5' }
+const { video, formato } = Astro.props;
+const { item, cfg, titulo, provisorio } = video;
+const id = `v-${cfg.midiaId}`;
+const semAudio = item.legenda?.status === 'nao-se-aplica';
+const legendaFala = item.legenda?.status === 'revisada' ? urlDerivado(item, 'secao', 'vtt') : null;
+const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+---
+<figure class:list={['vp', `vp--${formato === '9:16' ? 'vertical' : 'paisagem'}`]} data-player>
+  <div class="vp__midia">
+    <video
+      id={id}
+      controls
+      preload="none"
+      playsinline
+      muted={semAudio}
+      poster={urlDerivado(item, 'poster', 'webp') ?? undefined}
+      aria-label={`${titulo}. ${item.alt}`}
+      aria-describedby={`${id}-leg`}
+    >
+      {urlDerivado(item, 'secao', 'webm') && <source src={urlDerivado(item, 'secao', 'webm')} type="video/webm" />}
+      {urlDerivado(item, 'secao', 'mp4') && <source src={urlDerivado(item, 'secao', 'mp4')} type="video/mp4" />}
+      {legendaFala && <track kind="captions" srclang="pt-BR" label="Português" src={legendaFala} default />}
+      {semAudio && <track kind="captions" srclang="pt-BR" label="Português (sem áudio)" src={`/midia/${cfg.midiaId}.sem-audio.vtt`} default />}
+      {cfg.capitulos.length > 0 && <track kind="chapters" srclang="pt-BR" label="Capítulos" src={`/midia/${cfg.midiaId}.capitulos.vtt`} />}
+    </video>
+    {provisorio && <span class="vp__selo"><Provisorio ativo titulo="Mídia ainda não liberada para produção" /></span>}
+  </div>
+
+  {cfg.capitulos.length > 0 && (
+    <nav class="vp__caps" aria-label={`Capítulos: ${titulo}`}>
+      <ol>
+        {cfg.capitulos.map((c) => (
+          <li>
+            <button type="button" data-ir={c.inicio} aria-controls={id}>
+              <span class="vp__t">{mmss(c.inicio)}</span>
+              <span>{c.titulo}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )}
+
+  <figcaption id={`${id}-leg`} class="vp__leg">
+    <strong>{titulo}</strong>
+    <span>Registro de {dataBR(item.dataRegistro)}{semAudio ? ' · vídeo sem áudio' : ''}</span>
+    <BadgeId compacto />
+  </figcaption>
+</figure>
+
+<style>
+  .vp { margin: 0; display: grid; gap: 1rem; }
+  .vp__midia {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--raio-g);
+    background: var(--superficie-alt);
+    border: 6px solid var(--superficie);
+    box-shadow: var(--sombra-suave);
+  }
+  /* O vídeo fica dentro de overflow:hidden: o anel de foco vai na moldura. */
+  .vp__midia:has(video:focus-visible), .vp__midia:focus-within { outline: 3px solid var(--foco); outline-offset: 3px; }
+  .vp--vertical .vp__midia { aspect-ratio: 9 / 16; }
+  .vp--paisagem .vp__midia { aspect-ratio: 9 / 5; }
+  .vp__midia video { width: 100%; height: 100%; object-fit: cover; background: var(--superficie-alt); }
+  .vp__selo { position: absolute; top: 0.75rem; left: 0.75rem; }
+  .vp__caps ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .vp__caps button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--linha);
+    background: var(--superficie);
+    color: var(--texto);
+    font: 700 0.85rem/1.2 var(--fonte-texto);
+    cursor: pointer;
+  }
+  .vp__caps button:hover { border-color: var(--destaque); }
+  .vp__caps button[aria-current='true'] { background: var(--acao); color: var(--acao-texto); border-color: var(--acao); }
+  .vp__t { font-variant-numeric: tabular-nums; opacity: 0.8; }
+  .vp__leg { display: grid; gap: 0.2rem; font-size: 0.88rem; color: var(--texto-suave); }
+  .vp__leg strong { color: var(--texto); }
+</style>
+
+<script>
+  // Ilha mínima: capítulos (ir para o tempo e marcar o capítulo atual).
+  document.querySelectorAll<HTMLElement>('[data-player]').forEach((fig) => {
+    const video = fig.querySelector('video');
+    const botoes = [...fig.querySelectorAll<HTMLButtonElement>('[data-ir]')];
+    if (!video || !botoes.length) return;
+    const tempos = botoes.map((b) => Number(b.dataset['ir']));
+    botoes.forEach((b, i) =>
+      b.addEventListener('click', () => {
+        video.currentTime = tempos[i] ?? 0;
+        void video.play().catch(() => {});
+      }),
+    );
+    video.addEventListener('timeupdate', () => {
+      let atual = 0;
+      tempos.forEach((t, i) => { if (video.currentTime >= t) atual = i; });
+      botoes.forEach((b, i) => (i === atual ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current')));
+    });
+  });
+</script>

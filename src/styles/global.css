@@ -1,0 +1,237 @@
+/*
+ * Estilos globais. CORES: somente tokens semânticos gerados de
+ * src/config/theme.config.ts (src/lib/tema.ts). Nunca hex/rgb aqui.
+ * Tipografia provisória: Lato (display e texto).
+ */
+/* Fallback com métricas ajustadas às da Lato: a troca de fonte não move o layout. */
+@font-face {
+  font-family: 'Lato Fallback';
+  src: local('Arial');
+  ascent-override: 101.18%;
+  descent-override: 21.83%;
+  line-gap-override: 0%;
+  size-adjust: 97.69%;
+}
+
+:root {
+  --raio: 1rem;
+  --raio-g: 1.75rem;
+  --larg: 72rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --sec: clamp(4.5rem, 10vw, 8.5rem);
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  --sombra-suave: 0 30px 60px -34px color-mix(in oklab, var(--sombra) 45%, transparent);
+  --linha: color-mix(in oklab, var(--borda) 85%, transparent);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: var(--fonte-texto);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.075rem);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* Tons de seção: cada tom redefine os mesmos tokens (ver tema.ts). */
+.tom-claro,
+.tom-escuro,
+.tom-marca {
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+img,
+svg,
+video,
+iframe {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--fonte-display);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: 0.005em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--destaque);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: var(--acento);
+  color: var(--acento-texto);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.pular {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--acao);
+  color: var(--acao-texto);
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+}
+.pular:focus {
+  top: 1rem;
+}
+
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--larg));
+  margin-inline: auto;
+}
+
+.sec {
+  padding-block: var(--sec);
+}
+
+/* Compatibilidade com as seções existentes (mesmo visual de ui/Eyebrow). */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font: 700 0.76rem/1.2 var(--fonte-texto);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--destaque);
+}
+
+.titulo {
+  font-size: clamp(1.9rem, 1.3rem + 2.6vw, 3.1rem);
+  margin-top: 1rem;
+}
+.titulo em {
+  font-style: normal;
+  color: var(--destaque);
+}
+
+.lead {
+  font-size: clamp(1.06rem, 1rem + 0.35vw, 1.2rem);
+  color: var(--texto-suave);
+  max-width: 38rem;
+  margin-top: 1.25rem;
+}
+
+/* Botões (mesmas regras de ui/Button) */
+.btn {
+  --bg: var(--acao);
+  --fg: var(--acao-texto);
+  --bd: var(--acao);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.6rem;
+  border: 1.5px solid var(--bd);
+  background: var(--bg);
+  color: var(--fg);
+  font: 700 1rem/1 var(--fonte-texto);
+  letter-spacing: 0;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.35s var(--ease),
+    background-color 0.25s,
+    color 0.25s,
+    border-color 0.25s;
+}
+.btn:hover {
+  --bg: var(--acao-hover);
+  --bd: var(--acao-hover);
+}
+.btn svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.btn--linha {
+  --bg: transparent;
+  --fg: var(--destaque);
+  --bd: currentColor;
+}
+.btn--linha:hover {
+  --bg: var(--acento);
+  --fg: var(--acento-texto);
+  --bd: var(--acento);
+}
+.btn--claro {
+  --bg: var(--acao);
+  --fg: var(--acao-texto);
+}
+
+/* Revelação ao rolar (ilha em src/scripts/revelar.ts) */
+.js [data-revelar] {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+.js [data-revelar].visivel {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .js [data-revelar] {
+    opacity: 1;
+    transform: none;
+  }
+}

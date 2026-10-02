@@ -1,0 +1,24 @@
+---
+// Moldura de imagem.
+interface Props { formato?: '4:5' | '9:16' | '9:5'; class?: string | undefined }
+const { formato = '4:5', class: cls } = Astro.props;
+---
+<figure class:list={['mf', cls]} style={`--ar:${formato.replace(':', '/')}`}>
+  <div class="mf__midia"><slot /></div>
+  <slot name="legenda" />
+</figure>
+<style>
+  .mf { margin: 0; }
+  .mf__midia {
+    position: relative;
+    aspect-ratio: var(--ar);
+    overflow: hidden;
+    border-radius: var(--raio-g);
+    background: var(--superficie-alt);
+    border: 6px solid var(--superficie);
+    box-shadow: var(--sombra-suave);
+  }
+  .mf__midia :global(img),
+  .mf__midia :global(video) { width: 100%; height: 100%; object-fit: cover; }
+  .mf :global(figcaption) { margin-top: 0.9rem; font-size: 0.85rem; color: var(--texto-suave); }
+</style>
