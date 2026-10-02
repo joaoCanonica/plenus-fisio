@@ -4,7 +4,10 @@ import Icon from './ui/Icon.astro';
 import InstagramBloco from './InstagramBloco.astro';
 import { copy } from '../config/copy.config.ts';
 import { instagramUrl, whatsappUrl } from '../lib/contato.ts';
+import { canaisDisponiveis } from '../lib/clinica.ts';
 const ig = instagramUrl();
+// Canais confirmados; sem nenhum (preview), o botão geral provisório.
+const canais = canaisDisponiveis();
 const c = copy.contato;
 ---
 <section id="contato" class="sec contato tom-verde" aria-labelledby="contato-titulo">
@@ -13,7 +16,9 @@ const c = copy.contato;
       <h2 id="contato-titulo" class="titulo">{c.titulo}</h2>
       <p class="contato__txt">{c.texto}</p>
       <div class="contato__acoes">
-        <Button href={whatsappUrl()} externo>Chamar no WhatsApp</Button>
+        {canais.length > 1
+          ? canais.map((k) => <Button href={k.url} icone="whatsapp" externo>{k.rotulo}</Button>)
+          : <Button href={canais[0]?.url ?? whatsappUrl()} icone="whatsapp" externo>Falar no WhatsApp</Button>}
       </div>
     </div>
     {ig && (

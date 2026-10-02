@@ -175,6 +175,22 @@ export interface Cartao {
   readonly url: string;
 }
 
+/**
+ * Canais de WhatsApp CONFIRMADOS para o CTA final: o da clínica e o de cada
+ * profissional visível (nome + CREFITO) com número. Vazio = só o botão geral.
+ */
+export function canaisDisponiveis(): { rotulo: string; url: string }[] {
+  const msg = encodeURIComponent(atendimentoRapido.geral.mensagem);
+  const out: { rotulo: string; url: string }[] = [];
+  const nc = numeroDoCanal('clinica');
+  if (nc) out.push({ rotulo: `WhatsApp da ${clinica.nomeFantasia.valor}`, url: `https://wa.me/${nc}?text=${msg}` });
+  for (const p of equipeVisivel()) {
+    const n = numeroDoCanal(p.id);
+    if (n && n !== nc) out.push({ rotulo: `WhatsApp de ${p.nomeCompleto}`, url: `https://wa.me/${n}?text=${msg}` });
+  }
+  return out;
+}
+
 /** "Por onde começar": só áreas ativas com canal válido, na ordem definida. */
 export function cartoesInicio(): Cartao[] {
   return areasAtivas()

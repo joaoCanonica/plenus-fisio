@@ -6,6 +6,7 @@ import Provisorio from './Provisorio.astro';
 import BadgeId from './ui/BadgeId.astro';
 import { urlDerivado } from '../lib/manifesto.ts';
 import { dataBR, type VideoResolvido } from '../lib/slots.ts';
+import { profissionalVisivel } from '../lib/clinica.ts';
 
 interface Props { video: VideoResolvido; formato: '9:16' | '9:5' }
 const { video, formato } = Astro.props;
@@ -13,6 +14,9 @@ const { item, cfg, titulo, provisorio } = video;
 const id = `v-${cfg.midiaId}`;
 const semAudio = item.legenda?.status === 'nao-se-aplica';
 const legendaFala = item.legenda?.status === 'revisada' ? urlDerivado(item, 'secao', 'vtt') : null;
+// Regra de vídeo: data do registro + nome e CREFITO de quem atende. Sem profissional
+// visível, o vídeo nunca vai a produção (lib/validacao.ts); em preview, aviso.
+const responsavel = profissionalVisivel(item.profissionalResponsavelRef);
 const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 ---
 <figure class:list={['vp', `vp--${formato === '9:16' ? 'vertical' : 'paisagem'}`]} data-player>
@@ -54,7 +58,9 @@ const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, 
   <figcaption id={`${id}-leg`} class="vp__leg">
     <strong>{titulo}</strong>
     <span>Registro de {dataBR(item.dataRegistro)}{semAudio ? ' · vídeo sem áudio' : ''}</span>
-    <BadgeId compacto profissional={item.profissionalResponsavelRef} />
+    {responsavel
+      ? <BadgeId compacto profissional={responsavel.id} />
+      : <span>Profissional responsável a identificar (nome completo + CREFITO)<Provisorio ativo titulo="Sem profissional identificado: fora da produção" /></span>}
   </figcaption>
 </figure>
 

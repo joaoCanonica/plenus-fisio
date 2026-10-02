@@ -9,13 +9,19 @@ import { enderecoTexto } from '../lib/clinica.ts';
 const c = clinica;
 const t = copy.onde;
 const horarios = exibir(c.horarios);
+const regiao = t.regiao
+  .replace('{clinica}', c.nomeFantasia.valor)
+  .replace('{rua}', c.endereco.rua.valor)
+  .replace('{bairro}', c.endereco.bairro.valor)
+  .replace('{cidade}', c.endereco.cidade.valor)
+  .replace('{uf}', c.endereco.uf.valor);
 const mapa = exibir(c.googleMeuNegocio) ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${c.nomeFantasia.valor}, ${enderecoTexto()}`)}`;
 ---
 <section id="onde" class="sec onde" aria-labelledby="onde-titulo">
   <div class="wrap">
     <div data-revelar>
       <h2 id="onde-titulo" class="titulo">{t.titulo}</h2>
-      <p class="lead">{t.regiao}</p>
+      <p class="lead">{regiao}{t.domiciliar && ` ${t.domiciliar}`}</p>
     </div>
     <div class="onde__grade">
       <div class="onde__card onde__card--principal" data-revelar>
@@ -25,7 +31,7 @@ const mapa = exibir(c.googleMeuNegocio) ?? `https://www.google.com/maps/search/?
         <div class="onde__info">
           <h3>{c.nomeFantasia.valor}</h3>
           <address>{enderecoTexto()}</address>
-          {horarios && <p class="onde__horarios">{horarios}</p>}
+          {horarios && <p class="onde__horarios"><strong>Horários:</strong> {horarios}</p>}
           <a class="onde__link" href={mapa} target="_blank" rel="noopener">
             Abrir no Google Maps<Icon nome="externo" /><span class="sr-only"> (abre em nova aba)</span>
           </a>

@@ -36,6 +36,8 @@ export interface ItemManifesto {
   readonly profissionalResponsavelRef?: string;
   /** Arquivo guardado fora do git (repositório público). */
   readonly foraDoRepo?: boolean;
+  /** Derivado usado como fonte web no lugar do original (ex.: avatar 2x). */
+  readonly fonteWeb?: { readonly arquivo: string; readonly largura: number; readonly altura: number };
 }
 
 export const manifesto = manifestoJson as unknown as {
@@ -69,8 +71,8 @@ export function imagemLiberada(id: string, emProducao: boolean): ItemManifesto |
 
 /** srcset dos derivados gerados por prepare-media (mesmas larguras). */
 export function srcsetImagem(it: ItemManifesto, fmt: 'avif' | 'webp'): { srcset: string; largura: number; altura: number } {
-  const largura = it.crop?.largura ?? it.largura;
-  const altura = it.crop?.altura ?? it.altura;
+  const largura = it.fonteWeb?.largura ?? it.crop?.largura ?? it.largura;
+  const altura = it.fonteWeb?.altura ?? it.crop?.altura ?? it.altura;
   const ls = LARGURAS.filter((l) => l < largura).concat(largura);
   return { srcset: ls.map((l) => `/midia/${it.id}-${l}.${fmt} ${l}w`).join(', '), largura, altura };
 }

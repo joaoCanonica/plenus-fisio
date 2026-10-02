@@ -1,0 +1,44 @@
+---
+// Conheça o espaço: galeria de fotos do ESPAÇO (categoria "espaco").
+// Produção: só publicavel; preview: previewOk com selo PROVISÓRIO.
+// Sem nenhuma foto liberada, a seção não existe (os vídeos ficam no slot "Atendimentos").
+import Provisorio from './Provisorio.astro';
+import { copy } from '../config/copy.config.ts';
+import { imagemLiberada, manifesto, srcsetImagem } from '../lib/manifesto.ts';
+import { EM_PRODUCAO } from '../lib/modo.ts';
+const fotos = manifesto.itens
+  .filter((i) => i.categoria === 'espaco' && i.tipo === 'imagem')
+  .map((i) => imagemLiberada(i.id, EM_PRODUCAO))
+  .filter((i) => i !== null)
+  .slice(0, 6)
+  .map((i) => ({ item: i, webp: srcsetImagem(i, 'webp'), avif: srcsetImagem(i, 'avif') }));
+const c = copy.espaco;
+---
+{fotos.length > 0 && (
+  <section id="espaco" class="sec espaco tom-claro" aria-labelledby="espaco-titulo">
+    <div class="wrap">
+      <div data-revelar>
+        <h2 id="espaco-titulo" class="titulo">{c.titulo}</h2>
+        <p class="lead">{c.texto}</p>
+      </div>
+      <ul class="espaco__grade">
+        {fotos.map((f, i) => (
+          <li class:list={['espaco__item', { 'espaco__item--oval': i === 0 }]} data-revelar style={`--i:${i}`}>
+            <picture>
+              <source type="image/avif" srcset={f.avif.srcset} sizes="(min-width: 60rem) 24rem, 90vw" />
+              <img src={f.webp.srcset.split(' ')[0]} srcset={f.webp.srcset} sizes="(min-width: 60rem) 24rem, 90vw" alt={f.item.alt} width={f.webp.largura} height={f.webp.altura} loading="lazy" decoding="async" />
+            </picture>
+            {!f.item.publicavel && <span class="espaco__selo"><Provisorio ativo titulo="Foto sem liberação: só em preview" /></span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+<style>
+  .espaco__grade { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+  .espaco__item { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--raio-g); background: var(--acento); }
+  .espaco__item--oval { border-radius: 50%; }
+  .espaco__item img { width: 100%; height: 100%; object-fit: cover; }
+  .espaco__selo { position: absolute; top: 0.75rem; left: 0.75rem; }
+</style>

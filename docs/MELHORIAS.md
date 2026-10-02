@@ -63,3 +63,8 @@ consentimento. O bloco abaixo é gerado por `pnpm pendencias`; as seções segui
 - [ ] Curso: autorização da instrutora, título/registro, termo de imagem dos participantes e dados do curso (módulo futuro "Cursos").
 - [ ] Guardar os vídeos (originais e derivados) em armazenamento privado fora do git; o repositório é público. Conferir com o sha256 do manifesto.
 - [ ] Confirmar o título do hero: "Fisioterapia e Pilates em Lages".
+
+## Seções da landing (copy deck v1)
+- [ ] Fotos do espaço em boa resolução (categoria `espaco`, com autorização): ativam "Conheça o espaço" e a mídia do hero.
+- [ ] Vídeos de atendimento só depois de editados, com TCLE, data do registro e profissional responsável com nome completo + CREFITO (`profissionalResponsavelRef`). Vídeo referenciado sem TCLE bloqueia a produção.
+- [ ] Módulo "Cursos" (`src/config/cursos.config.ts`, desligado): ligar só com autorização da instrução, termos de imagem e dados do curso.

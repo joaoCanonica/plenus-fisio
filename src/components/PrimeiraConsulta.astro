@@ -1,0 +1,31 @@
+---
+// Como é a primeira consulta: passos numerados (lista ordenada nativa).
+import { copy } from '../config/copy.config.ts';
+const c = copy.primeiraConsulta;
+---
+<section id="primeira-consulta" class="sec consulta" aria-labelledby="consulta-titulo">
+  <div class="wrap">
+    <div data-revelar>
+      <h2 id="consulta-titulo" class="titulo">{c.titulo}</h2>
+      <p class="lead">{c.intro}</p>
+    </div>
+    <ol class="consulta__passos">
+      {c.passos.map((p, i) => (
+        <li data-revelar style={`--i:${i}`}>
+          <span class="consulta__n" aria-hidden="true">{i + 1}</span>
+          <h3>{p.titulo}</h3>
+          <p>{p.texto}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+<style>
+  .consulta { background: var(--superficie-alt); }
+  .consulta__passos { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
+  .consulta__passos li { display: grid; gap: 0.5rem; align-content: start; padding: 1.5rem; border-radius: var(--raio-g); background: var(--superficie); }
+  /* Número dentro de uma pequena oval (gesto do logo). */
+  .consulta__n { display: grid; place-items: center; width: 2.4rem; height: 3.2rem; border-radius: 50%; border: 1.5px solid var(--destaque); color: var(--destaque); font: 400 1.3rem/1 var(--fonte-display); }
+  .consulta__passos h3 { font-size: 1.05rem; margin-top: 0.25rem; }
+  .consulta__passos p { color: var(--texto-suave); font-size: 0.95rem; }
+</style>

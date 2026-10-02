@@ -97,9 +97,10 @@ for (const it of man.itens.filter((i) => liberado(i, modo))) {
     saida[it.id] = { alt: it.alt, provisorio: !it.publicavel, arquivos };
     continue;
   }
-  let base = sharp(it.arquivo).rotate();
-  if (it.crop) base = base.extract({ left: it.crop.x, top: it.crop.y, width: it.crop.largura, height: it.crop.altura });
-  const larguraMax = it.crop?.largura ?? it.largura;
+  // fonteWeb: derivado já preparado (ex.: avatar 2x Lanczos); senão, o original com recorte.
+  let base = sharp(it.fonteWeb?.arquivo ?? it.arquivo).rotate();
+  if (it.crop && !it.fonteWeb) base = base.extract({ left: it.crop.x, top: it.crop.y, width: it.crop.largura, height: it.crop.altura });
+  const larguraMax = it.fonteWeb?.largura ?? it.crop?.largura ?? it.largura;
   const ls = LARGURAS.filter((l) => l < larguraMax).concat(larguraMax);
   const fontes = { avif: [], webp: [] };
   for (const l of ls) {
@@ -113,7 +114,7 @@ for (const it of man.itens.filter((i) => liberado(i, modo))) {
   saida[it.id] = {
     alt: it.alt,
     largura: larguraMax,
-    altura: it.crop?.altura ?? it.altura,
+    altura: it.fonteWeb?.altura ?? it.crop?.altura ?? it.altura,
     provisorio: !it.publicavel,
     avif: fontes.avif.join(', '),
     webp: fontes.webp.join(', '),

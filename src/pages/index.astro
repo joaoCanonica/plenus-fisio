@@ -7,6 +7,10 @@ import SlotAtendimentos from '../components/SlotAtendimentos.astro';
 import Hero from '../components/Hero.astro';
 import PorOndeComecar from '../components/PorOndeComecar.astro';
 import Equipe from '../components/Equipe.astro';
+import Areas from '../components/Areas.astro';
+import PrimeiraConsulta from '../components/PrimeiraConsulta.astro';
+import ConhecaEspaco from '../components/ConhecaEspaco.astro';
+import SlotCursos from '../components/SlotCursos.astro';
 import Onde from '../components/Onde.astro';
 import Faq from '../components/Faq.astro';
 import Contato from '../components/Contato.astro';
@@ -39,10 +43,14 @@ const ld = EM_PRODUCAO
 <Base titulo={titulo} descricao={descricao} landing>
   {ld && <script type="application/ld+json" set:html={ld} />}
   <Hero />
-  <PorOndeComecar />
-  <Equipe />
   <SlotConvite />
+  <PorOndeComecar />
+  <Areas />
+  <PrimeiraConsulta />
+  <Equipe />
+  <ConhecaEspaco />
   <SlotAtendimentos />
+  <SlotCursos />
   <Onde />
   <Faq />
   <Contato />

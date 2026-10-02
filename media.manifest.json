@@ -78,7 +78,12 @@
         "Baixa resolução (150x150): o ideal é a foto original em alta resolução.",
         "Uso de imagem confirmado pelo cliente: CONFIRMAR por escrito com o próprio profissional.",
         "Identificar qual profissional é (Adrian ou Natalia) e só exibir com nome completo + CREFITO."
-      ]
+      ],
+      "fonteWeb": {
+        "arquivo": "assets-originais/pessoa/derivados/foto-a-300.jpg",
+        "largura": 300,
+        "altura": 300
+      }
     },
     {
       "id": "pessoa-foto-b",
@@ -112,7 +117,12 @@
         "Baixa resolução (150x150): o ideal é a foto original em alta resolução.",
         "Uso de imagem confirmado pelo cliente: CONFIRMAR por escrito com o próprio profissional.",
         "Identificar qual profissional é (Adrian ou Natalia) e só exibir com nome completo + CREFITO."
-      ]
+      ],
+      "fonteWeb": {
+        "arquivo": "assets-originais/pessoa/derivados/foto-b-300.jpg",
+        "largura": 300,
+        "altura": 300
+      }
     },
     {
       "id": "video-P-001-posparto",

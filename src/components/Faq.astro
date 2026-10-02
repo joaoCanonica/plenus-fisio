@@ -2,7 +2,8 @@
 // Perguntas frequentes: <details> nativo (sem JS). Respostas autossuficientes,
 // também publicadas como FAQPage (JSON-LD) para busca e IA.
 import { copy } from '../config/copy.config.ts';
-const c = copy.faq;
+import { pilatesPorFisioterapeuta } from '../lib/clinica.ts';
+const c = { ...copy.faq, itens: copy.faq.itens.filter((f) => !f.soPilatesClinico || pilatesPorFisioterapeuta()) };
 const ld = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'FAQPage',

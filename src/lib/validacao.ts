@@ -154,6 +154,16 @@ function checarTextos(out: Pendencia[]): void {
       return m ? [[`midia.${id}.alt`, m.alt]] : [];
     }),
   ];
+  // Todo texto do copy (folhas string), exceto o Pilates clínico enquanto não confirmado.
+  const folhas = (v: unknown, cam: string): [string, string][] =>
+    typeof v === 'string'
+      ? [[cam, v]]
+      : Array.isArray(v)
+        ? v.flatMap((x, i) => folhas(x, `${cam}[${i}]`))
+        : v && typeof v === 'object'
+          ? Object.entries(v).flatMap(([k, x]) => (k === 'url' || k === 'pesquisa' ? [] : folhas(x, `${cam}.${k}`)))
+          : [];
+  fontes.push(...folhas(copy, 'copy'));
   for (const [campo, txt] of fontes)
     for (const a of buscarTermosVetados(txt))
       out.push({ nivel: 'bloqueante', grupo: 'Conteúdo e vocabulário', campo, nota: `Termo vetado ${a}.` });
