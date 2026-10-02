@@ -1,6 +1,6 @@
 import manifestoJson from '../../media.manifest.json' with { type: 'json' };
 
-export type Consentimento = 'ok' | 'pendente' | 'nao-se-aplica';
+export type Consentimento = 'ok' | 'pendente' | 'nao-se-aplica' | 'confirmado-pelo-cliente';
 export type StatusLegenda = 'pendente' | 'revisada' | 'nao-se-aplica';
 
 export interface ItemManifesto {
@@ -58,7 +58,7 @@ export function imagemLiberada(id: string, emProducao: boolean): ItemManifesto |
   const it = midiaPorId(id);
   if (!it || it.tipo !== 'imagem') return null;
   const ok =
-    (it.publicavel && (it.consentimento === 'ok' || it.consentimento === 'nao-se-aplica')) ||
+    (it.publicavel && ['ok', 'nao-se-aplica', 'confirmado-pelo-cliente'].includes(it.consentimento)) ||
     (!emProducao && it.previewOk);
   return ok ? it : null;
 }

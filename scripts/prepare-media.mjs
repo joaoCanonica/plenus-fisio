@@ -15,7 +15,8 @@ import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'no
 
 const CATEGORIAS = ['marca', 'pessoa', 'espaco', 'videos'];
 const AUTORIA = ['propria', 'terceiro', 'desconhecida', 'CONFIRMAR'];
-const CONSENT = ['ok', 'pendente', 'nao-se-aplica'];
+// 'confirmado-pelo-cliente': uso de imagem do próprio profissional, confirmado verbalmente (sem paciente).
+const CONSENT = ['ok', 'pendente', 'nao-se-aplica', 'confirmado-pelo-cliente'];
 const EDICOES = ['recorte', 'tarja'];
 const LARGURAS = [480, 768, 1080, 1600];
 
@@ -50,7 +51,7 @@ export function validar(man) {
     // Privacidade e regras de paciente
     if (it.pacienteRef !== null && !/^P-\d{3,}$/.test(it.pacienteRef)) e('pacienteRef deve ser código opaco (P-001)');
     if (it.menorDeIdade && !it.pacienteRef) e('menor de idade exige pacienteRef');
-    if (it.pacienteRef && it.consentimento === 'nao-se-aplica') e('paciente exige consentimento (TCLE)');
+    if (it.pacienteRef && ['nao-se-aplica', 'confirmado-pelo-cliente'].includes(it.consentimento)) e('paciente exige consentimento (TCLE)');
     if (it.publicavel && it.pacienteRef && (it.consentimento !== 'ok' || !/^\d{4}-\d{2}-\d{2}$/.test(it.dataRegistro ?? ''))) e('publicável com paciente exige TCLE ok e dataRegistro');
     if (it.publicavel && it.autoria === 'CONFIRMAR') e('publicável exige autoria confirmada');
     if (it.antesDepois && !man.antesDepoisHabilitado) e('"antes e depois" desligado');
@@ -67,7 +68,7 @@ export function validar(man) {
 }
 
 export const liberado = (it, m) =>
-  ((it.publicavel && (it.consentimento === 'ok' || it.consentimento === 'nao-se-aplica')) ||
+  ((it.publicavel && ['ok', 'nao-se-aplica', 'confirmado-pelo-cliente'].includes(it.consentimento)) ||
     (m !== 'production' && it.previewOk));
 
 const man = JSON.parse(readFileSync('media.manifest.json', 'utf8'));

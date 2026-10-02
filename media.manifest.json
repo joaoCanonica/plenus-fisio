@@ -1,5 +1,118 @@
 {
   "versao": 1,
   "antesDepoisHabilitado": false,
-  "itens": []
+  "itens": [
+    {
+      "id": "marca-logo-original",
+      "arquivo": "assets-originais/marca/logo-original.jpg",
+      "categoria": "marca",
+      "tipo": "imagem",
+      "largura": 150,
+      "altura": 150,
+      "autoria": "propria",
+      "previewOk": true,
+      "crop": null,
+      "edicoes": [],
+      "pacienteRef": null,
+      "menorDeIdade": false,
+      "dataRegistro": null,
+      "bytes": 3754,
+      "sha256": "8372a939311e2374eac6e44f9f863559d808a986acc62a583d540e0f0a4f8cb0",
+      "descricao": "Logo da Plenus: oval branca aberta nas laterais, duas figuras em traço fino (exercício a dois) no topo, palavra PLENUS e \"FISIOTERAPIA & PILATES\", sobre fundo verde.",
+      "alt": "Logo da Plenus Fisioterapia & Pilates",
+      "usoSugerido": "Só referência. No site usar os lockups vetoriais derivados.",
+      "consentimento": "nao-se-aplica",
+      "publicavel": false,
+      "derivados": [
+        "assets-originais/marca/derivados/logo-1200-lanczos.png",
+        "assets-originais/marca/derivados/plenus-palavra-trace.svg",
+        "assets-originais/marca/derivados/lockup-oval.svg",
+        "assets-originais/marca/derivados/lockup-oval-mono-claro.svg",
+        "assets-originais/marca/derivados/lockup-oval-mono-escuro.svg",
+        "assets-originais/marca/derivados/lockup-horizontal.svg",
+        "assets-originais/marca/derivados/lockup-horizontal-mono-claro.svg",
+        "assets-originais/marca/derivados/lockup-horizontal-mono-escuro.svg",
+        "assets-originais/marca/derivados/simbolo-oval.svg"
+      ],
+      "coresAmostradas": {
+        "verde": "#457147",
+        "verdeDominante": "#407040",
+        "claro": "#ffffff (antialias médio #e2f5e0)"
+      },
+      "problemas": [
+        "Arquivo de 150x150: pedir o original (AI/SVG/PDF ou PNG grande).",
+        "Figuras não vetorizadas com fidelidade: ausentes dos lockups.",
+        "\"FISIOTERAPIA & PILATES\" recomposto em Lato (ilegível para vetorizar); fonte original desconhecida.",
+        "Lockups provisórios: não publicar como logo oficial sem aprovação da clínica."
+      ]
+    },
+    {
+      "id": "pessoa-foto-a",
+      "arquivo": "assets-originais/pessoa/foto-a-original.jpg",
+      "categoria": "pessoa",
+      "tipo": "imagem",
+      "largura": 150,
+      "altura": 150,
+      "autoria": "propria",
+      "previewOk": true,
+      "crop": null,
+      "edicoes": [],
+      "pacienteRef": null,
+      "menorDeIdade": false,
+      "dataRegistro": null,
+      "bytes": 4315,
+      "sha256": "ea9f9a6ac0158b2f7f223f016ae161159c734a410558f616920bcf939f006d32",
+      "descricao": "Retrato de profissional da clínica (avatar 150x150 recebido do cliente). QUAL profissional: CONFIRMAR.",
+      "alt": "Retrato de profissional da Plenus Fisioterapia & Pilates",
+      "usoSugerido": "Avatar em círculo/oval de até 96–120 px CSS, ao lado do nome completo + CREFITO. Nunca maior.",
+      "consentimento": "confirmado-pelo-cliente",
+      "profissional": "CONFIRMAR",
+      "publicavel": false,
+      "derivados": [
+        "assets-originais/pessoa/derivados/foto-a-300.webp",
+        "assets-originais/pessoa/derivados/foto-a-300.avif",
+        "assets-originais/pessoa/derivados/foto-a-300.jpg"
+      ],
+      "derivacao": "2x (300x300) com reamostragem Lanczos3 + nitidez leve (sharpen sigma 0.6). Sem super-resolução generativa, sem restauração de rosto, sem retoque. scripts/derivar-avatares.mjs",
+      "problemas": [
+        "Baixa resolução (150x150): o ideal é a foto original em alta resolução.",
+        "Uso de imagem confirmado pelo cliente: CONFIRMAR por escrito com o próprio profissional.",
+        "Identificar qual profissional é (Adrian ou Natalia) e só exibir com nome completo + CREFITO."
+      ]
+    },
+    {
+      "id": "pessoa-foto-b",
+      "arquivo": "assets-originais/pessoa/foto-b-original.jpg",
+      "categoria": "pessoa",
+      "tipo": "imagem",
+      "largura": 150,
+      "altura": 150,
+      "autoria": "propria",
+      "previewOk": true,
+      "crop": null,
+      "edicoes": [],
+      "pacienteRef": null,
+      "menorDeIdade": false,
+      "dataRegistro": null,
+      "bytes": 4550,
+      "sha256": "1f6b140dea3057d343d2dbbce9060d4d5d243ce4d18b25d4902caf07cb8a7061",
+      "descricao": "Retrato de profissional da clínica (avatar 150x150 recebido do cliente). QUAL profissional: CONFIRMAR.",
+      "alt": "Retrato de profissional da Plenus Fisioterapia & Pilates",
+      "usoSugerido": "Avatar em círculo/oval de até 96–120 px CSS, ao lado do nome completo + CREFITO. Nunca maior.",
+      "consentimento": "confirmado-pelo-cliente",
+      "profissional": "CONFIRMAR",
+      "publicavel": false,
+      "derivados": [
+        "assets-originais/pessoa/derivados/foto-b-300.webp",
+        "assets-originais/pessoa/derivados/foto-b-300.avif",
+        "assets-originais/pessoa/derivados/foto-b-300.jpg"
+      ],
+      "derivacao": "2x (300x300) com reamostragem Lanczos3 + nitidez leve (sharpen sigma 0.6). Sem super-resolução generativa, sem restauração de rosto, sem retoque. scripts/derivar-avatares.mjs",
+      "problemas": [
+        "Baixa resolução (150x150): o ideal é a foto original em alta resolução.",
+        "Uso de imagem confirmado pelo cliente: CONFIRMAR por escrito com o próprio profissional.",
+        "Identificar qual profissional é (Adrian ou Natalia) e só exibir com nome completo + CREFITO."
+      ]
+    }
+  ]
 }
