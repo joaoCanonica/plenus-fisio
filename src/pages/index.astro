@@ -15,33 +15,21 @@ import Onde from '../components/Onde.astro';
 import Faq from '../components/Faq.astro';
 import Contato from '../components/Contato.astro';
 import { clinica } from '../config/profile.config.ts';
-import { areasAtivas, enderecoTexto, equipeVisivel, registroEmpresa, responsavelTecnico } from '../lib/clinica.ts';
-import { EM_PRODUCAO, exibir } from '../lib/modo.ts';
-const c = clinica;
-const titulo = `${c.nomeFantasia.valor} · Fisioterapia e Pilates em Lages (SC)`;
-const descricao = `${c.nomeFantasia.valor}, clínica de fisioterapia em Lages (SC). Agende uma consulta fisioterapêutica pelo WhatsApp.`;
-const dominio = exibir(c.dominio);
-// Dados estruturados só em produção (com dados confirmados).
-// Dados estruturados só em produção. Pessoas só entram se visíveis (nome + CREFITO).
-const ld = EM_PRODUCAO
-  ? JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Physiotherapy',
-      name: c.nomeFantasia.valor,
-      ...(dominio ? { url: dominio } : {}),
-      address: enderecoTexto(),
-      identifier: `Registro ${registroEmpresa()}`,
-      medicalSpecialty: 'PhysicalTherapy',
-      availableService: areasAtivas().map((a) => ({ '@type': 'MedicalTherapy', name: a.titulo })),
-      employee: [
-        { '@type': 'Person', name: responsavelTecnico().nome, jobTitle: 'Fisioterapeuta, responsável técnico', identifier: responsavelTecnico().registro },
-        ...equipeVisivel().map((p) => ({ '@type': 'Person', name: p.nomeCompleto, jobTitle: 'Fisioterapeuta', identifier: p.registro })),
-      ],
-    })
-  : null;
+import { areasAtivas } from '../lib/clinica.ts';
+// SEO: especialidade + cidade, sem superlativo. Descrição gerada das áreas ativas.
+const CURTO: Record<string, string> = {
+  traumatoOrtopedica: 'ortopédica',
+  esportiva: 'esportiva',
+  obstetricaPelvica: 'obstétrica',
+  geriatrica: 'geriátrica',
+};
+const areas = areasAtivas().map((a) => CURTO[a.id]).filter(Boolean);
+const temPilates = areasAtivas().some((a) => a.id === 'pilates');
+const lista = areas.length <= 1 ? areas.join('') : `${areas.slice(0, -1).join(', ')} e ${areas.at(-1)}`;
+const titulo = `Fisioterapia${temPilates ? ' e Pilates' : ''} em Lages (SC) | ${clinica.nomeFantasia.valor.split(' ')[0]}`;
+const descricao = `${clinica.nomeFantasia.valor}, em Lages (SC): fisioterapia ${lista}${temPilates ? ', e Pilates' : ''}. Agende pelo WhatsApp.`;
 ---
-<Base titulo={titulo} descricao={descricao} landing>
-  {ld && <script type="application/ld+json" set:html={ld} />}
+<Base titulo={titulo} descricao={descricao} landing faq>
   <Hero />
   <SlotConvite />
   <PorOndeComecar />

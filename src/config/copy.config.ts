@@ -61,6 +61,8 @@ export const copy = {
   areas: {
     titulo: 'Áreas de atendimento',
     intro: 'Cada atendimento começa com uma consulta fisioterapêutica e segue um plano terapêutico individual.',
+    /** Data de acesso registrada em docs/pesquisa (GEO: fontes com data). */
+    fontesConsultadasEm: 'outubro de 2026',
     rotulos: { oQueE: 'O que é', quando: 'Quando procurar uma consulta fisioterapêutica', esperar: 'O que esperar' },
     conteudo: {
       obstetricaPelvica: {

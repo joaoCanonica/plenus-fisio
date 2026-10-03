@@ -1,18 +1,13 @@
 ---
 // Perguntas frequentes: <details> nativo (sem JS). Respostas autossuficientes,
-// também publicadas como FAQPage (JSON-LD) para busca e IA.
+// também publicadas como FAQPage (JSON-LD, lib/schema.ts) para busca e IA.
 import { copy } from '../config/copy.config.ts';
 import { pilatesPorFisioterapeuta } from '../lib/clinica.ts';
 const c = { ...copy.faq, itens: copy.faq.itens.filter((f) => !f.soPilatesClinico || pilatesPorFisioterapeuta()) };
-const ld = JSON.stringify({
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: c.itens.map((f) => ({ '@type': 'Question', name: f.pergunta, acceptedAnswer: { '@type': 'Answer', text: f.resposta } })),
-});
+// O FAQPage (JSON-LD) é emitido pelo Base (lib/schema.ts), junto do restante do grafo.
 ---
 {c.itens.length > 0 && (
 <section id="faq" class="sec faq tom-claro" aria-labelledby="faq-titulo">
-  <script type="application/ld+json" set:html={ld} />
   <div class="wrap faq__grade">
     <div data-revelar>
       <h2 id="faq-titulo" class="titulo">{c.titulo}</h2>

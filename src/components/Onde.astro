@@ -5,10 +5,10 @@ import Icon from './ui/Icon.astro';
 import { clinica } from '../config/profile.config.ts';
 import { copy } from '../config/copy.config.ts';
 import { exibir } from '../lib/modo.ts';
-import { enderecoTexto } from '../lib/clinica.ts';
+import { enderecoTexto, horariosTexto } from '../lib/clinica.ts';
 const c = clinica;
 const t = copy.onde;
-const horarios = exibir(c.horarios);
+const horarios = horariosTexto();
 const regiao = t.regiao
   .replace('{clinica}', c.nomeFantasia.valor)
   .replace('{rua}', c.endereco.rua.valor)

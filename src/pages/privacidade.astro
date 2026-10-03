@@ -11,7 +11,7 @@ const email = exibir(contato.emailPrivacidade);
 const temMedicao = contato.analytics.tipo !== 'nenhum';
 const atualizada = '01/10/2026';
 ---
-<Base titulo={`Privacidade e cookies · ${clinica.nomeFantasia.valor}`} descricao="Como este site trata dados pessoais, cookies e imagens de pacientes, e como pedir a retirada de uma imagem ou vídeo.">
+<Base titulo={`Privacidade e cookies · ${clinica.nomeFantasia.valor}`} descricao="Como este site trata dados pessoais, cookies e imagens de pacientes, e como pedir a retirada de uma imagem ou vídeo." trilha={[{ nome: 'Início', caminho: '/' }, { nome: 'Privacidade e cookies', caminho: '/privacidade/' }]}>
   <article class="sec wrap texto">
     <p class="eyebrow">Privacidade</p>
     <h1 class="titulo">Política de privacidade e cookies</h1>

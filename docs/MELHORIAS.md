@@ -26,7 +26,8 @@ consentimento. O bloco abaixo é gerado por `pnpm pendencias`; as seções segui
 - [ ] Complemento do endereço (sala, andar).
 - [ ] WhatsApp da clínica (recepção).
 - [ ] Telefone fixo.
-- [ ] Horários de atendimento (ex.: "Segunda a sexta, 7h às 20h").
+- [ ] Horários de atendimento (os mesmos do perfil no Google).
+- [ ] Latitude e longitude da clínica (as mesmas do perfil no Google).
 - [ ] Domínio de produção (melhora SEO, canonical e sitemap).
 - [ ] Link do perfil no Google (abre o mapa e as avaliações fora do site).
 
@@ -68,3 +69,9 @@ consentimento. O bloco abaixo é gerado por `pnpm pendencias`; as seções segui
 - [ ] Fotos do espaço em boa resolução (categoria `espaco`, com autorização): ativam "Conheça o espaço" e a mídia do hero.
 - [ ] Vídeos de atendimento só depois de editados, com TCLE, data do registro e profissional responsável com nome completo + CREFITO (`profissionalResponsavelRef`). Vídeo referenciado sem TCLE bloqueia a produção.
 - [ ] Módulo "Cursos" (`src/config/cursos.config.ts`, desligado): ligar só com autorização da instrução, termos de imagem e dados do curso.
+
+## SEO e presença local (ver docs/GOOGLE_MEU_NEGOCIO.md e docs/GEO_MONITORAMENTO.md)
+- [ ] Reivindicar e completar o perfil no Google; copiar o link (`googleMeuNegocio`) e as coordenadas (`geo`).
+- [ ] Horários estruturados em `clinica.horarios`, iguais aos do Google.
+- [ ] Domínio de produção (`SITE_URL` na Vercel) para canonical, sitemap e schema.
+- [ ] Monitoramento mensal em ChatGPT, Perplexity e Gemini.

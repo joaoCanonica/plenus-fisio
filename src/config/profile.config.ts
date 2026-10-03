@@ -15,6 +15,17 @@ import { bloqueante, confirmado, opcional, type Campo } from './campo.ts';
 /** Somente dígitos: 55 + DDD + número. */
 type Telefone = string;
 
+/** Dia no padrão schema.org (Mo, Tu…). */
+export type Dia = 'Mo' | 'Tu' | 'We' | 'Th' | 'Fr' | 'Sa' | 'Su';
+/** Faixa de horário: fonte única do texto do site e do schema (openingHoursSpecification). */
+export interface Horario {
+  readonly dias: readonly Dia[];
+  /** "07:00" */
+  readonly abre: string;
+  /** "20:00" */
+  readonly fecha: string;
+}
+
 export type IdEquipe = 'adrian' | 'natalia';
 export type IdArea = 'traumatoOrtopedica' | 'esportiva' | 'obstetricaPelvica' | 'pilates' | 'geriatrica';
 /** Canal de WhatsApp: o da clínica ou o de um profissional. */
@@ -88,7 +99,10 @@ export const clinica = {
   /** WhatsApp geral da clínica (um dos canais possíveis para o bloqueante 3). */
   whatsapp: opcional<Telefone>(null, 'WhatsApp da clínica (recepção).'),
   telefone: opcional<Telefone>(null, 'Telefone fixo.'),
-  horarios: opcional<string>(null, 'Horários de atendimento (ex.: "Segunda a sexta, 7h às 20h").'),
+  /** Ex.: [{ dias: ['Mo','Tu','We','Th','Fr'], abre: '07:00', fecha: '20:00' }]. Os mesmos do Google. */
+  horarios: opcional<readonly Horario[]>(null, 'Horários de atendimento (os mesmos do perfil no Google).'),
+  /** Coordenadas do perfil no Google (schema "geo"). */
+  geo: opcional<{ readonly lat: number; readonly lng: number }>(null, 'Latitude e longitude da clínica (as mesmas do perfil no Google).'),
   instagram: confirmado('plenusfisioterapia.lages'),
   /** Domínio de produção, sem barra final. */
   dominio: opcional<string>(null, 'Domínio de produção (melhora SEO, canonical e sitemap).'),

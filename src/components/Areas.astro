@@ -19,6 +19,7 @@ const recursos = recursosConfirmados();
       <div class="areas__topo" data-revelar>
         <h2 id="areas-titulo" class="titulo">{c.titulo}</h2>
         <p class="lead">{c.intro}</p>
+        <p class="areas__data">As afirmações de saúde desta página citam a fonte. Fontes consultadas em {c.fontesConsultadasEm}.</p>
       </div>
       <div class="areas__lista">
         {lista.map((a) => {
@@ -84,6 +85,7 @@ const recursos = recursosConfirmados();
   </section>
 )}
 <style>
+  .areas__data { margin-top: 0.75rem; font-size: 0.85rem; color: var(--texto-suave); }
   .areas__lista { display: grid; gap: clamp(1.5rem, 4vw, 2.5rem); margin-top: 3rem; }
   .area {
     display: grid;

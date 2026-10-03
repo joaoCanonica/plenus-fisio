@@ -96,6 +96,24 @@ export function enderecoTexto(): string {
   return `${e.rua.valor}${num}${comp}, ${e.bairro.valor}, ${e.cidade.valor} (${e.uf.valor}), CEP ${e.cep.valor}`;
 }
 
+const NOME_DIA: Record<string, string> = { Mo: 'segunda', Tu: 'terça', We: 'quarta', Th: 'quinta', Fr: 'sexta', Sa: 'sábado', Su: 'domingo' };
+const ORDEM = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+const hora = (h: string) => { const [hh, mm] = h.split(':'); return mm === '00' ? `${Number(hh)}h` : `${Number(hh)}h${mm}`; };
+
+/** Horários em texto ("Segunda a sexta, 7h às 20h; sábado, 8h às 12h"), ou null. */
+export function horariosTexto(): string | null {
+  const hs = clinica.horarios.valor;
+  if (!hs || hs.length === 0) return null;
+  const faixa = (d: readonly string[]) => {
+    const ids = [...d].sort((a, b) => ORDEM.indexOf(a) - ORDEM.indexOf(b));
+    const seguidos = ids.every((x, i) => i === 0 || ORDEM.indexOf(x) === ORDEM.indexOf(ids[i - 1]!) + 1);
+    if (ids.length > 2 && seguidos) return `${NOME_DIA[ids[0]!]} a ${NOME_DIA[ids.at(-1)!]}`;
+    return ids.map((x) => NOME_DIA[x]).join(ids.length === 2 ? ' e ' : ', ');
+  };
+  const t = hs.map((h) => `${faixa(h.dias)}, ${hora(h.abre)} às ${hora(h.fecha)}`).join('; ');
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+
 // ---- Áreas, Pilates, recursos ----
 
 export const pilatesPorFisioterapeuta = (): boolean =>
