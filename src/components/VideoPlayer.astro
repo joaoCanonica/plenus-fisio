@@ -61,6 +61,7 @@ const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, 
     {responsavel
       ? <BadgeId compacto profissional={responsavel.id} />
       : <span>Profissional responsável a identificar (nome completo + CREFITO)<Provisorio ativo titulo="Sem profissional identificado: fora da produção" /></span>}
+    <a class="vp__revogar" href="/privacidade#revogacao">Publicado com TCLE. Pedir retirada deste vídeo</a>
   </figcaption>
 </figure>
 
@@ -98,6 +99,7 @@ const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, 
   .vp__caps button[aria-current='true'] { background: var(--acao); color: var(--acao-texto); border-color: var(--acao); }
   .vp__t { font-variant-numeric: tabular-nums; opacity: 0.8; }
   .vp__leg { display: grid; gap: 0.2rem; font-size: 0.88rem; color: var(--texto-suave); }
+  .vp__revogar { color: var(--destaque); font-size: 0.82rem; }
   .vp__leg strong { color: var(--texto); }
 </style>
 

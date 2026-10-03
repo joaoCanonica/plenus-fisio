@@ -16,6 +16,7 @@ import { areas, clinica, equipe, pilates, recursos, vinculos } from '../config/p
 import { compliance, type TermoVetado } from '../config/compliance.config.ts';
 import { slots } from '../config/slots-video.config.ts';
 import { copy } from '../config/copy.config.ts';
+import { instagram } from '../config/instagram.config.ts';
 import { contato } from '../config/contato.config.ts';
 import { algumWhatsapp, elegivel, equipeVisivel, resumoPilates, pilatesPorFisioterapeuta } from './clinica.ts';
 import { dataValida, manifesto, midiaPorId, type ItemManifesto } from './manifesto.ts';
@@ -138,6 +139,7 @@ export function midiaReferenciada(): Set<string> {
   if (compilado.estado === 'preenchido') compilado.itens.forEach((i) => ids.add(i.midiaId));
   if (apresentacao.item) ids.add(apresentacao.item.midiaId);
   for (const p of equipeVisivel()) if (p.foto) ids.add(p.foto);
+  for (const p of instagram.posts.slice(0, 6)) ids.add(p.midiaId);
   return ids;
 }
 

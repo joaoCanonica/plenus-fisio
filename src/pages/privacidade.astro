@@ -15,7 +15,7 @@ const atualizada = '01/10/2026';
   <article class="sec wrap texto">
     <p class="eyebrow">Privacidade</p>
     <h1 class="titulo">Política de privacidade e cookies</h1>
-    <p class="lead">Este é um site de apresentação profissional. Ele não agenda atendimentos, não tem formulários e não coleta dados de saúde.</p>
+    <p class="lead">Este é o site de apresentação da clínica. Ele não agenda atendimentos, não tem formulários e não coleta dados de saúde.</p>
     <p class="atualizada">Última atualização: {atualizada}.</p>
 
     <nav aria-label="Nesta página" class="indice">
@@ -44,7 +44,7 @@ const atualizada = '01/10/2026';
         <tr><td>Escolha de privacidade</td><td>Sua preferência de cookies, guardada só no seu navegador</td><td>Lembrar a sua escolha</td><td>Necessário para atender ao seu pedido</td></tr>
         <tr><td>Medição de audiência</td><td>{temMedicao ? 'Dados de navegação agregados' : 'Nenhum: não utilizada neste site'}</td><td>{temMedicao ? 'Entender o uso do site' : '-'}</td><td>{temMedicao ? 'Consentimento (art. 7º, I), revogável a qualquer momento' : '-'}</td></tr>
         <tr><td>Contato por WhatsApp ou Instagram</td><td>O que você enviar ao iniciar a conversa, tratado no aplicativo, fora deste site</td><td>Responder e combinar a consulta fisioterapêutica</td><td>Procedimentos preliminares a pedido do titular (art. 7º, V)</td></tr>
-        <tr><td>Imagens e vídeos de pacientes</td><td>Imagem e voz, sem nome, escola, cidade ou rotina</td><td>Mostrar o trabalho fisioterapêutico</td><td>Consentimento específico e por escrito do responsável legal (arts. 11, I e 14, §1º), por meio do TCLE</td></tr>
+        <tr><td>Imagens e vídeos de pacientes</td><td>Imagem e voz, sem nome nem dado clínico que identifique a pessoa</td><td>Mostrar o trabalho fisioterapêutico</td><td>Consentimento específico e por escrito do paciente (ou do responsável legal, se menor de idade), por meio do TCLE (arts. 11, I e 14, §1º)</td></tr>
       </tbody>
     </table>
     </div>
@@ -54,8 +54,9 @@ const atualizada = '01/10/2026';
     <ul>
       <li><strong>Necessários:</strong> só a sua escolha de privacidade, guardada no armazenamento local do navegador.</li>
       <li><strong>Preferência de tema:</strong> se você escolher Claro ou Escuro no seletor do topo, essa escolha fica guardada no seu navegador para as próximas visitas. Nada é gravado enquanto você não clicar, e a informação não é enviada a ninguém.</li>
+      <li><strong>Abertura animada:</strong> na primeira visita, o site guarda, só enquanto o navegador estiver aberto, que a animação de abertura já foi exibida, para não repeti-la. Não identifica você e não é enviado a ninguém.</li>
       <li><strong>Medição de audiência:</strong> {temMedicao ? 'carregada somente depois que você aceita.' : 'não é utilizada.'}</li>
-      <li><strong>Conteúdo de terceiros:</strong> nenhum. O site não carrega mapas, publicações do Instagram, fontes ou scripts de outros serviços. Os links para o Instagram, o WhatsApp e o Google Maps só abrem esses serviços quando você clica neles.</li>
+      <li><strong>Conteúdo de terceiros:</strong> nenhum. O site não carrega mapas, publicações do Instagram, fontes ou scripts de outros serviços: as publicações mostradas são imagens guardadas no próprio site, e as fontes também. Os links para o Instagram, o WhatsApp e o Google Maps só abrem esses serviços quando você clica neles.</li>
     </ul>
     <p>As opções Aceitar, Recusar e Personalizar têm o mesmo destaque, e você pode mudar de ideia a qualquer momento:</p>
     <p><button type="button" class="btn btn--linha" data-reabrir-consentimento>Revisar preferências de cookies</button></p>
@@ -73,7 +74,7 @@ const atualizada = '01/10/2026';
     <p>O consentimento pode ser revogado a qualquer momento, sem precisar justificar e sem nenhum prejuízo ao atendimento. {contato.revogacao.prazo}</p>
     <ol>
       <li>Envie o pedido pelo WhatsApp, informando qual imagem ou vídeo deve ser retirado (por exemplo, a data que aparece na legenda). Não é preciso enviar dados de saúde.</li>
-      <li>Confirmamos a sua identidade como responsável legal.</li>
+      <li>Confirmamos que o pedido vem da própria pessoa que aparece no conteúdo ou do responsável legal.</li>
       <li>O conteúdo sai do site e você recebe a confirmação.</li>
     </ol>
     <p><a class="btn" href={revogacaoUrl()} target="_blank" rel="noopener">Pedir retirada pelo WhatsApp<span class="sr-only"> (abre em nova aba)</span></a></p>

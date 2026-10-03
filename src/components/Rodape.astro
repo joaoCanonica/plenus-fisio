@@ -3,7 +3,7 @@ import Marca from './Marca.astro';
 import Identificacao from './Identificacao.astro';
 import { clinica } from '../config/profile.config.ts';
 import { exibir } from '../lib/modo.ts';
-import { enderecoTexto, telefoneExibicao } from '../lib/clinica.ts';
+import { enderecoTexto, equipeVisivel, telefoneExibicao } from '../lib/clinica.ts';
 import { instagramUrl, revogacaoUrl, whatsappUrl } from '../lib/contato.ts';
 const c = clinica;
 const ig = instagramUrl();
@@ -11,6 +11,8 @@ const horarios = exibir(c.horarios);
 const telefone = exibir(c.telefone);
 const gmn = exibir(c.googleMeuNegocio);
 const ano = new Date().getFullYear();
+// Profissionais citados: só com nome completo + CREFITO.
+const equipe = equipeVisivel();
 ---
 <footer class="rod tom-claro">
   <div class="wrap rod__grade">
@@ -21,6 +23,12 @@ const ano = new Date().getFullYear();
     <div>
       <h2 class="rod__h">Identificação</h2>
       <Identificacao />
+      {equipe.length > 0 && (
+        <>
+          <h2 class="rod__h rod__h--esp">Fisioterapeutas</h2>
+          <ul class="rod__equipe">{equipe.map((p) => <li>{p.nomeCompleto} · {p.registro}</li>)}</ul>
+        </>
+      )}
     </div>
     <div>
       <h2 class="rod__h">Endereço</h2>
@@ -81,6 +89,8 @@ const ano = new Date().getFullYear();
   .rod__h:not(:first-child) { margin-top: 2rem; }
   address { font-style: normal; }
   .rod__info { margin-top: 0.4rem; color: var(--texto-suave); }
+  .rod__h--esp { margin-top: 1.5rem; }
+  .rod__equipe { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; font-size: 0.92rem; }
   .rod__links { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
   .rod__btn {
     font: inherit;
