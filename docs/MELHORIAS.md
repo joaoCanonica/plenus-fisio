@@ -75,3 +75,8 @@ consentimento. O bloco abaixo é gerado por `pnpm pendencias`; as seções segui
 - [ ] Horários estruturados em `clinica.horarios`, iguais aos do Google.
 - [ ] Domínio de produção (`SITE_URL` na Vercel) para canonical, sitemap e schema.
 - [ ] Monitoramento mensal em ChatGPT, Perplexity e Gemini.
+
+## Publicação e captação
+- [ ] Produzir as fotos e vídeos do espaço e as fotos individuais em alta resolução (`docs/ROTEIRO_CAPTACAO.md`).
+- [ ] Domínio próprio na Vercel (projeto `plenus-fisio`), com `www` redirecionando para o domínio principal.
+- [ ] Decidir o acesso ao deploy provisório: hoje protegido por login da Vercel; para o cliente revisar, usar o link de compartilhamento da Vercel ou liberar o acesso.

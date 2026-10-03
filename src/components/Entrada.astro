@@ -14,6 +14,9 @@ const g = trace
 const palavra = `<g transform="translate(60 248) scale(${280 / 2160})">${g}</g>`;
 ---
 <div class="entrada tom-verde" data-entrada>
+  <!-- Oval "furada": a sombra gigante pinta a tela; ao revelar, o centro fica
+       transparente e a oval cresce só com transform (compositor, sem repintura). -->
+  <div class="entrada__furo" aria-hidden="true"></div>
   <div class="entrada__palco" aria-hidden="true">
     <svg class="entrada__svg" viewBox="0 0 400 560" focusable="false">
       <ellipse class="entrada__oval" cx="200" cy="280" rx="172" ry="250" pathLength="1" />
@@ -24,11 +27,6 @@ const palavra = `<g transform="translate(60 248) scale(${280 / 2160})">${g}</g>`
 </div>
 
 <style>
-  @property --r {
-    syntax: '<length>';
-    inherits: false;
-    initial-value: 0px;
-  }
   .entrada { display: none; }
   :global(html.entrada) .entrada {
     position: fixed;
@@ -37,13 +35,27 @@ const palavra = `<g transform="translate(60 248) scale(${280 / 2160})">${g}</g>`
     display: grid;
     place-items: center;
     pointer-events: none;
-    background: var(--fundo);
     color: var(--texto);
-    /* Buraco oval (proporção da oval do logo) que cresce e revela o hero. */
-    --r: 0px;
-    -webkit-mask: radial-gradient(calc(var(--r) * 0.69) var(--r) at 50% 50%, transparent 98%, currentColor 100%);
-    mask: radial-gradient(calc(var(--r) * 0.69) var(--r) at 50% 50%, transparent 98%, currentColor 100%);
-    animation: entrada-revela 1s cubic-bezier(0.6, 0, 0.2, 1) 2s forwards;
+    /* O tom-verde pinta o fundo; aqui quem pinta a tela é a sombra da oval. */
+    background: transparent;
+    overflow: hidden;
+    animation: entrada-fim 0.01s linear 3s forwards;
+  }
+  /* Mesmo tamanho da oval desenhada: 344/400 da largura do SVG (min(58vw, 42vh)). */
+  .entrada__furo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(49.9vw, 36.1vh);
+    aspect-ratio: 172 / 250;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: var(--fundo);
+    box-shadow: 0 0 0 200vmax var(--fundo);
+    will-change: transform;
+    animation:
+      entrada-abre 0.01s linear 2s forwards,
+      entrada-cresce 1s cubic-bezier(0.6, 0, 0.2, 1) 2s forwards;
   }
   .entrada__svg { width: min(58vw, 42vh); height: auto; overflow: visible; }
   .entrada__oval {
@@ -74,11 +86,9 @@ const palavra = `<g transform="translate(60 248) scale(${280 / 2160})">${g}</g>`
   @keyframes entrada-traco { to { stroke-dashoffset: 0; } }
   @keyframes entrada-palavra { to { opacity: 1; transform: none; } }
   @keyframes entrada-some { to { opacity: 0; visibility: hidden; } }
-  @keyframes entrada-revela {
-    0% { --r: 21vh; }
-    99% { --r: 160vmax; visibility: visible; }
-    100% { --r: 160vmax; visibility: hidden; }
-  }
+  @keyframes entrada-abre { to { background: transparent; } }
+  @keyframes entrada-cresce { to { transform: scale(9); } }
+  @keyframes entrada-fim { to { visibility: hidden; } }
   @media (prefers-reduced-motion: reduce) {
     :global(html.entrada) .entrada { display: none; }
   }

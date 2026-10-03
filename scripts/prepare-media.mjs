@@ -120,5 +120,7 @@ for (const it of man.itens.filter((i) => liberado(i, modo))) {
     webp: fontes.webp.join(', '),
   };
 }
+// src/data/ não existe num clone limpo (o arquivo gerado é ignorado pelo git).
+mkdirSync('src/data', { recursive: true });
 writeFileSync('src/data/midia.gerada.json', JSON.stringify({ modo, itens: saida }, null, 2) + '\n');
 console.log(`Derivados gerados (${modo}): ${Object.keys(saida).join(', ') || 'nenhum'}`);
