@@ -33,7 +33,7 @@ Lighthouse e a produção foram medidos com dados fictícios nos 3 bloqueantes (
 - [ ] Conferir a região do CREFITO (CREFITO-10, SC).
 
 ### Consentimentos e autorizações (guardar fora do repositório, que é público)
-- [ ] Autorização de uso de imagem, por escrito, de cada profissional fotografado.
+- [x] Autorização de uso de imagem dos profissionais (confirmada pelo cliente em 2026-10-04).
 - [ ] TCLE de cada mídia com paciente (com `tcleRef` e `dataRegistro` no manifesto).
 - [ ] Vídeos de pacientes guardados em armazenamento privado (não vão para o git).
 - [ ] Autorização formal para conteúdo de terceiros (ex.: instrutora do curso).

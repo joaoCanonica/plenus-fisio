@@ -54,7 +54,7 @@ consentimento. O bloco abaixo é gerado por `pnpm pendencias`; as seções segui
 - [ ] Aprovar os lockups provisórios (sem as figuras) ou esperar o original.
 - [ ] Fotos dos profissionais em **alta resolução** (as atuais são avatares 150x150).
 - [ ] Dizer qual foto é de qual profissional (`pessoa-foto-a` / `pessoa-foto-b`).
-- [ ] Autorização de uso de imagem **por escrito** de cada profissional (hoje: confirmada pelo cliente).
+- [x] Autorização de uso de imagem dos profissionais confirmada pelo cliente (2026-10-04).
 
 ## Vídeos lote 01 (ver docs/midia/VIDEOS-LOTE-01.md)
 - [ ] Transcrever o áudio dos 3 vídeos e revisar os `.vtt` (confirmar se é fala ou música; música exige checar direito autoral).
@@ -79,4 +79,4 @@ consentimento. O bloco abaixo é gerado por `pnpm pendencias`; as seções segui
 ## Publicação e captação
 - [ ] Produzir as fotos e vídeos do espaço e as fotos individuais em alta resolução (`docs/ROTEIRO_CAPTACAO.md`).
 - [ ] Domínio próprio na Vercel (projeto `plenus-fisio`), com `www` redirecionando para o domínio principal.
-- [ ] Decidir o acesso ao deploy provisório: hoje protegido por login da Vercel; para o cliente revisar, usar o link de compartilhamento da Vercel ou liberar o acesso.
+- [x] Deploy provisório aberto ao público (decisão do cliente, 2026-10-04).

@@ -67,7 +67,7 @@
       "usoSugerido": "Avatar em círculo/oval de até 96–120 px CSS, ao lado do nome completo + CREFITO. Nunca maior.",
       "consentimento": "confirmado-pelo-cliente",
       "profissional": "CONFIRMAR",
-      "publicavel": false,
+      "publicavel": true,
       "derivados": [
         "assets-originais/pessoa/derivados/foto-a-300.webp",
         "assets-originais/pessoa/derivados/foto-a-300.avif",
@@ -76,14 +76,14 @@
       "derivacao": "2x (300x300) com reamostragem Lanczos3 + nitidez leve (sharpen sigma 0.6). Sem super-resolução generativa, sem restauração de rosto, sem retoque. scripts/derivar-avatares.mjs",
       "problemas": [
         "Baixa resolução (150x150): o ideal é a foto original em alta resolução.",
-        "Uso de imagem confirmado pelo cliente: CONFIRMAR por escrito com o próprio profissional.",
         "Identificar qual profissional é (Adrian ou Natalia) e só exibir com nome completo + CREFITO."
       ],
       "fonteWeb": {
         "arquivo": "assets-originais/pessoa/derivados/foto-a-300.jpg",
         "largura": 300,
         "altura": 300
-      }
+      },
+      "autorizacaoUso": "Uso de imagem autorizado pelo cliente em 2026-10-04 (autorização dos próprios profissionais)."
     },
     {
       "id": "pessoa-foto-b",
@@ -106,7 +106,7 @@
       "usoSugerido": "Avatar em círculo/oval de até 96–120 px CSS, ao lado do nome completo + CREFITO. Nunca maior.",
       "consentimento": "confirmado-pelo-cliente",
       "profissional": "CONFIRMAR",
-      "publicavel": false,
+      "publicavel": true,
       "derivados": [
         "assets-originais/pessoa/derivados/foto-b-300.webp",
         "assets-originais/pessoa/derivados/foto-b-300.avif",
@@ -115,14 +115,14 @@
       "derivacao": "2x (300x300) com reamostragem Lanczos3 + nitidez leve (sharpen sigma 0.6). Sem super-resolução generativa, sem restauração de rosto, sem retoque. scripts/derivar-avatares.mjs",
       "problemas": [
         "Baixa resolução (150x150): o ideal é a foto original em alta resolução.",
-        "Uso de imagem confirmado pelo cliente: CONFIRMAR por escrito com o próprio profissional.",
         "Identificar qual profissional é (Adrian ou Natalia) e só exibir com nome completo + CREFITO."
       ],
       "fonteWeb": {
         "arquivo": "assets-originais/pessoa/derivados/foto-b-300.jpg",
         "largura": 300,
         "altura": 300
-      }
+      },
+      "autorizacaoUso": "Uso de imagem autorizado pelo cliente em 2026-10-04 (autorização dos próprios profissionais)."
     },
     {
       "id": "video-P-001-posparto",
