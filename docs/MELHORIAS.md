@@ -7,11 +7,10 @@ consentimento. O bloco abaixo é gerado por `pnpm pendencias`; as seções segui
 <!-- auto:inicio -->
 ## O que a clínica pode acrescentar (gerado por `pnpm pendencias`)
 
-**Para publicar faltam 4 item(ns):**
+**Para publicar faltam 3 item(ns):**
 - [ ] Número do registro da empresa (Plenus) no CREFITO.
 - [ ] Nome completo do responsável técnico (RT).
 - [ ] CREFITO do responsável técnico (RT).
-- [ ] WhatsApp real em pelo menos um canal (clínica ou profissional).
 
 ### Identificação da clínica
 - [ ] Razão social (aparece na identificação do rodapé).
@@ -24,7 +23,6 @@ consentimento. O bloco abaixo é gerado por `pnpm pendencias`; as seções segui
 ### Endereço e contato
 - [ ] Número do endereço.
 - [ ] Complemento do endereço (sala, andar).
-- [ ] WhatsApp da clínica (recepção).
 - [ ] Telefone fixo.
 - [ ] Horários de atendimento (os mesmos do perfil no Google).
 - [ ] Latitude e longitude da clínica (as mesmas do perfil no Google).

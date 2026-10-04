@@ -97,7 +97,7 @@ export const clinica = {
     cep: confirmado('88501-003'),
   },
   /** WhatsApp geral da clínica (um dos canais possíveis para o bloqueante 3). */
-  whatsapp: opcional<Telefone>(null, 'WhatsApp da clínica (recepção).'),
+  whatsapp: opcional<Telefone>('5549999837407', 'WhatsApp da clínica (recepção).'),
   telefone: opcional<Telefone>(null, 'Telefone fixo.'),
   /** Ex.: [{ dias: ['Mo','Tu','We','Th','Fr'], abre: '07:00', fecha: '20:00' }]. Os mesmos do Google. */
   horarios: opcional<readonly Horario[]>(null, 'Horários de atendimento (os mesmos do perfil no Google).'),
@@ -118,8 +118,8 @@ export const equipe: readonly Profissional[] = [
     titulos: opcional<readonly string[]>(null, 'Formação e títulos do Adrian.'),
     especialista: { registrado: false, rqe: null, especialidade: null },
     areas: ['traumatoOrtopedica', 'esportiva', 'pilates'],
-    whatsapp: opcional<Telefone>(null, 'WhatsApp do Adrian.'),
-    foto: opcional<string>(null, 'Foto do Adrian (id do manifesto; hoje só avatares 150x150).'),
+    whatsapp: opcional<Telefone>('5548996056445', 'WhatsApp do Adrian.'),
+    foto: opcional<string>('pessoa-foto-b', 'Foto do Adrian em alta resolução (hoje avatar 150x150, exibido em 2x).'),
     responsavelTecnico: false,
   },
   {
@@ -130,8 +130,8 @@ export const equipe: readonly Profissional[] = [
     titulos: opcional<readonly string[]>(null, 'Formação e títulos da Natalia.'),
     especialista: { registrado: false, rqe: null, especialidade: null },
     areas: ['obstetricaPelvica', 'pilates'],
-    whatsapp: opcional<Telefone>(null, 'WhatsApp da Natalia.'),
-    foto: opcional<string>(null, 'Foto da Natalia (id do manifesto; hoje só avatares 150x150).'),
+    whatsapp: opcional<Telefone>('5548998355052', 'WhatsApp da Natalia.'),
+    foto: opcional<string>('pessoa-foto-a', 'Foto da Natalia em alta resolução (hoje avatar 150x150, exibido em 2x).'),
     responsavelTecnico: false,
   },
 ];

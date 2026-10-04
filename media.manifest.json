@@ -62,11 +62,11 @@
       "dataRegistro": null,
       "bytes": 4315,
       "sha256": "ea9f9a6ac0158b2f7f223f016ae161159c734a410558f616920bcf939f006d32",
-      "descricao": "Retrato de profissional da clínica (avatar 150x150 recebido do cliente). QUAL profissional: CONFIRMAR.",
-      "alt": "Retrato de profissional da Plenus Fisioterapia & Pilates",
+      "descricao": "Retrato de profissional da clínica (avatar 150x150 recebido do cliente). Profissional: Natalia.",
+      "alt": "Retrato da fisioterapeuta Natalia",
       "usoSugerido": "Avatar em círculo/oval de até 96–120 px CSS, ao lado do nome completo + CREFITO. Nunca maior.",
       "consentimento": "confirmado-pelo-cliente",
-      "profissional": "CONFIRMAR",
+      "profissional": "natalia",
       "publicavel": true,
       "derivados": [
         "assets-originais/pessoa/derivados/foto-a-300.webp",
@@ -75,8 +75,7 @@
       ],
       "derivacao": "2x (300x300) com reamostragem Lanczos3 + nitidez leve (sharpen sigma 0.6). Sem super-resolução generativa, sem restauração de rosto, sem retoque. scripts/derivar-avatares.mjs",
       "problemas": [
-        "Baixa resolução (150x150): o ideal é a foto original em alta resolução.",
-        "Identificar qual profissional é (Adrian ou Natalia) e só exibir com nome completo + CREFITO."
+        "Baixa resolução (150x150): o ideal é a foto original em alta resolução."
       ],
       "fonteWeb": {
         "arquivo": "assets-originais/pessoa/derivados/foto-a-300.jpg",
@@ -101,11 +100,11 @@
       "dataRegistro": null,
       "bytes": 4550,
       "sha256": "1f6b140dea3057d343d2dbbce9060d4d5d243ce4d18b25d4902caf07cb8a7061",
-      "descricao": "Retrato de profissional da clínica (avatar 150x150 recebido do cliente). QUAL profissional: CONFIRMAR.",
-      "alt": "Retrato de profissional da Plenus Fisioterapia & Pilates",
+      "descricao": "Retrato de profissional da clínica (avatar 150x150 recebido do cliente). Profissional: Adrian.",
+      "alt": "Retrato do fisioterapeuta Adrian",
       "usoSugerido": "Avatar em círculo/oval de até 96–120 px CSS, ao lado do nome completo + CREFITO. Nunca maior.",
       "consentimento": "confirmado-pelo-cliente",
-      "profissional": "CONFIRMAR",
+      "profissional": "adrian",
       "publicavel": true,
       "derivados": [
         "assets-originais/pessoa/derivados/foto-b-300.webp",
@@ -114,8 +113,7 @@
       ],
       "derivacao": "2x (300x300) com reamostragem Lanczos3 + nitidez leve (sharpen sigma 0.6). Sem super-resolução generativa, sem restauração de rosto, sem retoque. scripts/derivar-avatares.mjs",
       "problemas": [
-        "Baixa resolução (150x150): o ideal é a foto original em alta resolução.",
-        "Identificar qual profissional é (Adrian ou Natalia) e só exibir com nome completo + CREFITO."
+        "Baixa resolução (150x150): o ideal é a foto original em alta resolução."
       ],
       "fonteWeb": {
         "arquivo": "assets-originais/pessoa/derivados/foto-b-300.jpg",
