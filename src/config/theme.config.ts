@@ -130,12 +130,60 @@ const verde: Tokens = {
   sombra: 'verdeNoite',
 };
 
+/** Faixa verde-noite (cor cheia, fixa nos dois esquemas). */
+const noite: Tokens = {
+  fundo: 'verdeNoite',
+  superficie: 'noite1',
+  superficieAlt: 'verdeMarcaEscuro',
+  texto: 'offWhiteClaro',
+  textoSuave: 'salvia',
+  borda: 'verdeMarcaEscuro',
+  acao: 'verdeClaro',
+  acaoHover: 'salviaEscura',
+  acaoTexto: 'verdeNoite',
+  destaque: 'verdeClaro',
+  acento: 'noite1',
+  acentoTexto: 'salvia',
+  quente: 'terracotaClara',
+  quenteFundo: 'terracotaTexto',
+  quenteTexto: 'textoNoite',
+  foco: 'verdeClaro',
+  sombra: 'noite1',
+};
+
+/** Faixa sálvia (clara; no esquema escuro vira salviaNoite). */
+const salvia: Tokens = {
+  ...claro,
+  fundo: 'salvia',
+  superficie: 'offWhiteClaro',
+  superficieAlt: 'areiaSuave',
+  destaque: 'verdeNoite',
+  acento: 'offWhiteClaro',
+  acentoTexto: 'verdeNoite',
+  foco: 'verdeNoite',
+};
+
+/** Faixa areia (clara; no esquema escuro vira areiaNoite). */
+const areia: Tokens = {
+  ...claro,
+  fundo: 'areia',
+  superficie: 'offWhiteClaro',
+  superficieAlt: 'areiaSuave',
+  destaque: 'verdeNoite',
+  acento: 'salvia',
+  acentoTexto: 'verdeNoite',
+  foco: 'verdeNoite',
+};
+
+const salviaNoite: Tokens = { ...escuro, fundo: 'noite3', superficie: 'noite2', superficieAlt: 'noite1' };
+const areiaNoite: Tokens = { ...escuro, fundo: 'noite2', superficie: 'noite3', superficieAlt: 'noite1' };
+
 export const theme = {
   primitivas,
   /** Esquemas da página (prefers-color-scheme / data-tema). */
   esquemas: { claro, escuro },
   /** Tons de seção. "claro" segue o esquema; "escuro" e "verde" são fixos. */
-  tons: { escuro, verde },
+  tons: { escuro, verde, noite, salvia, areia, salviaNoite, areiaNoite },
   aviso: { fundo: 'avisoFundo', texto: 'avisoTexto', borda: 'avisoBorda' } satisfies Record<string, P>,
   /** Cor da barra do navegador (meta theme-color). */
   themeColor: 'verdeMarca' satisfies P,
@@ -167,4 +215,4 @@ export const theme = {
 
 } as const;
 
-export type Tom = 'claro' | 'escuro' | 'verde';
+export type Tom = 'claro' | 'escuro' | 'verde' | 'noite' | 'salvia' | 'areia';

@@ -20,7 +20,8 @@ export function cssDoTema(): string {
     .map(([k, v]) => `--aviso-${k}:${hex(v)};`)
     .join('');
   // Token de composição: fundo da seção verde.
-  const comp = `--secao-verde:${hex('verdeMarca')};`;
+  // --papel: fundo fixo e claro das ilustrações (arte com fundo off-white), igual nos dois esquemas.
+  const comp = `--secao-verde:${hex('verdeMarca')};--papel:${hex('offWhite')};--papel-linha:${hex('verdeNoite')};`;
   return [
     `:root{color-scheme:light dark;${comp}${aviso}--marca:${hex('verdeMarca')};}`,
     `:root,.tom-claro{color-scheme:light;${bloco(claro)}}`,
@@ -29,6 +30,13 @@ export function cssDoTema(): string {
     `[data-tema="escuro"],[data-tema="escuro"] .tom-claro{color-scheme:dark;${bloco(escuro)}--marca:${hex('verdeClaro')};}`,
     `.tom-escuro{color-scheme:dark;${bloco(theme.tons.escuro)}--marca:${hex('verdeClaro')};}`,
     `.tom-verde{color-scheme:dark;${bloco(theme.tons.verde)}--marca:${hex('offWhiteClaro')};}`,
+    `.tom-noite{color-scheme:dark;${bloco(theme.tons.noite)}--marca:${hex('verdeClaro')};}`,
+    // Sálvia e areia: claras no esquema claro; escuras (noite2/noite3) no escuro.
+    `.tom-salvia{color-scheme:light;${bloco(theme.tons.salvia)}--marca:${hex('verdeNoite')};}`,
+    `.tom-areia{color-scheme:light;${bloco(theme.tons.areia)}--marca:${hex('verdeNoite')};}`,
+    `@media (prefers-color-scheme: dark){:root:not([data-tema="claro"]) .tom-salvia{color-scheme:dark;${bloco(theme.tons.salviaNoite)}--marca:${hex('verdeClaro')};}:root:not([data-tema="claro"]) .tom-areia{color-scheme:dark;${bloco(theme.tons.areiaNoite)}--marca:${hex('verdeClaro')};}}`,
+    `[data-tema="escuro"] .tom-salvia{color-scheme:dark;${bloco(theme.tons.salviaNoite)}--marca:${hex('verdeClaro')};}`,
+    `[data-tema="escuro"] .tom-areia{color-scheme:dark;${bloco(theme.tons.areiaNoite)}--marca:${hex('verdeClaro')};}`,
     `:root{--fonte-display:${theme.fontes.display};--fonte-texto:${theme.fontes.texto};}`,
   ].join('\n');
 }
@@ -63,6 +71,11 @@ export function verificarContraste(): ResultadoPar[] {
     ['esquema escuro', theme.esquemas.escuro],
     ['tom escuro', theme.tons.escuro],
     ['tom verde', theme.tons.verde],
+    ['tom noite', theme.tons.noite],
+    ['tom sálvia', theme.tons.salvia],
+    ['tom areia', theme.tons.areia],
+    ['tom sálvia (escuro)', theme.tons.salviaNoite],
+    ['tom areia (escuro)', theme.tons.areiaNoite],
   ];
   const out: ResultadoPar[] = [];
   for (const [contexto, t] of contextos)

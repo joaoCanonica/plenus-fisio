@@ -43,6 +43,9 @@ const donoDe = (arquivo: string) =>
   );
 
 const erros: string[] = [];
+// Preview (decisão do cliente, 2026-10-05): o cartão provisório da equipe pode mostrar
+// o nome sem CREFITO, com selo PROVISÓRIO. Em produção isso continua sendo erro.
+const avisos: string[] = [];
 let n = 0;
 for (const arq of paginas(dist)) {
   n++;
@@ -56,7 +59,7 @@ for (const arq of paginas(dist)) {
   // Ninguém aparece sem nome completo + CREFITO (o RT aparece pela identificação PJ).
   for (const p of equipe)
     if (!elegivel(p) && p.nomeCompleto.valor && p.nomeCompleto.valor !== clinica.responsavelTecnico.nome.valor && html.includes(p.nomeCompleto.valor))
-      erros.push(`${arq}: "${p.nomeCompleto.valor}" aparece sem CREFITO.`);
+      (producao ? erros : avisos).push(`${arq}: "${p.nomeCompleto.valor}" aparece sem CREFITO.`);
 
   for (const m of new Set([...html.matchAll(/\/midia\/([\w.-]+)/g)].map((x) => x[1]!))) {
     const item = donoDe(m);
@@ -74,6 +77,7 @@ for (const arq of paginas(dist)) {
       erros.push(`${arq}: vínculo "${v.nome}" citado sem autorização.`);
 }
 
+avisos.forEach((a) => console.warn(`⚠ (preview) ${a}`));
 if (erros.length) {
   erros.forEach((e) => console.error(`✖ ${e}`));
   console.error(`\n✖ Auditoria de conformidade: ${erros.length} problema(s).`);

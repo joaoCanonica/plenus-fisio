@@ -1,0 +1,33 @@
+---
+// Imagem do manifesto (ilustração ou foto) em <picture> AVIF/WebP com srcset.
+// Só renderiza se a mídia estiver liberada no modo atual. `decorativa` = alt vazio.
+import { imagemLiberada, srcsetImagem } from '../../lib/manifesto.ts';
+import { EM_PRODUCAO } from '../../lib/modo.ts';
+interface Props {
+  id: string;
+  sizes: string;
+  class?: string;
+  decorativa?: boolean;
+  prioridade?: boolean;
+}
+const { id, sizes, class: cls, decorativa = false, prioridade = false } = Astro.props;
+const item = imagemLiberada(id, EM_PRODUCAO);
+const avif = item ? srcsetImagem(item, 'avif') : null;
+const webp = item ? srcsetImagem(item, 'webp') : null;
+---
+{item && avif && webp && (
+  <picture class={cls}>
+    <source type="image/avif" srcset={avif.srcset} sizes={sizes} />
+    <img
+      src={webp.srcset.split(', ').at(-1)?.split(' ')[0]}
+      srcset={webp.srcset}
+      sizes={sizes}
+      alt={decorativa ? '' : item.alt}
+      width={webp.largura}
+      height={webp.altura}
+      loading={prioridade ? 'eager' : 'lazy'}
+      fetchpriority={prioridade ? 'high' : undefined}
+      decoding="async"
+    />
+  </picture>
+)}

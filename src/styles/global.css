@@ -60,7 +60,10 @@ body {
 /* Tons de seção: cada tom redefine os mesmos tokens (ver tema.ts). */
 .tom-claro,
 .tom-escuro,
-.tom-verde {
+.tom-verde,
+.tom-noite,
+.tom-salvia,
+.tom-areia {
   background: var(--fundo);
   color: var(--texto);
 }
@@ -257,3 +260,53 @@ a:hover {
     transform: none;
   }
 }
+
+/* Grão sutil global (SVG feTurbulence inline, < 1 KB). Sem cor fixa: só luminância. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* Cartela de papel: ilustrações aprovadas têm fundo off-white; no escuro ficam numa cartela clara. */
+.papel {
+  background: var(--papel);
+  color: var(--papel-linha);
+}
+.papel img { mix-blend-mode: multiply; }
+
+/* Numeração editorial (01, 02…) e linha fina */
+.num-editorial {
+  font: 400 clamp(3rem, 2rem + 4vw, 5.5rem)/0.9 var(--fonte-display);
+  color: var(--destaque);
+  font-variant-numeric: lining-nums;
+}
+.linha-fina { height: 1px; background: var(--linha); border: 0; margin: 0; }
+
+/* Saiba mais (details) editorial */
+.saiba-mais { margin-top: 1.25rem; border-top: 1px solid var(--linha); }
+.saiba-mais > summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 0;
+  font-weight: 600;
+  color: var(--destaque);
+}
+.saiba-mais > summary::-webkit-details-marker { display: none; }
+.saiba-mais > summary::before {
+  content: '';
+  width: 0.8rem;
+  height: 1.1rem;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+.saiba-mais[open] > summary::before { background: currentColor; }
+.saiba-mais > summary:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }

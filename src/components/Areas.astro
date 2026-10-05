@@ -1,10 +1,13 @@
 ---
-// Áreas ativas: uma seção por área, com o copy aprovado (o que é, quando
-// procurar, o que esperar, fontes). Área inativa não aparece. Pilates segue
-// pilates.conduzidoPorFisioterapeuta (lib/clinica.ts). Recursos: só os confirmados.
-import Ilustracao from './ui/Ilustracao.astro';
+// Áreas ativas em blocos editoriais largos e alternados (arte à esquerda, texto
+// à direita, depois inverte), com as ilustrações APROVADAS do manifesto,
+// numeração grande e linha fina. No bloco: título, resumo curto e CTA.
+// "Quando procurar", "O que esperar" e as fontes ficam, intactos, no <details>
+// "Saiba mais". Área inativa não aparece. Pilates segue
+// pilates.conduzidoPorFisioterapeuta. Recursos: só os confirmados.
 import Fontes from './ui/Fontes.astro';
 import Button from './ui/Button.astro';
+import Arte from './ui/Arte.astro';
 import { copy, type ConteudoArea } from '../config/copy.config.ts';
 import { areasAtivas, pilatesPorFisioterapeuta, recursosConfirmados } from '../lib/clinica.ts';
 const c = copy.areas;
@@ -12,70 +15,84 @@ const conteudo = c.conteudo as Partial<Record<string, ConteudoArea>>;
 const lista = areasAtivas().sort((x, y) => (x.cartao?.ordem ?? 9) - (y.cartao?.ordem ?? 9));
 const pilatesClinico = pilatesPorFisioterapeuta();
 const recursos = recursosConfirmados();
+/** Ilustração aprovada de cada área (media.manifest.json, categoria 'ilustracao'). */
+const ARTE: Record<string, string> = {
+  obstetricaPelvica: 'ilustracao-gestacao',
+  esportiva: 'ilustracao-esporte',
+  traumatoOrtopedica: 'ilustracao-ortopedia',
+  pilates: 'ilustracao-pilates',
+};
+const dois = (n: number) => String(n).padStart(2, '0');
 ---
 {lista.length > 0 && (
   <section id="areas" class="sec areas tom-claro" aria-labelledby="areas-titulo">
     <div class="wrap">
-      <div class="areas__topo" data-revelar>
-        <h2 id="areas-titulo" class="titulo">{c.titulo}</h2>
-        <p class="lead">{c.intro}</p>
-        <p class="areas__data">As afirmações de saúde desta página citam a fonte. Fontes consultadas em {c.fontesConsultadasEm}.</p>
-      </div>
+      <header class="areas__topo">
+        <h2 id="areas-titulo" class="areas__h2">{c.titulo}</h2>
+        <div>
+          <p class="areas__intro">{c.intro}</p>
+          <p class="areas__data">As afirmações de saúde citam a fonte em "Saiba mais". Fontes consultadas em {c.fontesConsultadasEm}.</p>
+        </div>
+      </header>
+
       <div class="areas__lista">
-        {lista.map((a) => {
+        {lista.map((a, i) => {
           const t = conteudo[a.id];
           return (
-            <article class="area" id={`area-${a.id}`} aria-labelledby={`area-${a.id}-t`} data-revelar>
-              <div class="area__ilu"><Ilustracao area={a.id} /></div>
+            <article class:list={['area', { 'area--inversa': i % 2 === 1 }]} id={`area-${a.id}`} aria-labelledby={`area-${a.id}-t`}>
+              <div class="area__arte papel">
+                {ARTE[a.id] && <Arte id={ARTE[a.id]!} sizes="(min-width: 60rem) 34rem, 92vw" decorativa />}
+              </div>
               <div class="area__corpo">
+                <hr class="linha-fina" />
+                <p class="num-editorial" aria-hidden="true">{dois(i + 1)}</p>
                 <h3 id={`area-${a.id}-t`} class="area__t">{a.cartao?.rotulo ?? a.titulo}</h3>
-                {a.id === 'pilates' ? (
-                  pilatesClinico ? (
-                    <>
-                      <p>{c.pilates.comFisioterapeuta.texto}</p>
-                      <Fontes fontes={c.pilates.comFisioterapeuta.fontes} />
-                    </>
-                  ) : (
-                    <p>{c.pilates.semFisioterapeuta}</p>
-                  )
-                ) : t && (
-                  <>
-                    <p>{t.oQueE}</p>
-                    <div class="area__cols">
-                      <div>
-                        <h4>{c.rotulos.quando}</h4>
-                        <ul>{t.quando.map((q) => <li>{q}</li>)}</ul>
-                      </div>
-                      <div>
-                        <h4>{c.rotulos.esperar}</h4>
-                        <ul>{t.esperar.map((e) => <li>{e.texto}</li>)}</ul>
-                      </div>
-                    </div>
-                    {t.sub && (
-                      <div class="area__sub">
-                        <h4>{t.sub.titulo}</h4>
-                        <p>{t.sub.oQueE}</p>
-                        <p><strong>{c.rotulos.quando}:</strong> {t.sub.quando}</p>
-                        <ul>{t.sub.esperar.map((e) => <li>{e.texto}</li>)}</ul>
-                        {t.sub.fontes.length > 0 && <Fontes fontes={t.sub.fontes} />}
-                      </div>
-                    )}
-                    {t.fontes.length > 0 && <Fontes fontes={t.fontes} />}
-                  </>
-                )}
+                <p class="area__resumo">
+                  {a.id === 'pilates' ? (pilatesClinico ? c.pilates.comFisioterapeuta.texto : c.pilates.semFisioterapeuta) : a.resumo}
+                </p>
                 {a.equipe.length > 0 && <p class="area__quem">Com {a.equipe.map((p) => `${p.nomeCompleto} (${p.registro})`).join(' e ')}</p>}
                 <div class="area__cta">
-                  <Button href={a.whatsapp} variante="secundario" icone="whatsapp" externo>
+                  <Button href={a.whatsapp} icone="whatsapp" externo>
                     {a.id === 'pilates' ? 'Saber como funciona' : 'Agendar pelo WhatsApp'}
                   </Button>
                 </div>
+
+                {a.id === 'pilates' && pilatesClinico && (
+                  <details class="saiba-mais">
+                    <summary>Saiba mais</summary>
+                    <Fontes fontes={c.pilates.comFisioterapeuta.fontes} />
+                  </details>
+                )}
+                {a.id !== 'pilates' && t && (
+                  <details class="saiba-mais">
+                    <summary>Saiba mais<span class="sr-only"> sobre {a.cartao?.rotulo ?? a.titulo}</span></summary>
+                    <div class="area__mais">
+                      <p>{t.oQueE}</p>
+                      <h4>{c.rotulos.quando}</h4>
+                      <ul>{t.quando.map((q) => <li>{q}</li>)}</ul>
+                      <h4>{c.rotulos.esperar}</h4>
+                      <ul>{t.esperar.map((e) => <li>{e.texto}</li>)}</ul>
+                      {t.sub && (
+                        <div class="area__sub">
+                          <h4>{t.sub.titulo}</h4>
+                          <p>{t.sub.oQueE}</p>
+                          <p><strong>{c.rotulos.quando}:</strong> {t.sub.quando}</p>
+                          <ul>{t.sub.esperar.map((e) => <li>{e.texto}</li>)}</ul>
+                          {t.sub.fontes.length > 0 && <Fontes fontes={t.sub.fontes} />}
+                        </div>
+                      )}
+                      {t.fontes.length > 0 && <Fontes fontes={t.fontes} />}
+                    </div>
+                  </details>
+                )}
               </div>
             </article>
           );
         })}
       </div>
+
       {recursos.length > 0 && (
-        <div class="areas__recursos" data-revelar>
+        <div class="areas__recursos">
           <h3>{c.recursos.titulo}</h3>
           <p>{c.recursos.texto}</p>
           <ul>{recursos.map((r) => <li>{r.nome}</li>)}</ul>
@@ -84,32 +101,40 @@ const recursos = recursosConfirmados();
     </div>
   </section>
 )}
+
 <style>
+  .areas__topo { display: grid; gap: 1.5rem; align-items: end; }
+  @media (min-width: 60rem) { .areas__topo { grid-template-columns: 1.1fr 0.9fr; gap: 4rem; } }
+  .areas__h2 { font-size: clamp(2.8rem, 1.6rem + 5vw, 6rem); line-height: 0.92; letter-spacing: -0.02em; }
+  .areas__intro { font-size: 1.1rem; }
   .areas__data { margin-top: 0.75rem; font-size: 0.85rem; color: var(--texto-suave); }
-  .areas__lista { display: grid; gap: clamp(1.5rem, 4vw, 2.5rem); margin-top: 3rem; }
-  .area {
-    display: grid;
-    gap: clamp(1.25rem, 3vw, 2.5rem);
-    padding: clamp(1.5rem, 4vw, 2.5rem);
-    border-radius: var(--raio-g);
-    background: var(--superficie);
-    border: 1px solid var(--linha);
+
+  .areas__lista { display: grid; gap: clamp(4rem, 9vw, 8rem); margin-top: clamp(3.5rem, 7vw, 6rem); }
+  .area { display: grid; gap: clamp(1.75rem, 4vw, 4rem); align-items: center; }
+  @media (min-width: 60rem) {
+    .area { grid-template-columns: 1.05fr 0.95fr; }
+    .area--inversa .area__arte { order: 2; }
+    /* A arte sangra para fora da grade, do lado em que está. */
+    .area__arte { margin-left: calc(-1 * var(--gutter)); }
+    .area--inversa .area__arte { margin-left: 0; margin-right: calc(-1 * var(--gutter)); }
   }
-  @media (min-width: 48rem) { .area { grid-template-columns: 9rem 1fr; align-items: start; } }
-  .area__ilu { width: 7rem; }
-  @media (min-width: 48rem) { .area__ilu { width: 9rem; } }
-  .area__t { font: 400 clamp(1.7rem, 1.3rem + 1.4vw, 2.3rem)/1.1 var(--fonte-display); }
-  .area__corpo > p { margin-top: 0.75rem; color: var(--texto-suave); max-width: 46rem; }
-  .area__cols { display: grid; gap: 1.5rem; margin-top: 1.5rem; }
-  @media (min-width: 60rem) { .area__cols { grid-template-columns: 1fr 1fr; } }
-  .area h4 { font: 600 0.95rem/1.3 var(--fonte-texto); color: var(--destaque); margin: 0 0 0.5rem; }
-  .area ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.4rem; color: var(--texto-suave); }
-  .area__sub { margin-top: 1.5rem; padding: 1.25rem; border-radius: var(--raio); background: var(--superficie-alt); }
-  .area__sub p { margin-top: 0.4rem; color: var(--texto-suave); }
-  .area__sub ul { margin-top: 0.6rem; }
-  .area__quem { font-size: 0.88rem; }
+  /* Cantos mistos: arte em oval alongada nas ímpares, retângulo com um canto oval nas pares. */
+  .area__arte { aspect-ratio: 1; overflow: hidden; border-radius: 50% 50% var(--raio-g) var(--raio-g) / 42% 42% var(--raio-g) var(--raio-g); }
+  .area--inversa .area__arte { border-radius: var(--raio-g) 50% var(--raio-g) var(--raio-g) / var(--raio-g) 42% var(--raio-g) var(--raio-g); }
+  .area__arte :global(picture), .area__arte :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  .area__corpo { max-width: 34rem; }
+  .area__corpo .num-editorial { margin-top: 1.25rem; }
+  .area__t { margin-top: 0.75rem; font: 400 clamp(2rem, 1.5rem + 2vw, 3.2rem)/1 var(--fonte-display); letter-spacing: -0.01em; }
+  .area__resumo { margin-top: 1rem; font-size: 1.05rem; color: var(--texto-suave); }
+  .area__quem { margin-top: 0.75rem; font-size: 0.88rem; }
   .area__cta { margin-top: 1.5rem; }
-  .areas__recursos { margin-top: 2.5rem; max-width: 46rem; }
+  .area__mais { padding-bottom: 0.5rem; color: var(--texto-suave); }
+  .area__mais p { margin-top: 0.5rem; }
+  .area__mais h4 { margin: 1.25rem 0 0.5rem; font: 600 0.95rem/1.3 var(--fonte-texto); color: var(--texto); }
+  .area__mais ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.4rem; }
+  .area__sub { margin-top: 1.5rem; padding-left: 1rem; border-left: 1px solid var(--linha); }
+  .areas__recursos { margin-top: 4rem; max-width: 46rem; }
   .areas__recursos p { margin-top: 0.5rem; color: var(--texto-suave); }
-  .areas__recursos ul { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; padding-left: 1.2rem; margin-top: 0.75rem; }
+  .areas__recursos ul { padding-left: 1.2rem; margin-top: 0.75rem; }
 </style>

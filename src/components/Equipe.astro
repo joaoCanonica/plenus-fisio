@@ -1,64 +1,171 @@
 ---
-// "Quem cuida". Cartões SÓ para profissionais com nome completo + CREFITO
-// (lib/clinica.ts → equipeVisivel), com foto 2x opcional em oval de até 112 px.
-// Sem ninguém elegível: versão institucional da clínica + identificação PJ.
+// "Conheça a equipe". Duas colunas editoriais (um perfil largo se só houver uma
+// pessoa; versão institucional se nenhuma).
+// REGRA: em PRODUÇÃO só aparece quem tem nome completo + CREFITO
+// (equipeExibida() = equipeVisivel()). Em PREVIEW, quem ainda não tem CREFITO
+// aparece com "CREFITO a informar" e selo PROVISÓRIO, para aprovar o layout.
+// Fotos de 150 px: derivado 2x (300 px), no máximo 11 rem, com tratamento de cor
+// da marca (duotone sálvia leve, grão e vinheta) só por CSS, sem tocar a feição.
+import Button from './ui/Button.astro';
 import Provisorio from './Provisorio.astro';
 import Identificacao from './Identificacao.astro';
-import { areas } from '../config/profile.config.ts';
+import { areas, clinica } from '../config/profile.config.ts';
 import { copy } from '../config/copy.config.ts';
-import { equipeVisivel, modoEquipe, variante } from '../lib/clinica.ts';
+import { equipeExibida, registroEmpresa, responsavelTecnico } from '../lib/clinica.ts';
 import { imagemLiberada, srcsetImagem } from '../lib/manifesto.ts';
-import { EM_PRODUCAO } from '../lib/modo.ts';
-const pessoas = equipeVisivel().map((p) => {
+import { EM_PRODUCAO, exibir, provisorio } from '../lib/modo.ts';
+
+const pessoas = equipeExibida().map((p) => {
   const img = p.foto ? imagemLiberada(p.foto, EM_PRODUCAO) : null;
   return { ...p, img, webp: img ? srcsetImagem(img, 'webp') : null, avif: img ? srcsetImagem(img, 'avif') : null };
 });
+const c = copy.equipe;
+const modo = pessoas.length === 0 ? 'clinica' : pessoas.length === 1 ? 'solo' : 'equipe';
+const nomes = pessoas.map((p) => p.nomeCompleto);
+const abertura = c.texto[modo]
+  .replaceAll('{clinica}', clinica.nomeFantasia.valor)
+  .replaceAll('{nome}', nomes[0] ?? '')
+  .replaceAll('{nomes}', nomes.length <= 1 ? (nomes[0] ?? '') : `${nomes.slice(0, -1).join(', ')} e ${nomes.at(-1)}`);
 const nomeArea = (id: string) => {
   const a = areas.find((x) => x.id === id && x.ativa);
   return a ? (a.cartao?.rotulo ?? a.titulo) : null;
 };
-const institucional = modoEquipe() === 'clinica';
+const rt = responsavelTecnico();
+const consulta = exibir(clinica.consultaRegistroUrl);
+const regProv = provisorio(clinica.registroEmpresaCrefito) || provisorio(clinica.responsavelTecnico.crefito);
 ---
-<section id="equipe" class="sec equipe tom-claro" aria-labelledby="equipe-titulo">
+<section id="equipe" class="sec equipe tom-areia" aria-labelledby="equipe-titulo">
   <div class="wrap">
-    <div data-revelar>
-      <h2 id="equipe-titulo" class="titulo">{copy.equipe.titulo}</h2>
-      <p class="lead">{variante(copy.equipe.texto)}</p>
-    </div>
-    {institucional ? (
-      <div class="equipe__inst" data-revelar><Identificacao /></div>
+    <header class="equipe__topo">
+      <h2 id="equipe-titulo" class="equipe__h2">{c.titulo}</h2>
+      <p class="equipe__abertura">{abertura}</p>
+    </header>
+
+    {modo === 'clinica' ? (
+      <div class="equipe__inst"><Identificacao /></div>
     ) : (
-      <ul class="equipe__grade">
+      <div class:list={['equipe__cols', { 'equipe__cols--solo': modo === 'solo' }]}>
         {pessoas.map((p) => (
-          <li class="equipe__card" data-revelar>
+          <article class="pessoa" aria-labelledby={`pessoa-${p.id}`}>
             {p.img && p.webp && p.avif && (
-              <div class="equipe__foto">
+              <div class="pessoa__foto">
                 <picture>
-                  <source type="image/avif" srcset={p.avif.srcset} sizes="112px" />
-                  <img src={p.webp.srcset.split(' ')[0]} srcset={p.webp.srcset} sizes="112px" alt={`Foto de ${p.nomeCompleto}`} width="112" height="140" loading="lazy" decoding="async" />
+                  <source type="image/avif" srcset={p.avif.srcset} sizes="11rem" />
+                  <img src={p.webp.srcset.split(' ')[0]} srcset={p.webp.srcset} sizes="11rem" alt={`Foto de ${p.nomeCompleto}`} width={p.webp.largura} height={p.webp.altura} loading="lazy" decoding="async" />
                 </picture>
-                <Provisorio ativo={!p.img.publicavel} titulo="Foto sem autorização confirmada: só em preview" />
               </div>
             )}
-            <div>
-              <h3>{p.nomeCompleto}</h3>
-              <p class="equipe__reg">Fisioterapeuta · {p.registro}{p.responsavelTecnico && ' · Responsável técnico'}</p>
-              {p.titulos.length > 0 && <p class="equipe__tit">{p.titulos.join(' · ')}</p>}
-              {p.areas.map(nomeArea).filter(Boolean).length > 0 && <p class="equipe__areas">{p.areas.map(nomeArea).filter(Boolean).join(' · ')}</p>}
+            <div class="pessoa__texto">
+              {p.responsavelTecnico && <p class="pessoa__rt">Responsável técnico</p>}
+              <h3 id={`pessoa-${p.id}`} class="pessoa__nome">
+                {p.nomeCompleto}
+                <Provisorio ativo={p.provisorio} titulo="CREFITO a informar: só aparece em preview" />
+              </h3>
+              <p class="pessoa__reg">Fisioterapeuta · {p.registro}</p>
+              <dl class="pessoa__linhas">
+                {p.titulos.length > 0 && (
+                  <div><dt>Formação</dt><dd>{p.titulos.map((t) => <span>{t}</span>)}</dd></div>
+                )}
+                {p.areas.map(nomeArea).filter(Boolean).length > 0 && (
+                  <div><dt>Áreas</dt><dd>{p.areas.map(nomeArea).filter(Boolean).map((a) => <span>{a}</span>)}</dd></div>
+                )}
+              </dl>
+              {p.whatsapp && (
+                <div class="pessoa__cta">
+                  <Button href={p.whatsapp} variante="secundario" icone="whatsapp" externo>{p.ctaWhatsapp}</Button>
+                </div>
+              )}
             </div>
-          </li>
+          </article>
         ))}
-      </ul>
+      </div>
     )}
+
+    <p class="equipe__autoridade">
+      <span><strong>{c.registroRotulo}:</strong> {registroEmpresa()}</span>
+      <span><strong>Responsável técnico:</strong> {rt.nome}, {rt.registro}</span>
+      {consulta && <a href={consulta} target="_blank" rel="noopener">{c.consultar}<span class="sr-only"> (abre em nova aba)</span></a>}
+      <Provisorio ativo={regProv} titulo="Registro da empresa e CREFITO do RT a informar" />
+    </p>
   </div>
 </section>
+
 <style>
-  .equipe__grade { list-style: none; margin: 2.5rem 0 0; padding: 0; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
-  .equipe__card { display: flex; gap: 1.25rem; align-items: center; padding: 1.25rem; border-radius: var(--raio-g); background: var(--superficie); border: 1px solid var(--linha); }
-  /* Oval pequena (4:5), no máximo 112 px de largura: os avatares são de baixa resolução. */
-  .equipe__foto { position: relative; flex: none; width: 5.6rem; height: 7rem; }
-  .equipe__foto img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-  .equipe__card h3 { font-size: 1.05rem; }
-  .equipe__reg, .equipe__tit, .equipe__areas { font-size: 0.88rem; color: var(--texto-suave); margin-top: 0.25rem; }
-  .equipe__inst { margin-top: 2rem; max-width: 36rem; padding: 1.5rem; border-radius: var(--raio-g); background: var(--superficie); border: 1px solid var(--linha); }
+  .equipe__topo { display: grid; gap: 1rem; max-width: 46rem; }
+  .equipe__h2 { font-size: clamp(2.6rem, 1.6rem + 4vw, 5rem); line-height: 0.95; }
+  .equipe__abertura { color: var(--texto-suave); font-size: 1.05rem; }
+
+  .equipe__cols { display: grid; gap: clamp(3rem, 6vw, 5rem); margin-top: clamp(2.5rem, 5vw, 4rem); }
+  @media (min-width: 60rem) {
+    .equipe__cols { grid-template-columns: 1fr 1fr; }
+    /* Segunda coluna desce: ritmo editorial, não grade de cartões. */
+    .equipe__cols:not(.equipe__cols--solo) .pessoa:nth-child(2) { margin-top: 5rem; }
+    .equipe__cols--solo { grid-template-columns: 1fr; max-width: 52rem; }
+  }
+  .pessoa { display: grid; gap: 1.5rem; grid-template-columns: auto 1fr; align-items: start; }
+  @media (max-width: 30rem) { .pessoa { grid-template-columns: 1fr; } }
+
+  /* Foto: oval com borda verde; no máximo 11 rem (avatar 150 px exibido em 2x). */
+  .pessoa__foto {
+    position: relative;
+    width: min(11rem, 40vw);
+    aspect-ratio: 4 / 5;
+    border-radius: 50%;
+    border: 3px solid var(--acao);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .pessoa__foto img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.85) contrast(1.02); }
+  /* Duotone sálvia leve (cor), grão e vinheta: só sobreposições, a imagem não é alterada. */
+  .pessoa__foto::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: var(--acento);
+    mix-blend-mode: color;
+    opacity: 0.22;
+  }
+  .pessoa__foto::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: radial-gradient(ellipse at 50% 45%, transparent 55%, color-mix(in oklab, var(--sombra) 30%, transparent) 100%);
+  }
+
+  .pessoa__rt {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: 600 0.75rem/1 var(--fonte-texto);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--destaque);
+    margin-bottom: 0.6rem;
+  }
+  .pessoa__rt::before { content: ''; width: 0.55rem; height: 0.75rem; border: 1.5px solid currentColor; border-radius: 50%; }
+  .pessoa__nome { font: 400 clamp(1.9rem, 1.4rem + 1.8vw, 2.8rem)/1.05 var(--fonte-display); letter-spacing: -0.01em; }
+  .pessoa__reg { margin-top: 0.5rem; color: var(--texto-suave); font-size: 0.92rem; }
+  .pessoa__linhas { margin: 1.25rem 0 0; display: grid; gap: 0; }
+  .pessoa__linhas div { display: grid; grid-template-columns: 6rem 1fr; gap: 1rem; padding: 0.7rem 0; border-top: 1px solid var(--linha); }
+  .pessoa__linhas div:last-child { border-bottom: 1px solid var(--linha); }
+  .pessoa__linhas dt { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-suave); padding-top: 0.15rem; }
+  .pessoa__linhas dd { margin: 0; display: grid; gap: 0.2rem; font-size: 0.95rem; }
+  .pessoa__cta { margin-top: 1.5rem; }
+
+  .equipe__inst { margin-top: 2.5rem; max-width: 36rem; }
+  .equipe__autoridade {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    align-items: center;
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--linha);
+    font-size: 0.88rem;
+    color: var(--texto-suave);
+  }
+  .equipe__autoridade strong { color: var(--texto); font-weight: 600; }
+  .equipe__autoridade a { color: var(--destaque); font-weight: 600; }
 </style>

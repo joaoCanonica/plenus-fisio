@@ -4,12 +4,21 @@ O site publica sem pendência: campo vazio some sozinho. Bloqueiam a produção 
 `CLAUDE.md` (registro da empresa, RT, WhatsApp), além de termo vetado ou mídia referenciada sem
 consentimento. O bloco abaixo é gerado por `pnpm pendencias`; as seções seguintes são manuais.
 
+## Pendências atuais (o que falta da clínica)
+- [ ] Fotos do espaço (categoria `espaco`, com autorização): ativam a galeria "Conheça o espaço" e a mídia principal do hero.
+- [ ] Vídeo da clínica ("Conheça a clínica"), com poster, legenda `.vtt`, data e profissional (nome completo + CREFITO).
+- [ ] CREFITO do Adrian Thives de Bona Sartor (também RT): bloqueia a produção.
+- [ ] CREFITO da Natalia Pereira: sem ele, ela não aparece em produção.
+- [ ] Número do registro da empresa (Plenus) no CREFITO: bloqueia a produção.
+- [ ] Baixa prioridade: confirmar instituição e ano das formações do Adrian (UFSC; Unifesp).
+
+O resto da lista abaixo é aviso (melhoria opcional), não pendência.
+
 <!-- auto:inicio -->
 ## O que a clínica pode acrescentar (gerado por `pnpm pendencias`)
 
-**Para publicar faltam 3 item(ns):**
+**Para publicar faltam 2 item(ns):**
 - [ ] Número do registro da empresa (Plenus) no CREFITO.
-- [ ] Nome completo do responsável técnico (RT).
 - [ ] CREFITO do responsável técnico (RT).
 
 ### Identificação da clínica

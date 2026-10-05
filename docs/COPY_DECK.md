@@ -148,10 +148,10 @@ Dados que ainda não existem (nomes, CREFITO, horários, endereço completo) nã
 
 ---
 
-## 5. Quem cuida (o site escolhe a variante sozinho)
+## 5. Conheça a equipe (o site escolhe a variante sozinho)
 
 **Institucional** (enquanto nenhum profissional tiver nome completo e CREFITO no site):
-**Título:** Quem cuida
+**Título:** Conheça a equipe
 **Texto:** Na Plenus, o atendimento é feito por fisioterapeutas, com registro no CREFITO, sob a responsabilidade técnica indicada no rodapé.
 
 **Solo:**

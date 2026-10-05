@@ -47,6 +47,43 @@ export function equipeVisivel(): ProfissionalVisivel[] {
   }));
 }
 
+/** Profissional na seção "Conheça a equipe": visível, ou provisório (só em preview). */
+export interface ProfissionalExibido extends ProfissionalVisivel {
+  /** true = sem CREFITO: só existe em preview, com selo PROVISÓRIO. */
+  readonly provisorio: boolean;
+  /** WhatsApp do próprio profissional (mensagem neutra), ou null. */
+  readonly whatsapp: string | null;
+  readonly ctaWhatsapp: string;
+}
+
+/**
+ * Equipe para a seção "Conheça a equipe".
+ * PRODUÇÃO: exatamente equipeVisivel() (nome completo + CREFITO).
+ * PREVIEW: inclui também quem tem nome completo mas não CREFITO, com
+ * "CREFITO a informar" e selo PROVISÓRIO, para aprovar o layout.
+ * Schema, auditoria de produção e trava continuam usando só equipeVisivel().
+ */
+export function equipeExibida(): ProfissionalExibido[] {
+  const msg = encodeURIComponent(atendimentoRapido.geral.mensagem);
+  return equipe
+    .filter((p) => elegivel(p) || (!EM_PRODUCAO && temValor(p.nomeCompleto)))
+    .map((p) => {
+      const ok = elegivel(p);
+      return {
+        id: p.id,
+        nomeCompleto: p.nomeCompleto.valor as string,
+        registro: ok ? `${clinica.crefitoRegiao.valor} ${p.crefito.valor as string}` : `${clinica.crefitoRegiao.valor} · CREFITO a informar`,
+        titulos: (p.titulos.valor ?? []).filter(Boolean),
+        areas: p.areas,
+        foto: temValor(p.foto) ? (p.foto.valor as string) : null,
+        responsavelTecnico: p.responsavelTecnico,
+        provisorio: !ok,
+        ctaWhatsapp: p.ctaWhatsapp,
+        whatsapp: temValor(p.whatsapp) ? `https://wa.me/${p.whatsapp.valor as string}?text=${msg}` : null,
+      };
+    });
+}
+
 export const profissionalVisivel = (id: string | null | undefined): ProfissionalVisivel | undefined =>
   equipeVisivel().find((p) => p.id === id);
 

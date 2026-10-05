@@ -1,7 +1,7 @@
 # Roteiro de captação: espaço, fachada e equipe (meio período)
 
 Para a clínica produzir em cerca de **4 horas**, com celular recente (câmera principal, não a ultra-angular).
-O resultado ativa no site: mídia do hero, "Conheça o espaço", vídeo "Conheça a clínica" e as fotos de "Quem cuida".
+O resultado ativa no site: mídia do hero, "Conheça o espaço", vídeo "Conheça a clínica" e as fotos de "Conheça a equipe".
 
 ## Regras (iguais às do site)
 
@@ -60,7 +60,7 @@ Só profissionais que vão aparecer no site (com nome completo e CREFITO) e que 
 | E5 | Os dois juntos na recepção | Plano médio, lado a lado |
 | E6 | Os dois conversando (cena natural) | Plano médio, sem olhar para a câmera |
 
-## Fotos individuais em alta resolução (para "Quem cuida")
+## Fotos individuais em alta resolução (para "Conheça a equipe")
 
 Uma por profissional, para substituir os avatares atuais de 150×150:
 

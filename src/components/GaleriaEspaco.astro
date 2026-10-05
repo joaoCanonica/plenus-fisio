@@ -1,0 +1,61 @@
+---
+// Galeria do espaço (categoria "espaco"), em bento: 1 grande + até 4 menores,
+// máscaras mistas (oval e retângulo). Produção: só publicavel; preview: previewOk
+// com selo PROVISÓRIO. Legenda = alt. Sem foto liberada, a seção não existe.
+import Provisorio from './Provisorio.astro';
+import { copy } from '../config/copy.config.ts';
+import { imagemLiberada, manifesto, srcsetImagem } from '../lib/manifesto.ts';
+import { EM_PRODUCAO } from '../lib/modo.ts';
+const fotos = manifesto.itens
+  .filter((i) => i.categoria === 'espaco' && i.tipo === 'imagem')
+  .map((i) => imagemLiberada(i.id, EM_PRODUCAO))
+  .filter((i) => i !== null)
+  .slice(0, 5)
+  .map((i) => ({ item: i, webp: srcsetImagem(i, 'webp'), avif: srcsetImagem(i, 'avif') }));
+const c = copy.espaco;
+---
+{fotos.length > 0 && (
+  <section id="espaco" class="sec espaco tom-claro" aria-labelledby="espaco-titulo">
+    <div class="wrap">
+      <header class="espaco__topo">
+        <h2 id="espaco-titulo" class="titulo">{c.titulo}</h2>
+        <p class="lead">{c.texto}</p>
+      </header>
+      <ul class="bento">
+        {fotos.map((f, i) => {
+          const sizes = i === 0 ? '(min-width: 60rem) 36rem, 92vw' : '(min-width: 60rem) 18rem, 46vw';
+          return (
+            <li class:list={['bento__item', `bento__item--${i}`]}>
+              <figure>
+                <div class="bento__img">
+                  <picture>
+                    <source type="image/avif" srcset={f.avif.srcset} sizes={sizes} />
+                    <img src={f.webp.srcset.split(' ')[0]} srcset={f.webp.srcset} sizes={sizes} alt={f.item.alt} width={f.webp.largura} height={f.webp.altura} loading="lazy" decoding="async" />
+                  </picture>
+                  {!f.item.publicavel && <span class="bento__selo"><Provisorio ativo titulo="Foto sem liberação: só em preview" /></span>}
+                </div>
+                <figcaption>{f.item.alt}</figcaption>
+              </figure>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+)}
+<style>
+  .espaco__topo { max-width: 40rem; }
+  .bento { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 1.25rem; grid-template-columns: 1fr 1fr; }
+  .bento__item--0 { grid-column: 1 / -1; }
+  @media (min-width: 60rem) {
+    .bento { grid-template-columns: 2fr 1fr 1fr; grid-auto-rows: auto; }
+    .bento__item--0 { grid-column: 1; grid-row: span 2; }
+  }
+  .bento figure { margin: 0; }
+  .bento__img { position: relative; overflow: hidden; aspect-ratio: 4 / 3; border-radius: var(--raio-g); background: var(--acento); }
+  .bento__item--0 .bento__img { aspect-ratio: 4 / 5; border-radius: 50%; }
+  .bento__item--2 .bento__img, .bento__item--3 .bento__img { border-radius: 50% / 40%; }
+  .bento__img img { width: 100%; height: 100%; object-fit: cover; }
+  .bento figcaption { margin-top: 0.5rem; font-size: 0.82rem; color: var(--texto-suave); }
+  .bento__selo { position: absolute; top: 0.75rem; left: 50%; translate: -50% 0; }
+</style>

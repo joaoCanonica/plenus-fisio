@@ -46,6 +46,8 @@ export interface Profissional {
   /** Id da imagem no media.manifest.json. */
   readonly foto: Campo<string>;
   readonly responsavelTecnico: boolean;
+  /** Texto do botão de WhatsApp do profissional (definido pela clínica). */
+  readonly ctaWhatsapp: string;
 }
 
 export interface Area {
@@ -84,7 +86,7 @@ export const clinica = {
   crefitoRegiao: confirmado('CREFITO-10'),
   /** BLOQUEANTE (2). */
   responsavelTecnico: {
-    nome: bloqueante('', 'Nome completo do responsável técnico (RT).'),
+    nome: confirmado('Adrian Thives de Bona Sartor'),
     crefito: bloqueante('', 'CREFITO do responsável técnico (RT).'),
   },
   endereco: {
@@ -104,6 +106,8 @@ export const clinica = {
   /** Coordenadas do perfil no Google (schema "geo"). */
   geo: opcional<{ readonly lat: number; readonly lng: number }>(null, 'Latitude e longitude da clínica (as mesmas do perfil no Google).'),
   instagram: confirmado('plenusfisioterapia.lages'),
+  /** URL da consulta pública de registro do CREFITO-10 (vazia = o link "Consultar o registro" some). */
+  consultaRegistroUrl: opcional<string>(null, ''),
   /** Domínio de produção, sem barra final. */
   dominio: opcional<string>(null, 'Domínio de produção (melhora SEO, canonical e sitemap).'),
   googleMeuNegocio: opcional<string>(null, 'Link do perfil no Google (abre o mapa e as avaliações fora do site).'),
@@ -113,26 +117,29 @@ export const equipe: readonly Profissional[] = [
   {
     id: 'adrian',
     ref: 'Adrian (sócio)',
-    nomeCompleto: opcional<string>(null, 'Nome completo do Adrian.'),
+    nomeCompleto: opcional<string>('Adrian Thives de Bona Sartor', 'Nome completo do Adrian.'),
     crefito: opcional<string>(null, 'CREFITO do Adrian (sem ele, o nome não aparece no site).'),
-    titulos: opcional<readonly string[]>(null, 'Formação e títulos do Adrian.'),
+    // Instituição e ano: confirmação de baixa prioridade (docs/MELHORIAS.md).
+    titulos: opcional<readonly string[]>(['Graduação em Fisioterapia (UFSC)', 'Pós-graduação em Fisiologia do Exercício (Unifesp)'], 'Confirmar instituição e ano dos títulos do Adrian.'),
     especialista: { registrado: false, rqe: null, especialidade: null },
     areas: ['traumatoOrtopedica', 'esportiva', 'pilates'],
     whatsapp: opcional<Telefone>('5548996056445', 'WhatsApp do Adrian.'),
     foto: opcional<string>('pessoa-foto-b', 'Foto do Adrian em alta resolução (hoje avatar 150x150, exibido em 2x).'),
-    responsavelTecnico: false,
+    responsavelTecnico: true,
+    ctaWhatsapp: 'Falar com o Adrian',
   },
   {
     id: 'natalia',
     ref: 'Natalia',
-    nomeCompleto: opcional<string>(null, 'Nome completo da Natalia.'),
+    nomeCompleto: opcional<string>('Natalia Pereira', 'Nome completo da Natalia.'),
     crefito: opcional<string>(null, 'CREFITO da Natalia (sem ele, o nome não aparece no site).'),
-    titulos: opcional<readonly string[]>(null, 'Formação e títulos da Natalia.'),
+    titulos: opcional<readonly string[]>(null, 'Formação e títulos da Natalia (opcional).'),
     especialista: { registrado: false, rqe: null, especialidade: null },
     areas: ['obstetricaPelvica', 'pilates'],
     whatsapp: opcional<Telefone>('5548998355052', 'WhatsApp da Natalia.'),
     foto: opcional<string>('pessoa-foto-a', 'Foto da Natalia em alta resolução (hoje avatar 150x150, exibido em 2x).'),
     responsavelTecnico: false,
+    ctaWhatsapp: 'Falar com a Natalia',
   },
 ];
 

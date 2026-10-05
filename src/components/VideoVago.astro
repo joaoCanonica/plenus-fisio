@@ -1,11 +1,15 @@
 ---
-// Slot vago (só dev/preview): poster tipográfico "Vídeo em breve" para aprovar o layout.
+// Slot vago (só dev/preview): moldura oval menor, textura de papel e oval que
+// se desenha, com selo PROVISÓRIO. Em produção, o slot vago não aparece.
 import Provisorio from './Provisorio.astro';
+import Arte from './ui/Arte.astro';
 interface Props { titulo: string; formato: '9:16' | '9:5' }
 const { titulo, formato } = Astro.props;
 ---
 <figure class:list={['vago', `vago--${formato === '9:16' ? 'vertical' : 'paisagem'}`]}>
-  <div class="vago__poster tom-verde" aria-hidden="true">
+  <div class="vago__poster papel" aria-hidden="true">
+    <span class="vago__textura"><Arte id="ilustracao-textura-secao" sizes="20rem" decorativa /></span>
+    <svg class="vago__oval" viewBox="0 0 100 125" focusable="false"><ellipse cx="50" cy="62.5" rx="46" ry="58" pathLength="1" /></svg>
     <span class="vago__emb">Vídeo em breve</span>
     <span class="vago__tit">{titulo}</span>
   </div>
@@ -15,20 +19,30 @@ const { titulo, formato } = Astro.props;
   </figcaption>
 </figure>
 <style>
-  .vago { margin: 0; }
+  .vago { margin: 0; max-width: 20rem; }
+  .vago--paisagem { max-width: 34rem; }
   .vago__poster {
+    position: relative;
     display: grid;
     place-content: center;
     justify-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     padding: 2rem;
     text-align: center;
-    border-radius: var(--raio-g);
-    background: radial-gradient(40rem 24rem at 85% 0%, color-mix(in oklab, var(--superficie-alt) 70%, transparent), transparent 60%), var(--fundo);
+    overflow: hidden;
+    border-radius: 50% / 40%;
+    color: var(--papel-linha);
   }
-  .vago--vertical .vago__poster { aspect-ratio: 9 / 16; }
-  .vago--paisagem .vago__poster { aspect-ratio: 16 / 7; }
-  .vago__emb { font: 700 0.72rem/1 var(--fonte-texto); letter-spacing: 0.22em; text-transform: uppercase; color: var(--destaque); }
-  .vago__tit { font: 400 clamp(1.3rem, 1rem + 1.6vw, 2.1rem)/1.15 var(--fonte-display); text-transform: uppercase; letter-spacing: 0.05em; max-width: 18ch; }
+  .vago--vertical .vago__poster { aspect-ratio: 4 / 5; }
+  .vago--paisagem .vago__poster { aspect-ratio: 16 / 9; border-radius: var(--raio-g) 4rem; }
+  .vago__textura { position: absolute; inset: 0; opacity: 0.6; }
+  .vago__textura :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .vago__oval { position: absolute; inset: 8%; width: 84%; height: 84%; }
+  .vago__oval ellipse { fill: none; stroke: currentColor; stroke-width: 0.6; stroke-dasharray: 1; animation: vago-oval 2.4s ease-out both; }
+  @keyframes vago-oval { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  .vago__emb, .vago__tit { position: relative; }
+  .vago__emb { font: 700 0.7rem/1 var(--fonte-texto); letter-spacing: 0.22em; text-transform: uppercase; }
+  .vago__tit { font: 400 clamp(1.2rem, 1rem + 1vw, 1.7rem)/1.15 var(--fonte-display); max-width: 14ch; }
   figcaption { margin-top: 0.9rem; font-size: 0.85rem; color: var(--texto-suave); }
+  @media (prefers-reduced-motion: reduce) { .vago__oval ellipse { animation: none; } }
 </style>

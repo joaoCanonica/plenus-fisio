@@ -1,31 +1,77 @@
 ---
-// Como é a primeira consulta: passos numerados (lista ordenada nativa).
+// Primeira consulta: linha do tempo vertical. A linha fina se desenha ao rolar
+// (CSS scroll-driven; sem suporte, aparece inteira) e a oval de cada passo se
+// preenche quando ele entra na tela. Desktop: um passo por viewport (sticky);
+// celular: lista simples. Sem JS. prefers-reduced-motion: tudo estático.
 import { copy } from '../config/copy.config.ts';
 const c = copy.primeiraConsulta;
+const dois = (n: number) => String(n).padStart(2, '0');
 ---
-<section id="primeira-consulta" class="sec consulta" aria-labelledby="consulta-titulo">
-  <div class="wrap">
-    <div data-revelar>
-      <h2 id="consulta-titulo" class="titulo">{c.titulo}</h2>
-      <p class="lead">{c.intro}</p>
-    </div>
-    <ol class="consulta__passos">
+<section id="primeira-consulta" class="sec consulta tom-salvia" aria-labelledby="consulta-titulo">
+  <div class="wrap consulta__grade">
+    <header class="consulta__topo">
+      <h2 id="consulta-titulo" class="consulta__h2">{c.titulo}</h2>
+      <p class="consulta__intro">{c.intro}</p>
+    </header>
+    <ol class="tl">
+      <span class="tl__progresso" aria-hidden="true"></span>
       {c.passos.map((p, i) => (
-        <li data-revelar style={`--i:${i}`}>
-          <span class="consulta__n" aria-hidden="true">{i + 1}</span>
-          <h3>{p.titulo}</h3>
-          <p>{p.texto}</p>
+        <li class="tl__passo">
+          <div class="tl__conteudo">
+            <span class="tl__oval" aria-hidden="true"></span>
+            <span class="tl__n" aria-hidden="true">{dois(i + 1)}</span>
+            <h3 class="tl__t">{p.titulo}</h3>
+            <p class="tl__txt">{p.texto}</p>
+          </div>
         </li>
       ))}
     </ol>
   </div>
 </section>
+
 <style>
-  .consulta { background: var(--superficie-alt); }
-  .consulta__passos { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
-  .consulta__passos li { display: grid; gap: 0.5rem; align-content: start; padding: 1.5rem; border-radius: var(--raio-g); background: var(--superficie); }
-  /* Número dentro de uma pequena oval (gesto do logo). */
-  .consulta__n { display: grid; place-items: center; width: 2.4rem; height: 3.2rem; border-radius: 50%; border: 1.5px solid var(--destaque); color: var(--destaque); font: 400 1.3rem/1 var(--fonte-display); }
-  .consulta__passos h3 { font-size: 1.05rem; margin-top: 0.25rem; }
-  .consulta__passos p { color: var(--texto-suave); font-size: 0.95rem; }
+  .consulta__grade { display: grid; gap: clamp(2.5rem, 5vw, 4rem); }
+  @media (min-width: 60rem) {
+    .consulta__grade { grid-template-columns: 0.8fr 1.2fr; align-items: start; }
+    .consulta__topo { position: sticky; top: 7rem; }
+  }
+  .consulta__h2 { font-size: clamp(2.6rem, 1.6rem + 4vw, 5rem); line-height: 0.95; letter-spacing: -0.02em; max-width: 12ch; }
+  .consulta__intro { margin-top: 1.25rem; max-width: 26rem; color: var(--texto-suave); }
+
+  .tl { position: relative; list-style: none; margin: 0; padding: 0 0 0 3.5rem; }
+  /* Trilho fino e progresso por cima. */
+  .tl::before, .tl__progresso { content: ''; position: absolute; left: 1rem; top: 0.5rem; bottom: 0.5rem; width: 1px; }
+  .tl::before { background: var(--linha); }
+  .tl__progresso { background: var(--destaque); transform-origin: top; }
+
+  .tl__passo { position: relative; padding-block: 1.25rem 2.25rem; }
+  .tl__oval {
+    position: absolute;
+    left: -3.5rem;
+    top: 1.6rem;
+    width: 2rem;
+    height: 2.7rem;
+    margin-left: 0.03rem;
+    border: 1.5px solid var(--destaque);
+    border-radius: 50%;
+    background: var(--fundo);
+  }
+  .tl__n { display: block; font: 400 clamp(3rem, 2rem + 3vw, 4.5rem)/0.9 var(--fonte-display); color: var(--destaque); }
+  .tl__t { margin-top: 0.5rem; font-size: 1.2rem; }
+  .tl__txt { margin-top: 0.4rem; max-width: 30rem; color: var(--texto-suave); }
+
+  /* Desktop: um passo por viewport, conteúdo fixo enquanto o passo passa. */
+  @media (min-width: 60rem) {
+    .tl__passo { min-height: 62vh; }
+    .tl__conteudo { position: sticky; top: 30vh; }
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .tl__progresso { animation: tl-linha linear both; animation-timeline: view(); animation-range: entry 20% exit 60%; }
+      .tl__oval { animation: tl-oval linear both; animation-timeline: view(); animation-range: entry 30% cover 45%; }
+    }
+  }
+  @keyframes tl-linha { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes tl-oval { from { background: var(--fundo); } to { background: var(--destaque); } }
 </style>

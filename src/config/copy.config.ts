@@ -141,9 +141,12 @@ export const copy = {
     },
   },
 
+  /** Frase-chave da marca (bloco verde-noite entre as seções). */
+  frase: { antes: 'Movimento com saúde e', destaque: 'segurança.' },
+
   primeiraConsulta: {
-    titulo: 'Como é a primeira consulta',
-    intro: 'Sem pressa e sem complicação. Você não precisa trazer nada além das suas dúvidas.',
+    titulo: 'Sua primeira consulta, passo a passo',
+    intro: 'Do primeiro contato pelo WhatsApp ao acompanhamento do plano terapêutico, em cinco etapas.',
     passos: [
       { titulo: 'Você chama no WhatsApp', texto: 'Combinamos dia e horário. Não pedimos informações de saúde por mensagem.' },
       { titulo: 'Conversa', texto: 'Na consulta fisioterapêutica, ouvimos sua história, sua rotina e o que você quer voltar a fazer.' },
@@ -154,12 +157,15 @@ export const copy = {
   },
 
   equipe: {
-    titulo: 'Quem cuida',
+    titulo: 'Conheça a equipe',
+    /** Abertura factual por modo ({clinica}, {nome}, {nomes}). */
     texto: {
       clinica: 'Na {clinica}, o atendimento é feito por fisioterapeutas, com registro no CREFITO, sob a responsabilidade técnica indicada abaixo.',
       solo: '{nome} conduz a consulta fisioterapêutica e acompanha o plano terapêutico do início ao fim.',
       equipe: '{nomes} formam a equipe de fisioterapia da {clinica}. Cada área tem um profissional de referência, e o plano terapêutico é acompanhado pela mesma pessoa.',
     } satisfies Variantes,
+    registroRotulo: 'Registro da clínica no CREFITO',
+    consultar: 'Consultar o registro',
   },
 
   espaco: {

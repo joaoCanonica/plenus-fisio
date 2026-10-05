@@ -1,0 +1,32 @@
+---
+// Quebra de ritmo: bloco de cor cheia (verde-noite) com a frase-chave da marca.
+import { copy } from '../config/copy.config.ts';
+---
+<section class="frase tom-noite" aria-label="Frase da marca">
+  <div class="wrap">
+    <p class="frase__txt">{copy.frase.antes} <em>{copy.frase.destaque}</em></p>
+    <span class="frase__oval" aria-hidden="true"></span>
+  </div>
+</section>
+<style>
+  .frase { position: relative; overflow: clip; padding-block: clamp(5rem, 12vw, 10rem); }
+  .frase__txt {
+    position: relative;
+    z-index: 1;
+    max-width: 14ch;
+    font: 400 clamp(3rem, 1.5rem + 7vw, 8rem)/0.95 var(--fonte-display);
+    letter-spacing: -0.02em;
+  }
+  .frase__txt em { font-style: italic; color: var(--destaque); }
+  .frase__oval {
+    position: absolute;
+    right: -6vw;
+    top: 50%;
+    width: clamp(14rem, 34vw, 30rem);
+    aspect-ratio: 172 / 250;
+    translate: 0 -50%;
+    border: 1.5px solid var(--destaque);
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+</style>
