@@ -6,14 +6,14 @@ export type StatusLegenda = 'pendente' | 'revisada' | 'nao-se-aplica';
 export interface ItemManifesto {
   readonly id: string;
   readonly arquivo: string;
-  readonly categoria: 'marca' | 'pessoa' | 'espaco' | 'videos';
+  readonly categoria: 'marca' | 'pessoa' | 'espaco' | 'videos' | 'ilustracao';
   readonly tipo: 'imagem' | 'video' | 'audio';
   readonly largura: number;
   readonly altura: number;
   readonly duracaoSeg?: number;
   readonly descricao: string;
   readonly alt: string;
-  readonly autoria: 'propria' | 'terceiro' | 'desconhecida' | 'CONFIRMAR';
+  readonly autoria: 'propria' | 'terceiro' | 'desconhecida' | 'CONFIRMAR' | 'gerada-por-ia';
   readonly consentimento: Consentimento;
   readonly tcleRef?: string | null;
   readonly tcleArquivadoForaDoRepo?: boolean;

@@ -13,8 +13,9 @@
 import { createHash } from 'node:crypto';
 import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 
-const CATEGORIAS = ['marca', 'pessoa', 'espaco', 'videos'];
-const AUTORIA = ['propria', 'terceiro', 'desconhecida', 'CONFIRMAR'];
+const CATEGORIAS = ['marca', 'pessoa', 'espaco', 'videos', 'ilustracao'];
+// 'gerada-por-ia': ilustrações aprovadas pelo cliente, sem pessoa, rosto, texto ou marca d'água.
+const AUTORIA = ['propria', 'terceiro', 'desconhecida', 'CONFIRMAR', 'gerada-por-ia'];
 // 'confirmado-pelo-cliente': uso de imagem do próprio profissional, confirmado verbalmente (sem paciente).
 const CONSENT = ['ok', 'pendente', 'nao-se-aplica', 'confirmado-pelo-cliente'];
 const EDICOES = ['recorte', 'tarja'];
